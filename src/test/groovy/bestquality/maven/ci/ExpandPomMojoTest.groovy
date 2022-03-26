@@ -10,7 +10,7 @@ class ExpandPomMojoTest
     def setup() {
         mojo = new ExpandPomMojo()
                 .withProject(mockProject)
-                .withSession(mockSession)
+                .withPropertyResolver(new PropertyResolver(mockProject, mockSession))
     }
 
     def "should generate ci friendly POM file"() {
@@ -21,10 +21,15 @@ class ExpandPomMojoTest
         and:
         setupPom(getClass().getResourceAsStream("pom-with-all-ci-properties.xml"))
 
+        and:
+        systemProperties.setProperty("revision", "2.2.2")
+        systemProperties.setProperty("sha1", "22")
+        systemProperties.setProperty("changelist", "-SNAPSHOT")
+
         when:
         mojo.execute()
 
         then:
-        thrown(MojoFailureException)
+        notThrown(MojoFailureException)
     }
 }

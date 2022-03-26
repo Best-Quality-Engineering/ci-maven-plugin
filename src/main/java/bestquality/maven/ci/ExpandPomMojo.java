@@ -1,7 +1,7 @@
 package bestquality.maven.ci;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -9,6 +9,7 @@ import org.apache.maven.project.MavenProject;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
@@ -28,32 +29,16 @@ public class ExpandPomMojo
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
-    private MavenSession session;
-
-    @Parameter(property = "sha1")
-    private String sha1;
-
-    @Parameter(property = "changelist")
-    private String changelist;
+    @Component
+    private PropertyResolver resolver;
 
     public ExpandPomMojo withProject(MavenProject project) {
         this.project = project;
         return this;
     }
 
-    public ExpandPomMojo withSession(MavenSession session) {
-        this.session = session;
-        return this;
-    }
-
-    public ExpandPomMojo withSha1(String sha1) {
-        this.sha1 = sha1;
-        return this;
-    }
-
-    public ExpandPomMojo withChangelist(String changelist) {
-        this.changelist = changelist;
+    public ExpandPomMojo withPropertyResolver(PropertyResolver resolver) {
+        this.resolver = resolver;
         return this;
     }
 
@@ -61,7 +46,9 @@ public class ExpandPomMojo
             throws MojoExecutionException {
         String templatePom = readCurrentPom();
         String expandedPom = template(templatePom)
-                .expand(determineRevision(), sha1, changelist);
+                .expand(resolveRevision(),
+                        resolver.resolve("sha1"),
+                        resolver.resolve("changelist"));
         if (!templatePom.equals(expandedPom)) {
             Path ciPomFile = writePom(expandedPom);
             project.setPomFile(ciPomFile.toFile());
@@ -74,7 +61,7 @@ public class ExpandPomMojo
             throws MojoExecutionException {
         Path ciPomPath = ciPomPath();
         try {
-            createDirectories(ciPomPath);
+            createDirectories(ciPomPath.getParent());
             try (BufferedWriter writer = newBufferedWriter(ciPomPath, UTF_8)) {
                 writer.append(content);
             }
@@ -96,18 +83,11 @@ public class ExpandPomMojo
         }
     }
 
-    private String determineRevision() {
+    private String resolveRevision() {
         Properties properties = project.getProperties();
         if (properties.containsKey("internal.revision")) {
             return properties.getProperty("internal.revision");
         }
-        Properties systemProperties = session.getSystemProperties();
-        if (systemProperties.containsKey("revision")) {
-            return systemProperties.getProperty("revision");
-        } else if (properties.containsKey("revision")) {
-            return properties.getProperty("revision");
-        } else {
-            return project.getVersion();
-        }
+        return resolver.resolve("revision", project::getVersion);
     }
 }
