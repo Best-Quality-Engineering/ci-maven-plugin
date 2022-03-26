@@ -1,0 +1,9 @@
+.idea/
+target/
+*.iml
+*.asc
+*.gpg*
+release.properties
+pom.xml.releaseBackup
+deploy/id_rsa*
+deploy/settings-security.xml
