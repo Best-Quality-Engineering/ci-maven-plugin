@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 echo "Releasing ${TRAVIS_TAG}"
 
 # When triggered by a tag, the local git repository will be in

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # Only deploy branch builds
 if [ "${TRAVIS_BRANCH}" != "${TRAVIS_TAG}" ]; then
   echo "Performing a deploy on ${TRAVIS_BRANCH}"

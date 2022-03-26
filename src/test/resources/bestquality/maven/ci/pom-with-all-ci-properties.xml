@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>bestquality</groupId>
+    <artifactId>maven-ci-pom</artifactId>
+    <version>${revision}.${sha1}${changelist}</version>
+    <name>Maven CI Plugin</name>
+    <description>Maven plugin for building an releasing from CI pipelines</description>
+
+    <properties>
+        <revision>0.0.1</revision>
+        <sha1>22</sha1>
+        <changelist>-SNAPSHOT</changelist>
+    </properties>
+</project>
