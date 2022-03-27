@@ -4,7 +4,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
 
 [![Build Status](https://img.shields.io/travis/ruffkat/ci-maven-plugin/master?color=green)](https://travis-ci.com/ruffkat/ci-maven-plugin)
 [![codecov](https://codecov.io/gh/ruffkat/XXX/branch/master/graph/badge.svg)](https://codecov.io/gh/ruffkat/ci-maven-plugin)
-[![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/ci-maven-plugin.svg?color=green&label=maven%20central)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:ci-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/ci-maven-plugin?color=green)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:ci-maven-plugin)
 
 ## Usage
 ```xml
@@ -13,7 +13,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
         <plugin>
             <groupId>tools.bestquality</groupId>
             <artifactId>ci-maven-plugin</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
             <executions>
                 <execution>
                     <goals>
@@ -67,7 +67,7 @@ This configuration results in consistent developer and pipeline builds:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -113,7 +113,7 @@ When installed, this will become:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -158,7 +158,7 @@ When deployed, this will become:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
                 <executions>
                     <execution>
                         <goals>

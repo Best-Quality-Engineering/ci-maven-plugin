@@ -21,7 +21,7 @@
         <ossrh.hostname>s01.oss.sonatype.org</ossrh.hostname>
         <ossrh.staging-profile>7e430683fef886</ossrh.staging-profile>
         <repository.slug>ruffkat/ci-maven-plugin</repository.slug>
-        <revision>0.0.3</revision>
+        <revision>0.0.4</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
         <!-- Maven specific properties -->
@@ -35,7 +35,7 @@
         <objenesis.version>3.1</objenesis.version>
         <spock.version>2.1-groovy-3.0</spock.version>
         <!-- Plugin versions -->
-        <plugin.ci.version>0.0.2</plugin.ci.version>
+        <plugin.ci.version>0.0.3</plugin.ci.version>
         <plugin.gmaven.version>1.13.1</plugin.gmaven.version>
     </properties>
 
