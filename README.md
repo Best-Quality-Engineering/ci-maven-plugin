@@ -2,9 +2,9 @@
 A Maven plugin for use in CI pipelines based on the patterns described in the
 [Maven Ci Friendly documentation](https://maven.apache.org/maven-ci-friendly.html).
 
-[![Build Status](https://img.shields.io/travis/ruffkat/maven-ci-plugin/master?color=green)](https://travis-ci.com/ruffkat/maven-ci-plugin)
-[![codecov](https://codecov.io/gh/ruffkat/XXX/branch/master/graph/badge.svg)](https://codecov.io/gh/ruffkat/maven-ci-plugin)
-[![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/maven-ci-plugin.svg?color=green&label=maven%20central)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:maven-ci-plugin)
+[![Build Status](https://img.shields.io/travis/ruffkat/ci-maven-plugin/master?color=green)](https://travis-ci.com/ruffkat/ci-maven-plugin)
+[![codecov](https://codecov.io/gh/ruffkat/XXX/branch/master/graph/badge.svg)](https://codecov.io/gh/ruffkat/ci-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/ci-maven-plugin.svg?color=green&label=maven%20central)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:ci-maven-plugin)
 
 ## Usage
 ```xml
@@ -12,7 +12,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
     <plugins>
         <plugin>
             <groupId>tools.bestquality</groupId>
-            <artifactId>maven-ci-plugin</artifactId>
+            <artifactId>ci-maven-plugin</artifactId>
             <version>0.0.1</version>
             <executions>
                 <execution>
@@ -64,7 +64,7 @@ This configuration results in consistent developer and pipeline builds:
         <plugins>
             <plugin>
                 <groupId>tools.bestquality</groupId>
-                <artifactId>maven-ci-plugin</artifactId>
+                <artifactId>ci-maven-plugin</artifactId>
                 <version>0.0.1</version>
                 <executions>
                     <execution>
@@ -111,7 +111,7 @@ When installed, this will become:
         <plugins>
             <plugin>
                 <groupId>tools.bestquality</groupId>
-                <artifactId>maven-ci-plugin</artifactId>
+                <artifactId>ci-maven-plugin</artifactId>
                 <version>0.0.1</version>
                 <executions>
                     <execution>
@@ -157,7 +157,7 @@ When deployed, this will become:
         <plugins>
             <plugin>
                 <groupId>tools.bestquality</groupId>
-                <artifactId>maven-ci-plugin</artifactId>
+                <artifactId>ci-maven-plugin</artifactId>
                 <version>0.0.1</version>
                 <executions>
                     <execution>

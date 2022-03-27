@@ -1,7 +1,7 @@
 package tools.bestquality.maven.ci;
 
 import static java.lang.String.format;
-import static org.apache.maven.shared.utils.StringUtils.isEmpty;
+import static org.codehaus.plexus.util.StringUtils.isEmpty;
 
 @FunctionalInterface
 public interface VersionTemplate {
