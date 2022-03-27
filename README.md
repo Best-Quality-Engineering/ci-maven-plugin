@@ -2,8 +2,7 @@
 A Maven plugin for use in CI pipelines based on the patterns described in the
 [Maven Ci Friendly documentation](https://maven.apache.org/maven-ci-friendly.html).
 
-[![Build Status](https://img.shields.io/travis/ruffkat/ci-maven-plugin/master?color=green)](https://travis-ci.com/ruffkat/ci-maven-plugin)
-[![codecov](https://codecov.io/gh/ruffkat/XXX/branch/master/graph/badge.svg)](https://codecov.io/gh/ruffkat/ci-maven-plugin)
+[![Build Status](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/maven.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/ci-maven-plugin?color=green)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:ci-maven-plugin)
 
 ## Usage

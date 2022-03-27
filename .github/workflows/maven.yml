@@ -24,3 +24,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -e -B -ntp -f pom.xml -P ci -P ossrh deploy -Dsha1="-$GITHUB_RUN_ID"
+      env:
+        CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
+        CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}
+        OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
+        OSSRH_PASSWORD: ${{secrets.OSSRH_USERNAME}}
