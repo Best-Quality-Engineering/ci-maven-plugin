@@ -36,6 +36,18 @@ public abstract class CiMojo<M extends CiMojo<M>>
         return (M) this;
     }
 
+    protected void info(CharSequence message) {
+        getLog().info(message);
+    }
+
+    protected void error(CharSequence message, Throwable error) {
+        getLog().error(message, error);
+    }
+
+    protected void warn(CharSequence message) {
+        getLog().warn(message);
+    }
+
     protected Path ciPomPath() {
         return outputDirectory.toPath()
                 .resolve(ciPomFilename);

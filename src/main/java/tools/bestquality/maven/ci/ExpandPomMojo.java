@@ -42,36 +42,40 @@ public class ExpandPomMojo
 
     public void execute()
             throws MojoExecutionException {
-        String templatePom = readTemplatePom();
-        String expandedPom = expand(templatePom);
-        if (!templatePom.equals(expandedPom)) {
-            Path ciPomFile = writeCiPom(expandedPom);
-            project.setPomFile(ciPomFile.toFile());
-            getLog().info(format("Configured %s to use generated POM file at %s",
-                    project.getId(), ciPomFile.toAbsolutePath()));
+        String projectPom = readProjectPom();
+        String expandedPom = expandProjectPom(projectPom);
+        if (projectPom.equals(expandedPom)) {
+            info("No changes detected in expanded POM, retaining current project POM file");
+            return;
         }
+        Path ciPomFile = writeCiPom(expandedPom);
+        project.setPomFile(ciPomFile.toFile());
+        info(format("%s has been configured to use generated POM file at %s",
+                project.getId(), ciPomFile.toAbsolutePath()));
     }
 
-    private String expand(String templatePom)
+    private String readProjectPom()
             throws MojoExecutionException {
-        try {
-            return template(templatePom)
-                    .expand(resolver.resolve("revision"),
-                            resolver.resolve("sha1"),
-                            resolver.resolve("changelist"));
-        } catch (Exception e) {
-            getLog().error("Failure expanding template POM file", e);
-            throw new MojoExecutionException(e.getLocalizedMessage(), e);
-        }
-    }
-
-    private String readTemplatePom()
-            throws MojoExecutionException {
+        info("Reading project POM file");
         File currentPomFile = project.getFile();
         try {
             return new String(readAllBytes(currentPomFile.toPath()), UTF_8);
         } catch (IOException e) {
-            getLog().error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
+            error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
+            throw new MojoExecutionException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    private String expandProjectPom(String projectPom)
+            throws MojoExecutionException {
+        info("Expanding contents of project POM file");
+        try {
+            return template(projectPom)
+                    .expand(resolver.resolve("revision"),
+                            resolver.resolve("sha1"),
+                            resolver.resolve("changelist"));
+        } catch (Exception e) {
+            error("Failure expanding template POM file", e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }
@@ -79,6 +83,7 @@ public class ExpandPomMojo
     private Path writeCiPom(String content)
             throws MojoExecutionException {
         Path ciPomPath = ciPomPath();
+        info(format("Writing expanded POM file to %s", ciPomPath.toAbsolutePath()));
         try {
             createDirectories(ciPomPath.getParent());
             try (BufferedWriter writer = newBufferedWriter(ciPomPath, UTF_8)) {
@@ -86,7 +91,7 @@ public class ExpandPomMojo
             }
             return ciPomPath;
         } catch (IOException e) {
-            getLog().error(format("Failure writing generated POM file: %s", ciPomPath.toAbsolutePath()), e);
+            error(format("Failure writing expanded POM file: %s", ciPomPath.toAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }

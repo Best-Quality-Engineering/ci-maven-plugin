@@ -20,7 +20,7 @@ public class CleanMojo
             throws MojoFailureException {
         Path ciPomPath = ciPomPath();
         if (exists(ciPomPath) && !isDirectory(ciPomPath)) {
-            getLog().info(format("Deleting %s", ciPomPath.toAbsolutePath()));
+            info(format("Deleting %s", ciPomPath.toAbsolutePath()));
             try {
                 delete(ciPomPath);
             } catch (IOException e) {

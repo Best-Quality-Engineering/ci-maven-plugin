@@ -17,17 +17,21 @@
     <description>Maven plugin for building and releasing from CI pipelines</description>
 
     <properties>
+        <!-- Project properties -->
         <ossrh.hostname>s01.oss.sonatype.org</ossrh.hostname>
         <ossrh.staging-profile>7e430683fef886</ossrh.staging-profile>
         <repository.slug>ruffkat/ci-maven-plugin</repository.slug>
-        <groovy.version>3.0.10</groovy.version>
-        <spock.version>2.1-groovy-3.0</spock.version>
         <!-- Maven specific properties -->
         <maven.version>3.2.5</maven.version>
         <maven.invoker.version>3.2.2</maven.invoker.version>
         <maven.plugin-annotations.version>3.6.4</maven.plugin-annotations.version>
         <maven.plugin-plugin.version>3.6.4</maven.plugin-plugin.version>
-        <!-- Maven plugin versions -->
+        <!-- Dependency versions -->
+        <byte-buddy.version>1.12.8</byte-buddy.version>
+        <groovy.version>3.0.10</groovy.version>
+        <objenesis.version>3.1</objenesis.version>
+        <spock.version>2.1-groovy-3.0</spock.version>
+        <!-- Plugin versions -->
         <plugin.gmaven.version>1.13.1</plugin.gmaven.version>
     </properties>
 
@@ -71,18 +75,15 @@
         </dependency>
         <!-- Test Dependencies -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>${objenesis.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${byte-buddy.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -168,4 +169,26 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>tools.bestquality</groupId>
+                        <artifactId>ci-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>clean</goal>
+                                    <goal>expand-pom</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
