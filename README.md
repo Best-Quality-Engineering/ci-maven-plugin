@@ -17,7 +17,6 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
             <executions>
                 <execution>
                     <goals>
-                        <goal>clean</goal>
                         <goal>expand-pom</goal>
                     </goals>
                 </execution>
@@ -38,6 +37,9 @@ producing an expanded version performing the following actions on the template:
 
 ### `ci:clean`
 By default, this goal is bound to the `clean` phase and will remove the expanded `target/generated-poms/ci-pom.xml` file
+
+_note: This goal is only needed if the default plugin `outputDirectory` configuration is changed to be outside
+of `${project.build.directory}`_
 
 ## Example Project Configuration
 ### `pom.xml`
@@ -69,7 +71,6 @@ This configuration results in consistent developer and pipeline builds:
                 <executions>
                     <execution>
                         <goals>
-                            <goal>clean</goal>
                             <goal>expand-pom</goal>
                         </goals>
                     </execution>
@@ -116,7 +117,6 @@ When installed, this will become:
                 <executions>
                     <execution>
                         <goals>
-                            <goal>clean</goal>
                             <goal>expand-pom</goal>
                         </goals>
                     </execution>
@@ -131,7 +131,7 @@ When installed, this will become:
 ### Deploying
 To deploy a release:
 ```shell
-mvn clean deploy -Dchangelist=""
+mvn clean deploy -Dchangelist=
 ```
 
 When deployed, this will become:
@@ -162,7 +162,6 @@ When deployed, this will become:
                 <executions>
                     <execution>
                         <goals>
-                            <goal>clean</goal>
                             <goal>expand-pom</goal>
                         </goals>
                     </execution>

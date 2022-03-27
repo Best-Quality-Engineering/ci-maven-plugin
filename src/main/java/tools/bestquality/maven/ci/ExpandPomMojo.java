@@ -51,7 +51,7 @@ public class ExpandPomMojo
         Path ciPomFile = writeCiPom(expandedPom);
         project.setPomFile(ciPomFile.toFile());
         info(format("%s has been configured to use generated POM file at %s",
-                project.getId(), ciPomFile.toAbsolutePath()));
+                project.getArtifactId(), ciPomFile.toAbsolutePath()));
     }
 
     private String readProjectPom()
