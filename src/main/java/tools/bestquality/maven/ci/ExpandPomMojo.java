@@ -43,15 +43,25 @@ public class ExpandPomMojo
     public void execute()
             throws MojoExecutionException {
         String templatePom = readTemplatePom();
-        String expandedPom = template(templatePom)
-                .expand(resolver.resolve("revision"),
-                        resolver.resolve("sha1"),
-                        resolver.resolve("changelist"));
+        String expandedPom = expand(templatePom);
         if (!templatePom.equals(expandedPom)) {
             Path ciPomFile = writeCiPom(expandedPom);
             project.setPomFile(ciPomFile.toFile());
             getLog().info(format("Configured %s to use generated POM file at %s",
                     project.getId(), ciPomFile.toAbsolutePath()));
+        }
+    }
+
+    private String expand(String templatePom)
+            throws MojoExecutionException {
+        try {
+            return template(templatePom)
+                    .expand(resolver.resolve("revision"),
+                            resolver.resolve("sha1"),
+                            resolver.resolve("changelist"));
+        } catch (Exception e) {
+            getLog().error("Failure expanding template POM file", e);
+            throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -62,7 +72,7 @@ public class ExpandPomMojo
             return new String(readAllBytes(currentPomFile.toPath()), UTF_8);
         } catch (IOException e) {
             getLog().error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -77,7 +87,7 @@ public class ExpandPomMojo
             return ciPomPath;
         } catch (IOException e) {
             getLog().error(format("Failure writing generated POM file: %s", ciPomPath.toAbsolutePath()), e);
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }
 }
