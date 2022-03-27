@@ -11,7 +11,7 @@
 
     <groupId>tools.bestquality</groupId>
     <artifactId>maven-ci-plugin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Maven CI Plugin</name>
     <description>Maven plugin for building and releasing from CI pipelines</description>
 
