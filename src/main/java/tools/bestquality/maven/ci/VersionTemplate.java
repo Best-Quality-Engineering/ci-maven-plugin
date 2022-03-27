@@ -1,6 +1,7 @@
 package tools.bestquality.maven.ci;
 
 import static java.lang.String.format;
+import static org.apache.maven.shared.utils.StringUtils.isEmpty;
 
 @FunctionalInterface
 public interface VersionTemplate {
@@ -17,15 +18,21 @@ public interface VersionTemplate {
             // Next update the property definitions
             if (revision != null) {
                 expanded = expanded.replaceAll("<revision\\s*>.*</revision\\s*>|<revision\\s*/>",
-                        format("<revision>%s</revision>", revision));
+                        isEmpty(revision)
+                                ? "<revision/>"
+                                : format("<revision>%s</revision>", revision));
             }
             if (sha1 != null) {
                 expanded = expanded.replaceAll("<sha1\\s*>.*</sha1\\s*>|<sha1\\s*/>",
-                        format("<sha1>%s</sha1>", sha1));
+                        isEmpty(sha1)
+                                ? "<sha1/>"
+                                : format("<sha1>%s</sha1>", sha1));
             }
             if (changelist != null) {
                 expanded = expanded.replaceAll("<changelist\\s*>.*</changelist\\s*>|<changelist\\s*/>",
-                        format("<changelist>%s</changelist>", changelist));
+                        isEmpty(changelist)
+                                ? "<changelist/>"
+                                : format("<changelist>%s</changelist>", changelist));
             }
             return expanded;
         };

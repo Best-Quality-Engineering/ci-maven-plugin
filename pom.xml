@@ -13,7 +13,7 @@
     <artifactId>maven-ci-plugin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Maven CI Plugin</name>
-    <description>Maven plugin for building an releasing from CI pipelines</description>
+    <description>Maven plugin for building and releasing from CI pipelines</description>
 
     <properties>
         <ossrh.hostname>s01.oss.sonatype.org</ossrh.hostname>

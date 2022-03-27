@@ -36,6 +36,8 @@ class VersionTemplateTest
         "<changelist  >.RELEASE</changelist  >" | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
         "<changelist/>"                         | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
         "<changelist />"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
+        "<sha1/>"                               | "2.2.2"  | null   | "-SNAPSHOT" | "<sha1/>"
+        "<sha1/>"                               | "2.2.2"  | ""     | "-SNAPSHOT" | "<sha1/>"
         "<sha1/><sha1/>"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1><sha1>2222</sha1>"
     }
 }
