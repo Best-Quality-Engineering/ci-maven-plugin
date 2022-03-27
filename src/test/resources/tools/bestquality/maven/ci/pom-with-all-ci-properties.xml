@@ -10,8 +10,8 @@
     <description>Maven plugin for building an releasing from CI pipelines</description>
 
     <properties>
-        <revision>0.0.1</revision>
-        <sha1>22</sha1>
+        <revision>1.1.1</revision>
+        <sha1>11</sha1>
         <changelist>-SNAPSHOT</changelist>
     </properties>
 </project>

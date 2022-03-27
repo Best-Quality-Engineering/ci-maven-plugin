@@ -1,4 +1,4 @@
-package bestquality.maven.ci;
+package tools.bestquality.maven.ci;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -11,7 +11,6 @@ public abstract class CiMojo<M extends CiMojo<M>>
 
     @Parameter(defaultValue = "${project.build.directory}/generated-poms")
     private File outputDirectory;
-
 
     @Parameter(defaultValue = "ci-pom.xml")
     private String ciPomFilename;

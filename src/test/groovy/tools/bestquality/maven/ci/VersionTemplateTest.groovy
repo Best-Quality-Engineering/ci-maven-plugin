@@ -1,11 +1,12 @@
-package bestquality.maven.ci
+package tools.bestquality.maven.ci
 
+import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bestquality.maven.ci.VersionTemplate.template
+import static VersionTemplate.template
 
 class VersionTemplateTest
-        extends spock.lang.Specification {
+        extends Specification {
 
     @Unroll
     def "should expand ci friendly properties in #template with r: #revision s: #sha1 c: #changelist to #expected"() {

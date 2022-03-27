@@ -1,4 +1,4 @@
-package bestquality.maven.ci;
+package tools.bestquality.maven.ci;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;

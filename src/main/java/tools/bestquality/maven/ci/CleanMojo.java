@@ -1,4 +1,4 @@
-package bestquality.maven.ci;
+package tools.bestquality.maven.ci;
 
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;

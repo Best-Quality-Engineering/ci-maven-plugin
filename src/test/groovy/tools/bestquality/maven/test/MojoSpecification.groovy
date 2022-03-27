@@ -1,5 +1,6 @@
-package bestquality.maven.test
+package tools.bestquality.maven.test
 
+import groovy.xml.XmlParser
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
 import spock.lang.Specification
@@ -16,6 +17,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
 class MojoSpecification
         extends Specification {
+    protected XmlParser parser
     protected MavenProject mockProject
     protected Path pom
     protected Properties projectProperties
@@ -26,6 +28,8 @@ class MojoSpecification
     protected Path outputPath
 
     def setup() {
+        parser = new XmlParser()
+
         mockProject = Mock(MavenProject)
         pom = createTempFile("pom-", ".xml")
         mockProject.getFile() >> pom.toFile()
@@ -47,6 +51,10 @@ class MojoSpecification
 
     def setupPom(InputStream contents) {
         copy(contents, pom, REPLACE_EXISTING)
+    }
+
+    def setupPomFromResource(String resource) {
+        setupPom(getClass().getResourceAsStream(resource))
     }
 
     def cleanup() {

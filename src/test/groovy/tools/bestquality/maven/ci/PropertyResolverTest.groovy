@@ -1,6 +1,6 @@
-package bestquality.maven.ci
+package tools.bestquality.maven.ci
 
-import bestquality.maven.test.MojoSpecification
+import tools.bestquality.maven.test.MojoSpecification
 
 class PropertyResolverTest
         extends MojoSpecification {
