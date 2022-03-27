@@ -6,7 +6,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 import java.nio.file.Path;
 
-public abstract class CiMojo<M extends CiMojo<M>>
+public abstract class CiPomMojo<M extends CiPomMojo<M>>
         extends AbstractMojo {
 
     @Parameter(defaultValue = "${project.build.directory}/generated-poms")

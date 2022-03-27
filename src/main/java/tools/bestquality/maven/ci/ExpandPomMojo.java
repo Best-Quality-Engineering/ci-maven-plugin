@@ -23,7 +23,7 @@ import static tools.bestquality.maven.ci.VersionTemplate.template;
 
 @Mojo(name = "expand-pom", requiresDependencyCollection = RUNTIME, threadSafe = true, defaultPhase = PROCESS_RESOURCES)
 public class ExpandPomMojo
-        extends CiMojo<ExpandPomMojo> {
+        extends CiPomMojo<ExpandPomMojo> {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 

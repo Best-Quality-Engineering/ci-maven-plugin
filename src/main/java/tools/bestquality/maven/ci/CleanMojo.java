@@ -14,7 +14,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.CLEAN;
 
 @Mojo(name = "clean", threadSafe = true, defaultPhase = CLEAN)
 public class CleanMojo
-        extends CiMojo<CleanMojo> {
+        extends CiPomMojo<CleanMojo> {
 
     public void execute()
             throws MojoFailureException {
