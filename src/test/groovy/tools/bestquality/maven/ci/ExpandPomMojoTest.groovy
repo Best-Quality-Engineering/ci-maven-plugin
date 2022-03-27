@@ -9,7 +9,7 @@ class ExpandPomMojoTest
     def setup() {
         mojo = new ExpandPomMojo()
                 .withProject(mockProject)
-                .withPropertyResolver(new PropertyResolver(mockProject, mockSession))
+                .withSession(mockSession)
     }
 
     def "should generate ci friendly POM file using system properties"() {

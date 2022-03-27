@@ -1,7 +1,7 @@
 package tools.bestquality.maven.ci;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -27,16 +27,17 @@ public class ExpandPomMojo
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
-    @Component
-    private PropertyResolver resolver;
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    private MavenSession session;
+
 
     public ExpandPomMojo withProject(MavenProject project) {
         this.project = project;
         return this;
     }
 
-    public ExpandPomMojo withPropertyResolver(PropertyResolver resolver) {
-        this.resolver = resolver;
+    public ExpandPomMojo withSession(MavenSession session) {
+        this.session = session;
         return this;
     }
 
@@ -69,6 +70,7 @@ public class ExpandPomMojo
     private String expandProjectPom(String projectPom)
             throws MojoExecutionException {
         info("Expanding contents of project POM file");
+        PropertyResolver resolver = new PropertyResolver(project, session);
         try {
             return template(projectPom)
                     .expand(resolver.resolve("revision"),
