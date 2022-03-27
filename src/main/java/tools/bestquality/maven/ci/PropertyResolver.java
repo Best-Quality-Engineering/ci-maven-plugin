@@ -23,15 +23,14 @@ public class PropertyResolver {
     }
 
     public String resolve(String property, Supplier<String> defaultValue) {
-        Properties properties = project.getProperties();
         Properties systemProperties = session.getSystemProperties();
         if (systemProperties.containsKey(property)) {
             return systemProperties.getProperty(property);
-        } else if (properties.containsKey(property)) {
-            return properties.getProperty(property);
-        } else {
-            return defaultValue.get();
         }
+        Properties properties = project.getProperties();
+        return properties.containsKey(property)
+                ? properties.getProperty(property)
+                : defaultValue.get();
     }
 
     public String resolve(String property) {

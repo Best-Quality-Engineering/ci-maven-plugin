@@ -55,6 +55,17 @@ public class ExpandPomMojo
         }
     }
 
+    private String readTemplatePom()
+            throws MojoExecutionException {
+        File currentPomFile = project.getFile();
+        try {
+            return new String(readAllBytes(currentPomFile.toPath()), UTF_8);
+        } catch (IOException e) {
+            getLog().error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
+            throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
+
     private Path writeCiPom(String content)
             throws MojoExecutionException {
         Path ciPomPath = ciPomPath();
@@ -66,17 +77,6 @@ public class ExpandPomMojo
             return ciPomPath;
         } catch (IOException e) {
             getLog().error(format("Failure writing generated POM file: %s", ciPomPath.toAbsolutePath()), e);
-            throw new MojoExecutionException(e.getMessage(), e);
-        }
-    }
-
-    private String readTemplatePom()
-            throws MojoExecutionException {
-        File currentPomFile = project.getFile();
-        try {
-            return new String(readAllBytes(currentPomFile.toPath()), UTF_8);
-        } catch (IOException e) {
-            getLog().error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }
