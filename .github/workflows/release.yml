@@ -20,7 +20,7 @@ jobs:
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
       - name: Install maven settings-security.xml
-        run: printenv SETTINGS_SECURITY_XML > ~/.m2/settings-security.xml
+        run: deploy/setup-security.sh
         env:
           SETTINGS_SECURITY_XML: ${{secrets.SETTINGS_SECURITY_XML}}
       - name: Deploy release to Maven Central
