@@ -5,7 +5,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
 [![Build Status](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/build.yml)
 [![Release Status](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/release.yml/badge.svg)](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/release.yml)
 [![Code Coverage](https://codecov.io/gh/ruffkat/ci-maven-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/ruffkat/ci-maven-plugin)
-[![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/ci-maven-plugin?color=green)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:ci-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/tools.bestquality/ci-maven-plugin?color=%234c1)](https://search.maven.org/search?q=g:tools.bestquality%20AND%20a:ci-maven-plugin)
 
 ## Usage
 ```xml
