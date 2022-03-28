@@ -17,13 +17,14 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-      - name: Deploy to Maven Central
-        run: |
-          deploy/setup-security.sh
-          deploy/deploy-branch.sh
+      - name: Setup Security
+        run: deploy/setup-security.sh
         env:
           SETTINGS_SECURITY_XML: ${{secrets.SETTINGS_SECURITY_XML}}
           CODE_SIGNING_KEY: ${{secrets.CODE_SIGNING_KEY}}
+      - name: Deploy to Maven Central
+        run: deploy/deploy-branch.sh
+        env:
           CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
           CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}
           OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
