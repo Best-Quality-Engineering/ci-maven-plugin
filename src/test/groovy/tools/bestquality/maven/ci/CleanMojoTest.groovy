@@ -1,8 +1,12 @@
 package tools.bestquality.maven.ci
 
+
+import org.apache.maven.plugin.MojoFailureException
+import tools.bestquality.function.CheckedConsumer
 import tools.bestquality.maven.test.MojoSpecification
 
 import static java.nio.file.Files.createTempFile
+import static java.nio.file.Files.delete
 import static java.nio.file.Files.exists
 
 class CleanMojoTest
@@ -29,7 +33,7 @@ class CleanMojoTest
     def "should do nothing when ci pom file does not exist"() {
         given:
         mojo.withOutputDirectory(outputPath.toFile())
-                .withCiPomFilename("ci-pom.xml")
+                .withCiPomFilename("pom-ci.xml")
 
         when:
         mojo.execute()
@@ -52,5 +56,25 @@ class CleanMojoTest
 
         cleanup:
         file.deleteDir()
+    }
+
+    def "should raise exception when deleting ci pom file fails"() {
+        given:
+        def file = createTempFile(outputPath, "ci-", "-pom.xml")
+        def mockDelete = Mock(CheckedConsumer) {
+            accept(file) >> { throw new IOException("boom") }
+        }
+        mojo = new CleanMojo(mockDelete)
+                .withOutputDirectory(outputPath.toFile())
+                .withCiPomFilename(file.fileName.toString())
+
+        when:
+        mojo.execute()
+
+        then:
+        thrown(MojoFailureException)
+
+        cleanup:
+        delete(file)
     }
 }

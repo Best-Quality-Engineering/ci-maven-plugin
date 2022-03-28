@@ -15,7 +15,7 @@ class ExpandPomMojoTest
     def "should generate ci friendly POM file using system properties"() {
         given: "a configured mojo"
         mojo.withOutputDirectory(outputPath.toFile())
-                .withCiPomFilename("ci-pom.xml")
+                .withCiPomFilename("pom-ci.xml")
 
         and: "a POM file with all ci friendly properties"
         setupPomFromResource("pom-with-all-ci-properties.xml")
@@ -44,7 +44,7 @@ class ExpandPomMojoTest
     def "should generate ci friendly POM file using project properties"() {
         given: "a configured mojo"
         mojo.withOutputDirectory(outputPath.toFile())
-                .withCiPomFilename("ci-pom.xml")
+                .withCiPomFilename("pom-ci.xml")
 
         and: "a POM file with all ci friendly properties"
         setupPomFromResource("pom-with-all-ci-properties.xml")

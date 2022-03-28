@@ -2,6 +2,7 @@ package tools.bestquality.maven.test
 
 import groovy.xml.XmlParser
 import org.apache.maven.execution.MavenSession
+import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
 import spock.lang.Specification
 
@@ -18,6 +19,9 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 class MojoSpecification
         extends Specification {
     protected XmlParser parser
+
+    protected Log mockLog
+
     protected MavenProject mockProject
     protected Path pom
     protected Properties projectProperties
@@ -29,6 +33,8 @@ class MojoSpecification
 
     def setup() {
         parser = new XmlParser()
+
+        mockLog = Mock(Log)
 
         mockProject = Mock(MavenProject)
         pom = createTempFile("pom-", ".xml")

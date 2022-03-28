@@ -34,10 +34,10 @@ By default, this goal is bound to the `process-resources` phase and considers th
 producing an expanded version performing the following actions on the template:
 * replaces all `${revision}`, `${sha1}`, and `${changelist}` property references found in the project's `pom.xml` file
 * updates the values of `revision`, `sha1`, and `changelist` defined in the `<properties>` element
-* writes the expanded pom file to `target/generated-poms/ci-pom.xml` and sets it as the project's `pom.xml` file
+* writes the expanded pom file to `target/generated-poms/pom-ci.xml` and sets it as the project's `pom.xml` file
 
 ### `ci:clean`
-By default, this goal is bound to the `clean` phase and will remove the expanded `target/generated-poms/ci-pom.xml` file
+By default, this goal is bound to the `clean` phase and will remove the expanded `target/generated-poms/pom-ci.xml` file
 
 _note: This goal is only needed if the default plugin `outputDirectory` configuration is changed to be outside
 of `${project.build.directory}`_

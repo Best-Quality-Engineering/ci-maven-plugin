@@ -12,7 +12,7 @@ public abstract class CiPomMojo<M extends CiPomMojo<M>>
     @Parameter(defaultValue = "${project.build.directory}/generated-poms")
     private File outputDirectory;
 
-    @Parameter(defaultValue = "ci-pom.xml")
+    @Parameter(defaultValue = "pom-ci.xml")
     private String ciPomFilename;
 
 
