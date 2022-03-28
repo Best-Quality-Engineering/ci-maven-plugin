@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Java CI with Maven
+name: continuous integration
 
 on:
   push:
@@ -11,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -22,8 +17,13 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -e -B -ntp -f pom.xml -P ci -P ossrh deploy -Dsha1="-$GITHUB_RUN_ID"
+    - name: Setup Security
+      run: deploy/setup-security.sh
+      env:
+        MAVEN_SECURITY_MASTER: ${{secrets.MAVEN_SECURITY_MASTER}}
+        CODE_SIGNING_KEY: ${{secrets.CODE_SIGNING_KEY}}
+    - name: Deploy to Maven Central
+      run: deploy/deploy-branch.sh
       env:
         CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
         CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}

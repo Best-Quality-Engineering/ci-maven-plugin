@@ -1,8 +1,8 @@
 #!/bin/bash -e
 # Only deploy branch builds
-if [ "${TRAVIS_BRANCH}" != "${TRAVIS_TAG}" ]; then
-  echo "Performing a deploy on ${TRAVIS_BRANCH}"
-  mvn -e -B -ntp -s deploy/settings.xml -P ossrh deploy
-  echo "Uploading code coverage report for ${TRAVIS_BRANCH}"
+if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+  echo "Performing a deploy on ${GITHUB_REF_NAME}"
+  mvn -e -B -ntp -s deploy/settings.xml -P ci -P ossrh deploy -Dsha1="-${GITHUB_RUN_ID}"
+  echo "Uploading code coverage report for ${GITHUB_REF_NAME}"
   bash <(curl -s https://codecov.io/bash)
 fi
