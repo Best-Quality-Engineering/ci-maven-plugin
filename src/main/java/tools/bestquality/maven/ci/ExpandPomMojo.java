@@ -61,7 +61,7 @@ public class ExpandPomMojo
         File currentPomFile = project.getFile();
         try {
             return new String(readAllBytes(currentPomFile.toPath()), UTF_8);
-        } catch (IOException e) {
+        } catch (Exception e) {
             error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
@@ -92,7 +92,7 @@ public class ExpandPomMojo
                 writer.append(content);
             }
             return ciPomPath;
-        } catch (IOException e) {
+        } catch (Exception e) {
             error(format("Failure writing expanded POM file: %s", ciPomPath.toAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }

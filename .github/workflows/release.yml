@@ -20,7 +20,7 @@ jobs:
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
       - name: Deploy release to Maven Central
-        run: deploy/release-tag.sh
+        run: deploy/release-from-tag.sh
         env:
           CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
           CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}
