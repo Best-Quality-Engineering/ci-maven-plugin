@@ -22,11 +22,12 @@ jobs:
           server-password: OSSRH_PASSWORD
       - name: Install maven settings-security.xml
         run: printenv SETTINGS_SECURITY_XML > ~/.m2/settings-security.xml
+        env:
+          SETTINGS_SECURITY_XML: ${{secrets.SETTINGS_SECURITY_XML}}
       - name: Deploy to snapshot Maven Central
         run: deploy/deploy-branch.sh
         env:
           CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
           CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}
-          SETTINGS_SECURITY_XML: ${{secrets.SETTINGS_SECURITY_XML}}
           OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
           OSSRH_PASSWORD: ${{secrets.OSSRH_PASSWORD_ENC}}
