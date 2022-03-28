@@ -19,11 +19,13 @@ jobs:
           server-id: ossrh
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
+      - name: Install maven settings-security.xml
+        run: printenv SETTINGS_SECURITY_XML > ~/.m2/settings-security.xml
       - name: Deploy release to Maven Central
         run: deploy/release-from-tag.sh
         env:
           CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
           CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}
           OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
-          OSSRH_PASSWORD: ${{secrets.OSSRH_PASSWORD}}
+          OSSRH_PASSWORD: ${{secrets.OSSRH_PASSWORD_ENC}}
 

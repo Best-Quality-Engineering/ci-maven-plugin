@@ -37,6 +37,7 @@
         <!-- Plugin versions -->
         <plugin.ci.version>0.0.4</plugin.ci.version>
         <plugin.gmaven.version>1.13.1</plugin.gmaven.version>
+        <nexus.staging.version>1.6.12</nexus.staging.version>
     </properties>
 
     <prerequisites>
