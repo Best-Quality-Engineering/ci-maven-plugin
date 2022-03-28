@@ -20,7 +20,7 @@ jobs:
     - name: Setup Security
       run: deploy/setup-security.sh
       env:
-        MAVEN_SECURITY_MASTER: ${{secrets.MAVEN_SECURITY_MASTER}}
+        SETTINGS_SECURITY_XML: ${{secrets.SETTINGS_SECURITY_XML}}
         CODE_SIGNING_KEY: ${{secrets.CODE_SIGNING_KEY}}
     - name: Deploy to Maven Central
       run: deploy/deploy-branch.sh
