@@ -8,7 +8,6 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import static java.lang.String.format;

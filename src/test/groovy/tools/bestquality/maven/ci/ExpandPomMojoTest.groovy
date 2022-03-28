@@ -3,6 +3,8 @@ package tools.bestquality.maven.ci
 import org.apache.maven.plugin.MojoExecutionException
 import tools.bestquality.maven.test.MojoSpecification
 
+import java.nio.file.Path
+
 import static java.nio.file.Files.list
 
 class ExpandPomMojoTest
@@ -55,6 +57,12 @@ class ExpandPomMojoTest
         1 * mockLog.error("Failure reading project POM file: pom.xml", error)
         _ * mockLog._
 
+        and: "the pom file was not expanded"
+        0 * mockProject.setPomFile(_ as File)
+        !list(outputPath)
+                .findFirst()
+                .isPresent()
+
         and: "an exception is thrown"
         thrown(MojoExecutionException)
     }
@@ -80,6 +88,56 @@ class ExpandPomMojoTest
         and: "an error message is logged"
         1 * mockLog.error("Failure expanding template POM file", error)
         _ * mockLog._
+
+        and: "the pom file was not expanded"
+        0 * mockProject.setPomFile(_ as File)
+        !list(outputPath)
+                .findFirst()
+                .isPresent()
+
+        and: "an exception is thrown"
+        thrown(MojoExecutionException)
+    }
+
+    def "should raise exception on error writing ci pom"() {
+        given: "a mojo that will throw an exception when getting the ci pom parent path"
+        def error = new RuntimeException("nope")
+        def spyPath = Mock(Path) {
+            toAbsolutePath() >> Mock(Path) {
+                toString() >> "pom.xml"
+            }
+            getParent() >> { throw error }
+        }
+        mojo = new ExpandPomMojo() {
+            @Override
+            protected Path ciPomPath() {
+                return spyPath
+            }
+        }
+                .withProject(mockProject)
+                .withSession(mockSession)
+        mojo.setLog(mockLog)
+
+        and: "a POM file with all ci friendly properties"
+        setupPomFromResource("pom-with-all-ci-properties.xml")
+
+        and: "the ci properties are available as system properties"
+        systemProperties.setProperty("revision", "2.2.2")
+        systemProperties.setProperty("sha1", "22")
+        systemProperties.setProperty("changelist", ".RELEASE")
+
+        when: "the mojo is executed"
+        mojo.execute()
+
+        then: "an error message is logged"
+        1 * mockLog.error("Failure writing expanded POM file: pom.xml", error)
+        _ * mockLog._
+
+        and: "the pom file was not expanded"
+        0 * mockProject.setPomFile(_ as File)
+        !list(outputPath)
+                .findFirst()
+                .isPresent()
 
         and: "an exception is thrown"
         thrown(MojoExecutionException)
