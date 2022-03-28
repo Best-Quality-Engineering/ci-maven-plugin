@@ -1,15 +1,14 @@
-name: build
+name: release
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - "*"
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up build environment
+      - name: Set up release environment
         uses: actions/setup-java@v2
         with:
           java-version: "11"
@@ -20,10 +19,11 @@ jobs:
           server-id: ossrh
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
-      - name: Deploy to snapshot Maven Central
-        run: deploy/deploy-branch.sh
+      - name: Deploy release to Maven Central
+        run: deploy/release-tag.sh
         env:
           CODE_SIGNING_KEY_FINGERPRINT: ${{secrets.CODE_SIGNING_KEY_FINGERPRINT}}
           CODE_SIGNING_KEY_PASSPHRASE: ${{secrets.CODE_SIGNING_KEY_PASSPHRASE}}
           OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
           OSSRH_PASSWORD: ${{secrets.OSSRH_PASSWORD}}
+
