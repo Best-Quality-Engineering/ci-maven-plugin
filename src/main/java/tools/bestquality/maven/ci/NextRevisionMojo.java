@@ -85,7 +85,7 @@ public class NextRevisionMojo
         return component(component);
     }
 
-    private Path nextRevisionPath() {
+    Path nextRevisionPath() {
         return outputDirectory.toPath()
                 .resolve(filename);
     }
