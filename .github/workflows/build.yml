@@ -1,9 +1,15 @@
 name: build
 on:
   push:
-    branches: [ master ]
+    branches:
+      - "master"
+      - "feature/**"
+      - "fix/**"
   pull_request:
-    branches: [ master ]
+    branches:
+      - "master"
+      - "feature/**"
+      - "fix/**"
 jobs:
   build:
     runs-on: ubuntu-latest

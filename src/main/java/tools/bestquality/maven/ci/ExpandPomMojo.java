@@ -17,7 +17,7 @@ import static java.nio.file.Files.newBufferedWriter;
 import static java.nio.file.Files.readAllBytes;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
 import static org.apache.maven.plugins.annotations.ResolutionScope.RUNTIME;
-import static tools.bestquality.maven.ci.VersionTemplate.template;
+import static tools.bestquality.maven.ci.CiVersion.versionFrom;
 
 
 @Mojo(name = "expand-pom", requiresDependencyCollection = RUNTIME, threadSafe = true, defaultPhase = PROCESS_RESOURCES)
@@ -69,12 +69,10 @@ public class ExpandPomMojo
     private String expandProjectPom(String projectPom)
             throws MojoExecutionException {
         info("Expanding contents of project POM file");
-        PropertyResolver resolver = new PropertyResolver(project, session);
         try {
-            return template(projectPom)
-                    .expand(resolver.resolve("revision"),
-                            resolver.resolve("sha1"),
-                            resolver.resolve("changelist"));
+            CiVersion version = versionFrom(session.getSystemProperties())
+                    .withMissingFrom(project.getProperties());
+            return version.replace(version.expand(projectPom));
         } catch (Exception e) {
             error("Failure expanding template POM file", e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);

@@ -156,6 +156,11 @@ class ExpandPomMojoTest
         systemProperties.setProperty("sha1", "22")
         systemProperties.setProperty("changelist", ".RELEASE")
 
+        and: "the ci properties are available as project properties"
+        projectProperties.setProperty("revision", "1.1.1")
+        projectProperties.setProperty("sha1", "11")
+        projectProperties.setProperty("changelist", "-SNAPSHOT")
+
         when: "the mojo is executed"
         mojo.execute()
 
