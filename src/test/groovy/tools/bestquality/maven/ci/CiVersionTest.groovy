@@ -177,6 +177,14 @@ class CiVersionTest
         thrown(MojoFailureException)
     }
 
+    def "should raise exception when revision not present"() {
+        when:
+        version.next(MAJOR)
+
+        then:
+        thrown(MojoFailureException)
+    }
+
     @Unroll
     def "should compute next version using #incrementor when r: #revision and s: #sha1 and c: #changelist"() {
         given:
