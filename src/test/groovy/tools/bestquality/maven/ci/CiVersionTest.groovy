@@ -1,14 +1,16 @@
 package tools.bestquality.maven.ci
 
-
+import org.apache.maven.plugin.MojoFailureException
 import spock.lang.Specification
 import spock.lang.Unroll
+import tools.bestquality.maven.versioning.Incrementor
+import tools.bestquality.maven.versioning.Version
 
 import static tools.bestquality.maven.versioning.StandardIncrementor.AUTO
 import static tools.bestquality.maven.versioning.StandardIncrementor.BUILD
-import static tools.bestquality.maven.versioning.StandardIncrementor.PATCH
 import static tools.bestquality.maven.versioning.StandardIncrementor.MAJOR
 import static tools.bestquality.maven.versioning.StandardIncrementor.MINOR
+import static tools.bestquality.maven.versioning.StandardIncrementor.PATCH
 
 class CiVersionTest
         extends Specification {
@@ -23,6 +25,22 @@ class CiVersionTest
         !version.revision().isPresent()
         !version.sha1().isPresent()
         !version.changelist().isPresent()
+    }
+
+    def "should be equal when all components are equal"() {
+        given:
+        version.withRevision("1")
+                .withSha1("2")
+                .withChangelist("3")
+
+        and:
+        def other = new CiVersion()
+                .withRevision("1")
+                .withSha1("2")
+                .withChangelist("3")
+
+        expect:
+        version == other
     }
 
     @Unroll
@@ -142,6 +160,22 @@ class CiVersionTest
         "2.2.2"  | ".2222" | null        | "2.2.2.2222"
     }
 
+    def "should raise exception on error incrementing revision"() {
+        given:
+        version.withRevision("a.b.c")
+
+        and:
+        def mockIncrementor = Mock(Incrementor) {
+            next(_ as Version) >> { throw new Exception("nope") }
+        }
+
+        when:
+        version.next(mockIncrementor)
+
+        then:
+        thrown(MojoFailureException)
+    }
+
     @Unroll
     def "should compute next version using #incrementor when r: #revision and s: #sha1 and c: #changelist"() {
         given:
@@ -160,7 +194,7 @@ class CiVersionTest
         incrementor | revision  | sha1    | changelist  | expected
         MAJOR       | "1.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         MINOR       | "2.1.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        PATCH | "2.2.1" | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
+        PATCH       | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         BUILD       | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
         AUTO        | "1"       | ".2222" | "-SNAPSHOT" | "2.2222-SNAPSHOT"
         AUTO        | "2.1"     | ".2222" | "-SNAPSHOT" | "2.2.2222-SNAPSHOT"

@@ -21,7 +21,7 @@ import static org.codehaus.plexus.util.StringUtils.isNotEmpty;
 public final class Version {
     private static final String MAJOR_MINOR_PATCH_PATTERN = "^((\\d+)(\\.(\\d+)(\\.(\\d+))?)?)";
     private static final Pattern MAJOR_MINOR_PATCH = compile(MAJOR_MINOR_PATCH_PATTERN);
-    private static final Pattern FormatPattern = compile(MAJOR_MINOR_PATCH_PATTERN + "(.*)$");
+    private static final Pattern DIGITS = compile(MAJOR_MINOR_PATCH_PATTERN + "(.*)$");
     private static final Pattern BUILD_NUMBER = compile("(((\\-)(\\d+)(.*))?)|(\\.(.*))|(\\-(.*))|(.*)$");
 
     private Optional<Integer> major;
@@ -234,7 +234,7 @@ public final class Version {
 
     public static Version parseVersion(String version) {
         Version v = new Version();
-        Matcher matcherFormatPattern = FormatPattern.matcher(version);
+        Matcher matcherFormatPattern = DIGITS.matcher(version);
         if (matcherFormatPattern.matches()) {
             v.parseMajorMinorPatch(matcherFormatPattern.group(1));
             v.parseBuildAndQualifier(matcherFormatPattern.group(7));
