@@ -6,7 +6,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import tools.bestquality.maven.versioning.Incrementer;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,7 +18,7 @@ import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.newBufferedWriter;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 import static tools.bestquality.maven.ci.CiVersion.versionFrom;
-import static tools.bestquality.maven.versioning.ComponentIncrementer.component;
+import static tools.bestquality.maven.versioning.StandardIncrementor.incrementor;
 
 @Mojo(name = "next-revision",
         aggregator = true,
@@ -30,8 +29,8 @@ public class NextRevisionMojo
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
-    @Parameter(alias = "increment-component", defaultValue = "auto")
-    private String component;
+    @Parameter(alias = "incrementor", property = "incrementor", defaultValue = "auto")
+    private String incrementor;
 
     @Parameter(alias = "force-stdout", property = "force-stdout", defaultValue = "false")
     private boolean forceStdout;
@@ -48,8 +47,8 @@ public class NextRevisionMojo
         return this;
     }
 
-    public NextRevisionMojo withComponent(String component) {
-        this.component = component;
+    public NextRevisionMojo withIncrementor(String incrementor) {
+        this.incrementor = incrementor;
         return this;
     }
 
@@ -72,17 +71,13 @@ public class NextRevisionMojo
     public void execute()
             throws MojoFailureException, MojoExecutionException {
         CiVersion current = versionFrom(project.getProperties());
-        CiVersion next = current.next(incrementer());
+        CiVersion next = current.next(incrementor(incrementor));
         getLog().info(format("Next revision is: %s", next.toExternalForm()));
         if (forceStdout) {
             out.print(next.toExternalForm());
             out.flush();
         }
         writeNextRevision(next.toExternalForm());
-    }
-
-    private Incrementer incrementer() {
-        return component(component);
     }
 
     Path nextRevisionPath() {

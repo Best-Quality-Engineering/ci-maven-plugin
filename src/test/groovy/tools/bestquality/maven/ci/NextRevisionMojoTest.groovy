@@ -16,7 +16,7 @@ class NextRevisionMojoTest
     def setup() {
         mojo = new NextRevisionMojo()
                 .withProject(mockProject)
-                .withComponent("auto")
+                .withIncrementor("auto")
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("next-revision.txt")
         mojo.setLog(mockLog)
@@ -38,7 +38,7 @@ class NextRevisionMojoTest
             }
         }
                 .withProject(mockProject)
-                .withComponent("auto")
+                .withIncrementor("auto")
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("next-revision.txt")
         mojo.setLog(mockLog)

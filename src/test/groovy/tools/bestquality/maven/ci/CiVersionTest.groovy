@@ -4,11 +4,11 @@ package tools.bestquality.maven.ci
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static tools.bestquality.maven.versioning.ComponentIncrementer.AUTO
-import static tools.bestquality.maven.versioning.ComponentIncrementer.BUILD
-import static tools.bestquality.maven.versioning.ComponentIncrementer.INCREMENTAL
-import static tools.bestquality.maven.versioning.ComponentIncrementer.MAJOR
-import static tools.bestquality.maven.versioning.ComponentIncrementer.MINOR
+import static tools.bestquality.maven.versioning.StandardIncrementor.AUTO
+import static tools.bestquality.maven.versioning.StandardIncrementor.BUILD
+import static tools.bestquality.maven.versioning.StandardIncrementor.PATCH
+import static tools.bestquality.maven.versioning.StandardIncrementor.MAJOR
+import static tools.bestquality.maven.versioning.StandardIncrementor.MINOR
 
 class CiVersionTest
         extends Specification {
@@ -143,24 +143,24 @@ class CiVersionTest
     }
 
     @Unroll
-    def "should compute next version using #incrementer when r: #revision and s: #sha1 and c: #changelist"() {
+    def "should compute next version using #incrementor when r: #revision and s: #sha1 and c: #changelist"() {
         given:
         version.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.next(incrementer)
+        def actual = version.next(incrementor)
 
         then:
         actual.toExternalForm() == expected
         actual.toString() == expected
 
         where:
-        incrementer | revision  | sha1    | changelist  | expected
+        incrementor | revision  | sha1    | changelist  | expected
         MAJOR       | "1.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         MINOR       | "2.1.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        INCREMENTAL | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
+        PATCH | "2.2.1" | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         BUILD       | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
         AUTO        | "1"       | ".2222" | "-SNAPSHOT" | "2.2222-SNAPSHOT"
         AUTO        | "2.1"     | ".2222" | "-SNAPSHOT" | "2.2.2222-SNAPSHOT"

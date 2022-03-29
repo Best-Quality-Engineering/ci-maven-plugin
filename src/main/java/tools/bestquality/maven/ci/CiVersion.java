@@ -1,9 +1,8 @@
 package tools.bestquality.maven.ci;
 
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
-import tools.bestquality.maven.versioning.Incrementer;
+import tools.bestquality.maven.versioning.Incrementor;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -11,6 +10,7 @@ import java.util.Properties;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
+import static tools.bestquality.maven.versioning.Version.parseVersion;
 
 public class CiVersion {
     private Optional<String> revision = ofNullable(null);
@@ -132,10 +132,10 @@ public class CiVersion {
         return this;
     }
 
-    public CiVersion next(Incrementer incrementer)
+    public CiVersion next(Incrementor incrementor)
             throws MojoFailureException {
         return new CiVersion()
-                .withRevision(nextRevision(incrementer))
+                .withRevision(nextRevision(incrementor))
                 .withSha1(this.sha1)
                 .withChangelist(this.changelist);
     }
@@ -168,12 +168,12 @@ public class CiVersion {
         return Objects.hash(revision, sha1, changelist);
     }
 
-    private String nextRevision(Incrementer incrementer)
+    private String nextRevision(Incrementor incrementor)
             throws MojoFailureException {
         String revision = this.revision.orElseThrow(() ->
                 new MojoFailureException("Failed to determine next version, revision ci property not detected."));
         try {
-            return incrementer.next(new DefaultArtifactVersion(revision))
+            return incrementor.next(parseVersion(revision))
                     .toString();
         } catch (Exception e) {
             throw new MojoFailureException(format("Revision %s is not a valid Maven artifact version", revision), e);

@@ -36,6 +36,31 @@ producing an expanded version performing the following actions on the template:
 * updates the values of `revision`, `sha1`, and `changelist` defined in the `<properties>` element
 * writes the expanded pom file to `target/generated-poms/pom-ci.xml` and sets it as the project's `pom.xml` file
 
+### `ci:next-revision`
+By default, this aggregator goal is bound to the `validate` phase and will read the top-level project's `revision`
+property and increment it according to the desired version component.
+
+Without customization, the goal will attempt to resolve the version component to increment by starting with the `build` 
+and working it's way up to the `major` component. The following incrementors are available:
+* `auto` (default)
+* `major`
+* `minor`
+* `patch`
+* `build`
+
+It will write the results into `target/ci/next-revision.txt`
+
+#### Writing to `stdout`
+The goal can be executed from the command line to capture and assign the output to a variable:
+
+```shell
+next_revision=$(mvn -q ci:next-revision -Dforce-stdout=true)
+```
+or using a specific incrementor:
+```shell
+next_revision=$(mvn -q ci:next-revision -Dforce-stdout=true -incrementor=patch)
+```
+
 ### `ci:clean`
 By default, this goal is bound to the `clean` phase and will remove the expanded `target/generated-poms/pom-ci.xml` file
 
@@ -176,4 +201,3 @@ When deployed, this will become:
 
 ## Upcoming Features
 * Goal to update any references to the project version in documentation, i.e. `README.md`
-* Goal to increment the deconstructed version's `revision` element for next iteration of development after a release
