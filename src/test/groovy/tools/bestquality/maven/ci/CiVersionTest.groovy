@@ -4,6 +4,12 @@ package tools.bestquality.maven.ci
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static tools.bestquality.maven.ci.VersionElement.AUTO
+import static tools.bestquality.maven.ci.VersionElement.BUILD
+import static tools.bestquality.maven.ci.VersionElement.INCREMENTAL
+import static tools.bestquality.maven.ci.VersionElement.MAJOR
+import static tools.bestquality.maven.ci.VersionElement.MINOR
+
 class CiVersionTest
         extends Specification {
     CiVersion version
@@ -131,20 +137,27 @@ class CiVersionTest
     }
 
     @Unroll
-    def "should compute next version when r: #revision and s: #sha1 and c: #changelist"() {
+    def "should compute next version using #element when r: #revision and s: #sha1 and c: #changelist"() {
         given:
         version.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.next()
+        def actual = version.next(element)
 
         then:
         actual.toString() == expected
 
         where:
-        revision | sha1   | changelist  | expected
-        "2.2.2"  | ".2222" | "-SNAPSHOT" | "TODO.2222-SNAPSHOT"
+        element     | revision  | sha1    | changelist  | expected
+        MAJOR       | "2.2.2"   | ".2222" | "-SNAPSHOT" | "3.2.2.2222-SNAPSHOT"
+        MINOR       | "2.2.2"   | ".2222" | "-SNAPSHOT" | "2.3.2.2222-SNAPSHOT"
+        INCREMENTAL | "2.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.3.2222-SNAPSHOT"
+        BUILD       | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
+        AUTO        | "2"       | ".2222" | "-SNAPSHOT" | "3.2222-SNAPSHOT"
+        AUTO        | "2.2"     | ".2222" | "-SNAPSHOT" | "2.3.2222-SNAPSHOT"
+        AUTO        | "2.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.3.2222-SNAPSHOT"
+        AUTO        | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
     }
 }

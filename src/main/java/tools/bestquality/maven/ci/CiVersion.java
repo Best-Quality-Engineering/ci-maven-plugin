@@ -1,5 +1,7 @@
 package tools.bestquality.maven.ci;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Objects;
@@ -108,9 +110,10 @@ public class CiVersion {
         return this;
     }
 
-    public CiVersion next() {
+    public CiVersion next(VersionIncrementer incrementer)
+            throws MojoFailureException {
         return new CiVersion()
-                .withRevision(nextRevision())
+                .withRevision(nextRevision(incrementer))
                 .withSha1(this.sha1)
                 .withChangelist(this.changelist);
     }
@@ -127,11 +130,11 @@ public class CiVersion {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        revision.ifPresent(buffer::append);
-        sha1.ifPresent(buffer::append);
-        changelist.ifPresent(buffer::append);
-        return buffer.toString();
+        StringBuilder builder = new StringBuilder();
+        revision.ifPresent(builder::append);
+        sha1.ifPresent(builder::append);
+        changelist.ifPresent(builder::append);
+        return builder.toString();
     }
 
     @Override
@@ -139,8 +142,16 @@ public class CiVersion {
         return Objects.hash(revision, sha1, changelist);
     }
 
-    private String nextRevision() {
-        return "TODO";
+    private String nextRevision(VersionIncrementer incrementer)
+            throws MojoFailureException {
+        String revision = this.revision.orElseThrow(() ->
+                new MojoFailureException("Failed to determine next version, revision ci property not detected."));
+        try {
+            return incrementer.next(new DefaultArtifactVersion(revision))
+                    .toString();
+        } catch (Exception e) {
+            throw new MojoFailureException(format("Revision %s is not a valid Maven artifact version", revision), e);
+        }
     }
 
     public static CiVersion versionFrom(Properties properties) {
