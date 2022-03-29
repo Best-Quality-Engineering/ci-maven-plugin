@@ -4,11 +4,11 @@ package tools.bestquality.maven.ci
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static tools.bestquality.maven.versioning.VersionComponent.AUTO
-import static tools.bestquality.maven.versioning.VersionComponent.BUILD
-import static tools.bestquality.maven.versioning.VersionComponent.INCREMENTAL
-import static tools.bestquality.maven.versioning.VersionComponent.MAJOR
-import static tools.bestquality.maven.versioning.VersionComponent.MINOR
+import static tools.bestquality.maven.versioning.ComponentIncrementer.AUTO
+import static tools.bestquality.maven.versioning.ComponentIncrementer.BUILD
+import static tools.bestquality.maven.versioning.ComponentIncrementer.INCREMENTAL
+import static tools.bestquality.maven.versioning.ComponentIncrementer.MAJOR
+import static tools.bestquality.maven.versioning.ComponentIncrementer.MINOR
 
 class CiVersionTest
         extends Specification {
@@ -80,20 +80,26 @@ class CiVersionTest
     }
 
     @Unroll
-    def "should replace ci friendly properties in #template with r: #revision s: #sha1 c: #changelist to #expected"() {
+    def "should replace ci friendly properties in #content with r: #revision s: #sha1 c: #changelist to #expected"() {
         given:
         version.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
+        and:
+        expected = "\n<properties>\n\t${expected}\n</properties>\n"
+
+        and:
+        def element = "\n<properties>\n\t${content}\n</properties>\n"
+
         when:
-        def actual = version.replace(template)
+        def actual = version.replace(element)
 
         then:
         actual == expected
 
         where:
-        template                                | revision | sha1   | changelist  | expected
+        content                                 | revision | sha1   | changelist  | expected
         "<revision>123</revision>"              | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
         "<revision  >123</revision  >"          | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
         "<revision/>"                           | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
@@ -112,7 +118,7 @@ class CiVersionTest
         "<sha1/>"                               | "2.2.2"  | ""     | "-SNAPSHOT" | "<sha1/>"
         "<changelist/>"                         | "2.2.2"  | "2222" | null        | "<changelist/>"
         "<changelist/>"                         | "2.2.2"  | "2222" | ""          | "<changelist/>"
-        "<sha1/><sha1/>"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1><sha1>2222</sha1>"
+        "<sha1/><sha1/>"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1><sha1/>"
     }
 
     @Unroll
@@ -137,27 +143,28 @@ class CiVersionTest
     }
 
     @Unroll
-    def "should compute next version using #element when r: #revision and s: #sha1 and c: #changelist"() {
+    def "should compute next version using #incrementer when r: #revision and s: #sha1 and c: #changelist"() {
         given:
         version.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.next(element)
+        def actual = version.next(incrementer)
 
         then:
+        actual.toExternalForm() == expected
         actual.toString() == expected
 
         where:
-        element     | revision  | sha1    | changelist  | expected
-        MAJOR       | "2.2.2"   | ".2222" | "-SNAPSHOT" | "3.2.2.2222-SNAPSHOT"
-        MINOR       | "2.2.2"   | ".2222" | "-SNAPSHOT" | "2.3.2.2222-SNAPSHOT"
-        INCREMENTAL | "2.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.3.2222-SNAPSHOT"
+        incrementer | revision  | sha1    | changelist  | expected
+        MAJOR       | "1.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
+        MINOR       | "2.1.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
+        INCREMENTAL | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         BUILD       | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
-        AUTO        | "2"       | ".2222" | "-SNAPSHOT" | "3.2222-SNAPSHOT"
-        AUTO        | "2.2"     | ".2222" | "-SNAPSHOT" | "2.3.2222-SNAPSHOT"
-        AUTO        | "2.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.3.2222-SNAPSHOT"
+        AUTO        | "1"       | ".2222" | "-SNAPSHOT" | "2.2222-SNAPSHOT"
+        AUTO        | "2.1"     | ".2222" | "-SNAPSHOT" | "2.2.2222-SNAPSHOT"
+        AUTO        | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         AUTO        | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
     }
 }

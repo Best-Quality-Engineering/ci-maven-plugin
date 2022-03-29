@@ -2,9 +2,11 @@ package tools.bestquality.maven.versioning;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 
+import static java.lang.String.format;
+import static java.util.Arrays.stream;
 import static tools.bestquality.maven.versioning.Incrementer.version;
 
-public enum VersionComponent
+public enum ComponentIncrementer
         implements Incrementer {
     MAJOR() {
         @Override
@@ -67,4 +69,13 @@ public enum VersionComponent
     };
 
     public abstract ArtifactVersion next(ArtifactVersion current);
+
+    public static ComponentIncrementer component(String name) {
+        return stream(values())
+                .filter(item -> item.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        format("No enum constant in %s matching %s",
+                                ComponentIncrementer.class.getCanonicalName(), name)));
+    }
 }

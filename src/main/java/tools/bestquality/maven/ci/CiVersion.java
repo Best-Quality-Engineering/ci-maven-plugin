@@ -66,6 +66,17 @@ public class CiVersion {
         return withChangelist(ofNullable(changelist));
     }
 
+    /**
+     * Expands all ci friendly property references to:
+     * <ul>
+     *     <li>{@code ${revision}}</li>
+     *     <li>{@code ${sha1}}</li>
+     *     <li>{@code ${changelist}}</li>
+     * </ul>
+     *
+     * @param template The content containing ci friendly property references to expand
+     * @return The expanded content with property references resolved
+     */
     public String expand(String template) {
         return template
                 .replace("${revision}", revision
@@ -76,26 +87,36 @@ public class CiVersion {
                         .orElse("${changelist}"));
     }
 
-    public String replace(String template) {
+    /**
+     * Replaces the values assigned to the ci friendly properties in the {@code &lt;properties/&gt;}
+     * element with the current values held in this instance.
+     *
+     * @param pom The POM content to update
+     * @return The POM content with updated ci friendly properties
+     */
+    public String replace(String pom) {
         if (revision.isPresent()) {
-            template = template.replaceAll("<revision\\s*>.*</revision\\s*>|<revision\\s*/>",
-                    revision.filter(StringUtils::isNotEmpty)
-                            .map(r -> format("<revision>%s</revision>", r))
-                            .orElse("<revision/>"));
+            String element = revision.filter(StringUtils::isNotEmpty)
+                    .map(r -> format("<revision>%s</revision>", r))
+                    .orElse("<revision/>");
+            pom = pom.replaceAll("(?s)(<properties.*)<revision\\s*>.*</revision\\s*>|<revision\\s*/>(.*properties>)",
+                    format("$1%s$2", element));
         }
         if (sha1.isPresent()) {
-            template = template.replaceAll("<sha1\\s*>.*</sha1\\s*>|<sha1\\s*/>",
-                    sha1.filter(StringUtils::isNotEmpty)
-                            .map(s -> format("<sha1>%s</sha1>", s))
-                            .orElse("<sha1/>"));
+            String element = sha1.filter(StringUtils::isNotEmpty)
+                    .map(s -> format("<sha1>%s</sha1>", s))
+                    .orElse("<sha1/>");
+            pom = pom.replaceAll("(?s)(<properties.*)<sha1\\s*>.*</sha1\\s*>|<sha1\\s*/>(.*properties>)",
+                    format("$1%s$2", element));
         }
         if (changelist.isPresent()) {
-            template = template.replaceAll("<changelist\\s*>.*</changelist\\s*>|<changelist\\s*/>",
-                    changelist.filter(StringUtils::isNotEmpty)
-                            .map(c -> format("<changelist>%s</changelist>", c))
-                            .orElse("<changelist/>"));
+            String element = changelist.filter(StringUtils::isNotEmpty)
+                    .map(c -> format("<changelist>%s</changelist>", c))
+                    .orElse("<changelist/>");
+            pom = pom.replaceAll("(?s)(<properties.*)<changelist\\s*>.*</changelist\\s*>|<changelist\\s*/>(.*properties>)",
+                    format("$1%s$2", element));
         }
-        return template;
+        return pom;
     }
 
     public CiVersion withMissingFrom(Properties properties) {
@@ -119,6 +140,14 @@ public class CiVersion {
                 .withChangelist(this.changelist);
     }
 
+    public String toExternalForm() {
+        StringBuilder builder = new StringBuilder();
+        revision.ifPresent(builder::append);
+        sha1.ifPresent(builder::append);
+        changelist.ifPresent(builder::append);
+        return builder.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,11 +160,7 @@ public class CiVersion {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        revision.ifPresent(builder::append);
-        sha1.ifPresent(builder::append);
-        changelist.ifPresent(builder::append);
-        return builder.toString();
+        return toExternalForm();
     }
 
     @Override
