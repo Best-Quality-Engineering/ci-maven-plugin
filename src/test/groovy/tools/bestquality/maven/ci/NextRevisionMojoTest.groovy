@@ -85,8 +85,8 @@ class NextRevisionMojoTest
         captured.toString() == "2.2.2-22-SNAPSHOT"
 
         and:
-        exists(outputPath.resolve("next-revision.txt"))
-        new String(readAllBytes(outputPath.resolve("next-revision.txt"))) == "2.2.2-22-SNAPSHOT"
+        exists(mojo.nextRevisionPath())
+        new String(readAllBytes(mojo.nextRevisionPath())) == "2.2.2-22-SNAPSHOT"
 
         cleanup:
         System.out = original
@@ -113,8 +113,8 @@ class NextRevisionMojoTest
         captured.toString() == ""
 
         and:
-        exists(outputPath.resolve("next-revision.txt"))
-        new String(readAllBytes(outputPath.resolve("next-revision.txt"))) == "2.2.2-22-SNAPSHOT"
+        exists(mojo.nextRevisionPath())
+        new String(readAllBytes(mojo.nextRevisionPath())) == "2.2.2-22-SNAPSHOT"
 
         cleanup:
         System.out = original
