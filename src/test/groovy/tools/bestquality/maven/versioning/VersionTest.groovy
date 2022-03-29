@@ -16,7 +16,7 @@ class VersionTest
         def copy = original.copy()
 
         then:
-        copy == original
+        copy.equals(original)
     }
 
     def "should increment major version"() {
@@ -110,5 +110,6 @@ class VersionTest
         "2.3.4-beta_5"            | 2     | 3     | 4     | null            | "beta_5"        | "2.3.4-beta_5"
         "2.3.4.beta_5"            | 2     | 3     | 4     | null            | "beta_5"        | "2.3.4.beta_5"
         "1.2.3-20171002135756"    | 1     | 2     | 3     | 20171002135756l | null            | "1.2.3-20171002135756"
+        "-SNAPSHOT"               | null  | null  | null  | null            | "-SNAPSHOT"     | "-SNAPSHOT"
     }
 }

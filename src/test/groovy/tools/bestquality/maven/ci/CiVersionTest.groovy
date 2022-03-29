@@ -40,7 +40,7 @@ class CiVersionTest
                 .withChangelist("3")
 
         expect:
-        version == other
+        version.equals(other)
     }
 
     @Unroll
