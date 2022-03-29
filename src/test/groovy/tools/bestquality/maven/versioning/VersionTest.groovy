@@ -3,6 +3,7 @@ package tools.bestquality.maven.versioning
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static java.util.Objects.equals
 import static tools.bestquality.maven.versioning.Version.parseVersion
 
 class VersionTest
@@ -16,7 +17,7 @@ class VersionTest
         def copy = original.copy()
 
         then:
-        copy.equals(original)
+        equals(copy, original)
     }
 
     def "should increment major version"() {

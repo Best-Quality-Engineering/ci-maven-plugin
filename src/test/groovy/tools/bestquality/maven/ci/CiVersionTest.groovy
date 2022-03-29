@@ -6,6 +6,7 @@ import spock.lang.Unroll
 import tools.bestquality.maven.versioning.Incrementor
 import tools.bestquality.maven.versioning.Version
 
+import static java.util.Objects.equals
 import static tools.bestquality.maven.versioning.StandardIncrementor.AUTO
 import static tools.bestquality.maven.versioning.StandardIncrementor.BUILD
 import static tools.bestquality.maven.versioning.StandardIncrementor.MAJOR
@@ -40,7 +41,7 @@ class CiVersionTest
                 .withChangelist("3")
 
         expect:
-        version.equals(other)
+        equals(version, other)
     }
 
     @Unroll
