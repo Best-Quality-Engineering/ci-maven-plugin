@@ -30,10 +30,10 @@ public class NextRevisionMojo
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
-    @Parameter(defaultValue = "auto", alias = "increment-component")
+    @Parameter(alias = "increment-component", defaultValue = "auto")
     private String component;
 
-    @Parameter(property = "forceStdout", alias = "force-stdout", defaultValue = "false")
+    @Parameter(alias = "force-stdout", property = "force-stdout", defaultValue = "false")
     private boolean forceStdout;
 
     @Parameter(defaultValue = "${project.build.directory}/ci")

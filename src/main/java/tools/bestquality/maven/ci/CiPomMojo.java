@@ -9,10 +9,10 @@ import java.nio.file.Path;
 public abstract class CiPomMojo<M extends CiPomMojo<M>>
         extends AbstractMojo {
 
-    @Parameter(defaultValue = "${project.build.directory}/generated-poms", alias = "output-directory")
+    @Parameter(alias = "output-directory", defaultValue = "${project.build.directory}/generated-poms")
     private File outputDirectory;
 
-    @Parameter(defaultValue = "pom-ci.xml", alias = "ci-pom-filename")
+    @Parameter(alias = "ci-pom-filename", defaultValue = "pom-ci.xml")
     private String ciPomFilename;
 
 
