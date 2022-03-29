@@ -2,14 +2,14 @@ package tools.bestquality.maven.ci;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 
-import static tools.bestquality.maven.ci.ArtifactVersions.newVersion;
+import static tools.bestquality.maven.ci.VersionIncrementer.version;
 
 public enum VersionElement
         implements VersionIncrementer {
     MAJOR() {
         @Override
         public ArtifactVersion next(ArtifactVersion current) {
-            return newVersion(
+            return version(
                     current.getMajorVersion() + 1,
                     current.getMinorVersion(),
                     current.getIncrementalVersion(),
@@ -20,7 +20,7 @@ public enum VersionElement
     MINOR() {
         @Override
         public ArtifactVersion next(ArtifactVersion current) {
-            return newVersion(
+            return version(
                     current.getMajorVersion(),
                     current.getMinorVersion() + 1,
                     current.getIncrementalVersion(),
@@ -31,7 +31,7 @@ public enum VersionElement
     INCREMENTAL() {
         @Override
         public ArtifactVersion next(ArtifactVersion current) {
-            return newVersion(
+            return version(
                     current.getMajorVersion(),
                     current.getMinorVersion(),
                     current.getIncrementalVersion() + 1,
@@ -42,7 +42,7 @@ public enum VersionElement
     BUILD() {
         @Override
         public ArtifactVersion next(ArtifactVersion current) {
-            return newVersion(
+            return version(
                     current.getMajorVersion(),
                     current.getMinorVersion(),
                     current.getIncrementalVersion(),
