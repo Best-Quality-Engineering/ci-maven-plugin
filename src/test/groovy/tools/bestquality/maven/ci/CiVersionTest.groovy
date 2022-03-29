@@ -4,11 +4,11 @@ package tools.bestquality.maven.ci
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static tools.bestquality.maven.ci.VersionElement.AUTO
-import static tools.bestquality.maven.ci.VersionElement.BUILD
-import static tools.bestquality.maven.ci.VersionElement.INCREMENTAL
-import static tools.bestquality.maven.ci.VersionElement.MAJOR
-import static tools.bestquality.maven.ci.VersionElement.MINOR
+import static tools.bestquality.maven.versioning.VersionComponent.AUTO
+import static tools.bestquality.maven.versioning.VersionComponent.BUILD
+import static tools.bestquality.maven.versioning.VersionComponent.INCREMENTAL
+import static tools.bestquality.maven.versioning.VersionComponent.MAJOR
+import static tools.bestquality.maven.versioning.VersionComponent.MINOR
 
 class CiVersionTest
         extends Specification {

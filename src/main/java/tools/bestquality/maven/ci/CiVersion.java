@@ -3,6 +3,7 @@ package tools.bestquality.maven.ci;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
+import tools.bestquality.maven.versioning.Incrementer;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -110,7 +111,7 @@ public class CiVersion {
         return this;
     }
 
-    public CiVersion next(VersionIncrementer incrementer)
+    public CiVersion next(Incrementer incrementer)
             throws MojoFailureException {
         return new CiVersion()
                 .withRevision(nextRevision(incrementer))
@@ -142,7 +143,7 @@ public class CiVersion {
         return Objects.hash(revision, sha1, changelist);
     }
 
-    private String nextRevision(VersionIncrementer incrementer)
+    private String nextRevision(Incrementer incrementer)
             throws MojoFailureException {
         String revision = this.revision.orElseThrow(() ->
                 new MojoFailureException("Failed to determine next version, revision ci property not detected."));

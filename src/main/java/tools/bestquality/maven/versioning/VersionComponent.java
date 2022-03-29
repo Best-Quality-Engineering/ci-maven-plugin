@@ -1,11 +1,11 @@
-package tools.bestquality.maven.ci;
+package tools.bestquality.maven.versioning;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 
-import static tools.bestquality.maven.ci.VersionIncrementer.version;
+import static tools.bestquality.maven.versioning.Incrementer.version;
 
-public enum VersionElement
-        implements VersionIncrementer {
+public enum VersionComponent
+        implements Incrementer {
     MAJOR() {
         @Override
         public ArtifactVersion next(ArtifactVersion current) {

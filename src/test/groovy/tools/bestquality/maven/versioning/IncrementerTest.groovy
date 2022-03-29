@@ -1,11 +1,11 @@
-package tools.bestquality.maven.ci
+package tools.bestquality.maven.versioning
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static tools.bestquality.maven.ci.VersionIncrementer.version
+import static Incrementer.version
 
-class VersionIncrementerTest
+class IncrementerTest
         extends Specification {
 
     @Unroll

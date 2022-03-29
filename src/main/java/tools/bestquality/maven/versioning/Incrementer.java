@@ -1,4 +1,4 @@
-package tools.bestquality.maven.ci;
+package tools.bestquality.maven.versioning;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -6,7 +6,7 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import static org.codehaus.plexus.util.StringUtils.isNotEmpty;
 
 @FunctionalInterface
-public interface VersionIncrementer {
+public interface Incrementer {
     ArtifactVersion next(ArtifactVersion current);
 
     static ArtifactVersion version(int major, int minor, int incremental, int build, String qualifier) {
