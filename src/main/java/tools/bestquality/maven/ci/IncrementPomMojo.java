@@ -14,17 +14,18 @@ import static java.nio.file.Files.newBufferedWriter;
 import static java.nio.file.Files.readAllBytes;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
 
-@Mojo(name = "increment-revision",
+@Mojo(name = "increment-pom",
         aggregator = true,
         threadSafe = true,
         defaultPhase = PROCESS_RESOURCES)
-public class IncrementRevisionMojo
-        extends IncrementingMojo<IncrementRevisionMojo> {
+public class IncrementPomMojo
+        extends IncrementingMojo<IncrementPomMojo> {
 
     @Override
     public void execute()
             throws MojoExecutionException, MojoFailureException {
-        writeIncrementedPom(next().replace(readProjectPom()));
+        CiVersion next = outputNextRevision();
+        writeIncrementedPom(next.replace(readProjectPom()));
     }
 
     private String readProjectPom()

@@ -3,15 +3,17 @@ package tools.bestquality.maven.ci
 import org.apache.maven.plugin.MojoExecutionException
 import tools.bestquality.maven.test.MojoSpecification
 
-class IncrementRevisionMojoTest
+class IncrementPomMojoTest
         extends MojoSpecification {
-    IncrementRevisionMojo mojo
+    IncrementPomMojo mojo
 
     @Override
     def setup() {
-        mojo = new IncrementRevisionMojo()
+        mojo = new IncrementPomMojo()
                 .withProject(mockProject)
                 .withIncrementor("auto")
+                .withOutputDirectory(outputPath.toFile())
+                .withFilename("next-revision.txt")
         mojo.setLog(mockLog)
     }
 
