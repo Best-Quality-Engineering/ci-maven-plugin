@@ -16,12 +16,10 @@ import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.newBufferedWriter;
 import static java.nio.file.Files.readAllBytes;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
-import static org.apache.maven.plugins.annotations.ResolutionScope.RUNTIME;
 import static tools.bestquality.maven.ci.CiVersion.versionFrom;
 
 
 @Mojo(name = "expand-pom",
-        requiresDependencyCollection = RUNTIME,
         threadSafe = true,
         defaultPhase = PROCESS_RESOURCES)
 public class ExpandPomMojo

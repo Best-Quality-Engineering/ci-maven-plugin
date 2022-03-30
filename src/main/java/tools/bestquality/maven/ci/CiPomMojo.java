@@ -1,13 +1,12 @@
 package tools.bestquality.maven.ci;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.nio.file.Path;
 
 public abstract class CiPomMojo<M extends CiPomMojo<M>>
-        extends AbstractMojo {
+        extends CiMojo {
 
     @Parameter(alias = "output-directory", defaultValue = "${project.build.directory}/generated-poms")
     private File outputDirectory;
@@ -34,18 +33,6 @@ public abstract class CiPomMojo<M extends CiPomMojo<M>>
     public M withCiPomFilename(String ciPomFilename) {
         this.ciPomFilename = ciPomFilename;
         return (M) this;
-    }
-
-    protected void info(CharSequence message) {
-        getLog().info(message);
-    }
-
-    protected void error(CharSequence message, Throwable error) {
-        getLog().error(message, error);
-    }
-
-    protected void warn(CharSequence message) {
-        getLog().warn(message);
     }
 
     protected Path ciPomPath() {

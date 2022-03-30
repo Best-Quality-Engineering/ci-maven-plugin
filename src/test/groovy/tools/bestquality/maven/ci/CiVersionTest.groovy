@@ -6,7 +6,6 @@ import spock.lang.Unroll
 import tools.bestquality.maven.versioning.Incrementor
 import tools.bestquality.maven.versioning.Version
 
-import static java.util.Objects.equals
 import static tools.bestquality.maven.versioning.StandardIncrementor.AUTO
 import static tools.bestquality.maven.versioning.StandardIncrementor.BUILD
 import static tools.bestquality.maven.versioning.StandardIncrementor.MAJOR
@@ -28,20 +27,48 @@ class CiVersionTest
         !version.changelist().isPresent()
     }
 
-    def "should be equal when all components are equal"() {
+    @Unroll
+    def "should equal self when r: #revision s: #sha1 c: #changelist"() {
         given:
-        version.withRevision("1")
-                .withSha1("2")
-                .withChangelist("3")
+        version.withRevision(revision as String)
+                .withSha1(sha1 as String)
+                .withChangelist(changelist as String)
 
-        and:
-        def other = new CiVersion()
-                .withRevision("1")
-                .withSha1("2")
-                .withChangelist("3")
+        when:
+        def equal = version.equals(expected)
 
-        expect:
-        equals(version, other)
+        then:
+        equal
+
+        where:
+        revision | sha1 | changelist | expected
+        "1"      | "1"  | "1"        | new CiVersion("1", "1", "1")
+        null     | "1"  | "1"        | new CiVersion(null, "1", "1")
+        "1"      | null | "1"        | new CiVersion("1", null, "1")
+        "1"      | "1"  | null       | new CiVersion("1", "1", null)
+        null     | null | null       | new CiVersion()
+    }
+
+    @Unroll
+    def "should hash self to #expected when r: #revision s: #sha1 c: #changelist"() {
+        given:
+        version.withRevision(revision as String)
+                .withSha1(sha1 as String)
+                .withChangelist(changelist as String)
+
+        when:
+        def actual = version.hashCode()
+
+        then:
+        actual == expected
+
+        where:
+        revision | sha1 | changelist | expected
+        "1"      | "1"  | "1"        | 78448
+        null     | "1"  | "1"        | 31359
+        "1"      | null | "1"        | 76929
+        "1"      | "1"  | null       | 78399
+        null     | null | null       | 29791
     }
 
     @Unroll

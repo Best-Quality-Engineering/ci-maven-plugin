@@ -1,11 +1,9 @@
 package tools.bestquality.maven.ci;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,20 +15,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.newBufferedWriter;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
-import static tools.bestquality.maven.ci.CiVersion.versionFrom;
-import static tools.bestquality.maven.versioning.StandardIncrementor.incrementor;
 
 @Mojo(name = "next-revision",
         aggregator = true,
         threadSafe = true,
         defaultPhase = VALIDATE)
 public class NextRevisionMojo
-        extends AbstractMojo {
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
-    private MavenProject project;
-
-    @Parameter(alias = "incrementor", property = "incrementor", defaultValue = "auto")
-    private String incrementor;
+        extends IncrementingMojo<NextRevisionMojo> {
 
     @Parameter(alias = "force-stdout", property = "force-stdout", defaultValue = "false")
     private boolean forceStdout;
@@ -41,16 +32,6 @@ public class NextRevisionMojo
     @Parameter(defaultValue = "next-revision.txt")
     private String filename;
 
-
-    public NextRevisionMojo withProject(MavenProject project) {
-        this.project = project;
-        return this;
-    }
-
-    public NextRevisionMojo withIncrementor(String incrementor) {
-        this.incrementor = incrementor;
-        return this;
-    }
 
     public NextRevisionMojo withForceStdout(boolean forceStdout) {
         this.forceStdout = forceStdout;
@@ -70,9 +51,7 @@ public class NextRevisionMojo
     @Override
     public void execute()
             throws MojoFailureException, MojoExecutionException {
-        CiVersion current = versionFrom(project.getProperties());
-        CiVersion next = current.next(incrementor(incrementor));
-        getLog().info(format("Next revision is: %s", next.toExternalForm()));
+        CiVersion next = next();
         if (forceStdout) {
             out.print(next.toExternalForm());
             out.flush();
@@ -88,14 +67,14 @@ public class NextRevisionMojo
     private void writeNextRevision(String revision)
             throws MojoExecutionException {
         Path path = nextRevisionPath();
-        getLog().info(format("Writing next revision to %s", path.toAbsolutePath()));
+        info(format("Writing next revision to %s", path.toAbsolutePath()));
         try {
             createDirectories(path.getParent());
             try (BufferedWriter writer = newBufferedWriter(path, UTF_8)) {
                 writer.append(revision);
             }
         } catch (Exception e) {
-            getLog().error(format("Failure writing next revision to: %s", path.toAbsolutePath()), e);
+            error(format("Failure writing next revision to: %s", path.toAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }
