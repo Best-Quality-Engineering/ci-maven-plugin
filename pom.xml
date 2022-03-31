@@ -26,7 +26,6 @@
         <changelist>-SNAPSHOT</changelist>
         <!-- Maven specific properties -->
         <maven.version>3.2.5</maven.version>
-        <maven.invoker.version>3.2.2</maven.invoker.version>
         <maven.plugin-annotations.version>3.6.4</maven.plugin-annotations.version>
         <maven.plugin-plugin.version>3.6.4</maven.plugin-plugin.version>
         <!-- Dependency versions -->
@@ -147,26 +146,6 @@
                         <id>generated-helpmojo</id>
                         <goals>
                             <goal>helpmojo</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-invoker-plugin</artifactId>
-                <version>${maven.invoker.version}</version>
-                <configuration>
-                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-                    <settingsFile>src/it/settings.xml</settingsFile>
-                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <postBuildHookScript>verify</postBuildHookScript> <!-- no extension required -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>install</goal>
-                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>

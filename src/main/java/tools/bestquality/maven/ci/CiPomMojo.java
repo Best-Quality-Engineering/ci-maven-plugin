@@ -8,9 +8,15 @@ import java.nio.file.Path;
 public abstract class CiPomMojo<M extends CiPomMojo<M>>
         extends CiMojo {
 
+    /**
+     * The output directory containing the generated <code>pom.xml</code> file
+     */
     @Parameter(alias = "output-directory", defaultValue = "${project.build.directory}/generated-poms")
     private File outputDirectory;
 
+    /**
+     * The name of the generated <code>pom.xml</code> file
+     */
     @Parameter(alias = "ci-pom-filename", defaultValue = "pom-ci.xml")
     private String ciPomFilename;
 

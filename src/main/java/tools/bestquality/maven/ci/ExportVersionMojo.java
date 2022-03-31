@@ -1,5 +1,6 @@
 package tools.bestquality.maven.ci;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -11,7 +12,7 @@ import java.nio.file.Path;
 import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.nio.file.Files.createDirectories;
-import static tools.bestquality.maven.ci.CiVersion.versionFrom;
+import static tools.bestquality.maven.ci.CiVersionSource.ciVersionSource;
 
 public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
         extends CiMojo {
@@ -20,11 +21,48 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
-    @Parameter(defaultValue = "${project.build.directory}/ci")
+    /**
+     * The source of the properties used to compute the CI Version. There are 2
+     * primary sources of properties from which the CI version is built:
+     * <p/>
+     * <ul>
+     *     <li>The maven project's properties</li>
+     *     <li>The maven session's system properties</li>
+     * </ul>
+     * <p/>
+     * This parameter determines which set of properties is used, there are options
+     * for merging the properties as well. The possible values are:
+     * <p/>
+     * <ul>
+     *     <li><code>project</code></li>
+     *     <li><code>system</code></li>
+     *     <li><code>merge-system-first</code></li>
+     *     <li><code>merge-project-first</code></li>
+     * </ul>
+     */
+    @Parameter(alias = "source", property = "source", defaultValue = "merge-system-first")
+    protected String source;
+
+    /**
+     * The directory containing exported version information
+     */
+    @Parameter(alias = "output-directory", defaultValue = "${project.build.directory}/ci")
     protected File outputDirectory;
 
+    /**
+     * Indicates that version information should be exported to standard out rather
+     * than a file so that it may be directly assigned to a scripting variable.
+     * <p/>
+     * For example:
+     * <code>
+     * export release_revision=$(mvn -q ci:release-version -Dscriptable=true)
+     * </code>
+     */
     @Parameter(alias = "scriptable", property = "scriptable", defaultValue = "false")
     protected boolean scriptable;
+
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    private MavenSession session;
 
     public ExportVersionMojo(Content content) {
         this.content = content;
@@ -37,19 +75,32 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
     }
 
     @SuppressWarnings("unchecked")
+    public M withSession(MavenSession session) {
+        this.session = session;
+        return (M) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public M withSource(String source) {
+        this.source = source;
+        return (M) this;
+    }
+
+    @SuppressWarnings("unchecked")
     public M withOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
         return (M) this;
     }
 
     @SuppressWarnings("unchecked")
-    public M withScriptable(boolean forceStdout) {
-        this.scriptable = forceStdout;
+    public M withScriptable(boolean scriptable) {
+        this.scriptable = scriptable;
         return (M) this;
     }
 
     protected CiVersion current() {
-        return versionFrom(project.getProperties());
+        CiVersionSource source = ciVersionSource(this.source);
+        return source.from(project, session);
     }
 
     protected void exportVersion(String filename, String version)

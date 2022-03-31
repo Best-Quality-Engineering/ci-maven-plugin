@@ -23,6 +23,8 @@ class ExportVersionMojoTest
         }
         mojo.setLog(logMock)
         mojo.withProject(projectMock)
+                .withSession(sessionMock)
+                .withSource("merge-system-first")
                 .withOutputDirectory(outputPath.toFile())
     }
 

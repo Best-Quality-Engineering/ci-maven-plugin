@@ -13,12 +13,13 @@ import java.nio.file.Path;
 import static java.lang.String.format;
 import static java.nio.file.Files.createDirectories;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
+import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 import static tools.bestquality.maven.ci.CiVersion.versionFrom;
 
 
 @Mojo(name = "expand-pom",
         threadSafe = true,
-        defaultPhase = PROCESS_RESOURCES)
+        defaultPhase = VALIDATE)
 public class ExpandPomMojo
         extends CiPomMojo<ExpandPomMojo> {
     private final Content content;

@@ -9,6 +9,8 @@ class ReleaseVersionMojoTest
     def setup() {
         mojo = new ReleaseVersionMojo()
                 .withProject(projectMock)
+                .withSession(sessionMock)
+                .withSource("merge-system-first")
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("release-version.txt")
         mojo.setLog(logMock)

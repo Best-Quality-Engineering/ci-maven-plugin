@@ -20,6 +20,8 @@ class IncrementPomMojoTest
         contentSpy = Spy(new Content())
         mojo = new IncrementPomMojo(contentSpy)
                 .withProject(projectMock)
+                .withSession(sessionMock)
+                .withSource("merge-system-first")
                 .withIncrementor("auto")
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("next-revision.txt")
@@ -43,7 +45,7 @@ class IncrementPomMojoTest
         actual == expected
 
         and:
-        1 * logMock.info(format("Next revision is: %s", expected.toExternalForm()))
+        1 * logMock.info(format("Next ci version is: %s", expected.toExternalForm()))
 
         where:
         incrementor | expected

@@ -16,7 +16,7 @@ class StandardIncrementorTest
         extends Specification {
 
     @Unroll
-    def "should find component from name when name is #name"() {
+    def "should find item from name when name is #name"() {
         expect:
         incrementor(name) == expected
 
@@ -34,7 +34,7 @@ class StandardIncrementorTest
         "AUTO"  | AUTO
     }
 
-    def "should raise exception when not found from name"() {
+    def "should raise exception when item not found from name"() {
         when:
         incrementor("unknown")
 
@@ -44,22 +44,22 @@ class StandardIncrementorTest
     }
 
     @Unroll
-    def "should increment version #component from #current to #expected"() {
+    def "should increment version #incrementor from #current to #expected"() {
         when:
-        def actual = component.next(current)
+        def actual = incrementor.next(current)
 
         then:
         actual == expected
 
         where:
-        component | current                 | expected
-        MAJOR     | parseVersion("1")       | parseVersion("2")
-        MINOR     | parseVersion("2.1")     | parseVersion("2.2")
-        PATCH     | parseVersion("2.2.1")   | parseVersion("2.2.2")
-        BUILD     | parseVersion("2.2.2-1") | parseVersion("2.2.2-2")
-        AUTO      | parseVersion("1")       | parseVersion("2")
-        AUTO      | parseVersion("2.1")     | parseVersion("2.2")
-        AUTO      | parseVersion("2.2.1")   | parseVersion("2.2.2")
-        AUTO      | parseVersion("2.2.2-1") | parseVersion("2.2.2-2")
+        incrementor | current                 | expected
+        MAJOR       | parseVersion("1")       | parseVersion("2")
+        MINOR       | parseVersion("2.1")     | parseVersion("2.2")
+        PATCH       | parseVersion("2.2.1")   | parseVersion("2.2.2")
+        BUILD       | parseVersion("2.2.2-1") | parseVersion("2.2.2-2")
+        AUTO        | parseVersion("1")       | parseVersion("2")
+        AUTO        | parseVersion("2.1")     | parseVersion("2.2")
+        AUTO        | parseVersion("2.2.1")   | parseVersion("2.2.2")
+        AUTO        | parseVersion("2.2.2-1") | parseVersion("2.2.2-2")
     }
 }

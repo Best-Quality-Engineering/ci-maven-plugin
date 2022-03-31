@@ -14,6 +14,10 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
         defaultPhase = VALIDATE)
 public class ReleaseVersionMojo
         extends ExportVersionMojo<ReleaseVersionMojo> {
+
+    /**
+     * The filename in the output directory which will contain the exported release version.
+     */
     @Parameter(defaultValue = "release-version.txt")
     private String filename;
 
