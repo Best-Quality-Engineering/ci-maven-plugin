@@ -16,7 +16,7 @@ if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
   git checkout -b "release/${GITHUB_REF_NAME}"
 
   echo "Incrementing project revision"
-  mvn -e -B -ntp -P ci ci:increment-revision
+  mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
 
   echo "Updating version references in documentation"
   sed --in-place --regexp-extended --expression="s/(<version>).*(<\/version>)/\1${GITHUB_REF_NAME}\2/g" README.md
