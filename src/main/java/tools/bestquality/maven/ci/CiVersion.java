@@ -9,13 +9,14 @@ import java.util.Optional;
 import java.util.Properties;
 
 import static java.lang.String.format;
+import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static tools.bestquality.maven.versioning.Version.parseVersion;
 
 public class CiVersion {
-    private Optional<String> revision = ofNullable(null);
-    private Optional<String> sha1 = ofNullable(null);
-    private Optional<String> changelist = ofNullable(null);
+    private Optional<String> revision = empty();
+    private Optional<String> sha1 = empty();
+    private Optional<String> changelist = empty();
 
     public CiVersion(String revision, String sha1, String changelist) {
         withRevision(revision);
@@ -141,12 +142,12 @@ public class CiVersion {
     }
 
     public CiVersion release() {
-        return changelist.filter(value -> "-SNAPSHOT".equalsIgnoreCase(value))
-                .map(value -> withChangelist(ofNullable(null)))
+        return changelist.filter("-SNAPSHOT"::equalsIgnoreCase)
+                .map(value -> withChangelist(empty()))
                 .orElseGet(() ->
                         revision.filter(value -> value.endsWith("-SNAPSHOT"))
                                 .map(value -> value.substring(0, value.length() - 9))
-                                .map(value -> withRevision(value))
+                                .map(this::withRevision)
                                 .orElse(CiVersion.this));
     }
 

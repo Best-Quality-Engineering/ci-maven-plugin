@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
+import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static java.util.regex.Pattern.compile;
@@ -40,19 +41,19 @@ public final class Version {
     private String qualifierSeparator;
 
     private Version() {
-        major = ofNullable(null);
+        major = empty();
         majorFormatPattern = "%d";
 
-        minor = ofNullable(null);
+        minor = empty();
         minorFormatPattern = "%d";
 
-        patch = ofNullable(null);
+        patch = empty();
         patchFormatPattern = "%d";
 
-        build = ofNullable(null);
+        build = empty();
         buildFormatPattern = "%d";
 
-        qualifier = ofNullable(null);
+        qualifier = empty();
         qualifierSeparator = "";
     }
 
