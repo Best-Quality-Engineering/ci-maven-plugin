@@ -51,14 +51,16 @@ and working it's way up to the `major` component. The following standard increme
 
 To use a specific incrementor:
 ```shell
-mvn -q ci:increment-pom -Dincrementor=minor
+mvn ci:increment-pom -Dincrementor=minor
 ```
 
 ### `ci:release-version`
 By default, this aggregator goal is bound to the `validate` phase and will read the top-level project's `revision`
-property and remove the `-SNAPSHOT` qualifier. This goal can be used if the release process is not event driven.
+property and output the value to a file or standard out while removing the `-SNAPSHOT` qualifier. It does not make 
+any pom modifications and can be used if the release process is not event driven.
 
-It will write the results into `target/ci/release-version.txt`
+If not explicitly configured to export the version to standard out, it will write the results 
+into `target/ci/release-version.txt`.
 
 #### Writing to `stdout`
 The goal can be executed from the command line to capture and assign the output to a variable:
