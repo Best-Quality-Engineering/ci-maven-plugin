@@ -12,7 +12,7 @@ class CiPomMojoTest
             void execute() {
             }
         }
-        mojo.setLog(mockLog)
+        mojo.setLog(logMock)
     }
 
     def "should use output directory"() {

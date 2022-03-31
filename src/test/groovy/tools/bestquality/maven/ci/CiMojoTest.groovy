@@ -13,7 +13,7 @@ class CiMojoTest
             void execute() {
             }
         }
-        mojo.setLog(mockLog)
+        mojo.setLog(logMock)
     }
 
     def "should log info message"() {
@@ -21,7 +21,7 @@ class CiMojoTest
         mojo.info("message")
 
         then:
-        1 * mockLog.info("message")
+        1 * logMock.info("message")
     }
 
     def "should log warn message"() {
@@ -29,7 +29,7 @@ class CiMojoTest
         mojo.warn("message")
 
         then:
-        1 * mockLog.warn("message")
+        1 * logMock.warn("message")
     }
 
     def "should log error message"() {
@@ -40,6 +40,6 @@ class CiMojoTest
         mojo.error("message", error)
 
         then:
-        1 * mockLog.error("message", error)
+        1 * logMock.error("message", error)
     }
 }

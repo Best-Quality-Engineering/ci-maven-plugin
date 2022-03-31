@@ -20,13 +20,13 @@ class MojoSpecification
         extends Specification {
     protected XmlParser parser
 
-    protected Log mockLog
+    protected Log logMock
 
-    protected MavenProject mockProject
+    protected MavenProject projectMock
     protected Path pom
     protected Properties projectProperties
 
-    protected MavenSession mockSession
+    protected MavenSession sessionMock
     protected Properties systemProperties
 
     protected Path outputPath
@@ -34,17 +34,17 @@ class MojoSpecification
     def setup() {
         parser = new XmlParser()
 
-        mockLog = Mock(Log)
+        logMock = Mock(Log)
 
-        mockProject = Mock(MavenProject)
+        projectMock = Mock(MavenProject)
         pom = createTempFile("pom-", ".xml")
-        mockProject.getFile() >> pom.toFile()
+        projectMock.getFile() >> pom.toFile()
         projectProperties = new Properties()
-        mockProject.getProperties() >> projectProperties
+        projectMock.getProperties() >> projectProperties
 
-        mockSession = Mock(MavenSession)
+        sessionMock = Mock(MavenSession)
         systemProperties = new Properties()
-        mockSession.getSystemProperties() >> systemProperties
+        sessionMock.getSystemProperties() >> systemProperties
 
         outputPath = createTempDirectory("mojo-test-")
     }

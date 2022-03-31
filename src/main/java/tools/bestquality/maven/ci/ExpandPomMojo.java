@@ -5,16 +5,13 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import tools.bestquality.io.Content;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.file.Path;
 
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectories;
-import static java.nio.file.Files.newBufferedWriter;
-import static java.nio.file.Files.readAllBytes;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
 import static tools.bestquality.maven.ci.CiVersion.versionFrom;
 
@@ -24,12 +21,21 @@ import static tools.bestquality.maven.ci.CiVersion.versionFrom;
         defaultPhase = PROCESS_RESOURCES)
 public class ExpandPomMojo
         extends CiPomMojo<ExpandPomMojo> {
+    private final Content content;
+
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
+    public ExpandPomMojo() {
+        this(new Content());
+    }
+
+    ExpandPomMojo(Content content) {
+        this.content = content;
+    }
 
     public ExpandPomMojo withProject(MavenProject project) {
         this.project = project;
@@ -60,7 +66,7 @@ public class ExpandPomMojo
         info("Reading project POM file");
         File currentPomFile = project.getFile();
         try {
-            return new String(readAllBytes(currentPomFile.toPath()), UTF_8);
+            return content.read(currentPomFile.toPath());
         } catch (Exception e) {
             error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
@@ -80,15 +86,13 @@ public class ExpandPomMojo
         }
     }
 
-    private Path writeCiPom(String content)
+    private Path writeCiPom(String pom)
             throws MojoExecutionException {
         Path ciPomPath = ciPomPath();
         info(format("Writing expanded POM file to %s", ciPomPath.toAbsolutePath()));
         try {
             createDirectories(ciPomPath.getParent());
-            try (BufferedWriter writer = newBufferedWriter(ciPomPath, UTF_8)) {
-                writer.append(content);
-            }
+            content.write(ciPomPath, pom);
             return ciPomPath;
         } catch (Exception e) {
             error(format("Failure writing expanded POM file: %s", ciPomPath.toAbsolutePath()), e);

@@ -15,7 +15,7 @@ class CleanMojoTest
 
     def setup() {
         mojo = new CleanMojo()
-        mojo.setLog(mockLog)
+        mojo.setLog(logMock)
     }
 
     def "should delete ci pom file when exists"() {

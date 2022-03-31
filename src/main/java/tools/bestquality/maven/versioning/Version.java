@@ -35,7 +35,6 @@ public final class Version {
 
     private Optional<Long> build;
     private String buildFormatPattern;
-    private String buildSeparator;
 
     private Optional<String> qualifier;
     private String qualifierSeparator;
@@ -52,7 +51,6 @@ public final class Version {
 
         build = ofNullable(null);
         buildFormatPattern = "%d";
-        buildSeparator = "";
 
         qualifier = ofNullable(null);
         qualifierSeparator = "";
@@ -112,7 +110,6 @@ public final class Version {
         version.patchFormatPattern = patchFormatPattern;
         version.build = build;
         version.buildFormatPattern = buildFormatPattern;
-        version.buildSeparator = buildSeparator;
         version.qualifier = qualifier;
         version.qualifierSeparator = qualifierSeparator;
         return version;
@@ -126,7 +123,7 @@ public final class Version {
         major.ifPresent(value -> builder.append(format(majorFormatPattern, value)));
         minor.ifPresent(value -> builder.append(".").append(format(minorFormatPattern, value)));
         patch.ifPresent(value -> builder.append(".").append(format(patchFormatPattern, value)));
-        build.ifPresent(value -> builder.append(buildSeparator).append(format(buildFormatPattern, value)));
+        build.ifPresent(value -> builder.append("-").append(format(buildFormatPattern, value)));
         qualifier.ifPresent(value -> builder.append(qualifierSeparator).append(value));
         return builder.toString();
     }
@@ -144,7 +141,6 @@ public final class Version {
                 && Objects.equals(patchFormatPattern, version.patchFormatPattern)
                 && Objects.equals(build, version.build)
                 && Objects.equals(buildFormatPattern, version.buildFormatPattern)
-                && Objects.equals(buildSeparator, version.buildSeparator)
                 && Objects.equals(qualifier, version.qualifier)
                 && Objects.equals(qualifierSeparator, version.qualifierSeparator);
     }
@@ -154,7 +150,7 @@ public final class Version {
         return Objects.hash(major, majorFormatPattern,
                 minor, minorFormatPattern,
                 patch, patchFormatPattern,
-                build, buildFormatPattern, buildSeparator,
+                build, buildFormatPattern,
                 qualifier, qualifierSeparator);
     }
 
@@ -199,11 +195,6 @@ public final class Version {
             if (buildString != null) {
                 build = of(new Long(buildString));
                 buildFormatPattern = "%0" + buildString.length() + "d";
-                if (buildNumberPart.startsWith(".")) {
-                    buildSeparator = ".";
-                } else if (buildNumberPart.startsWith("-")) {
-                    buildSeparator = "-";
-                }
             }
             if (matcher.group(7) != null) {
                 qualifierString = matcher.group(7);
