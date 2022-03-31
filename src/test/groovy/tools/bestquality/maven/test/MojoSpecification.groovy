@@ -2,6 +2,7 @@ package tools.bestquality.maven.test
 
 import groovy.xml.XmlParser
 import org.apache.maven.execution.MavenSession
+import org.apache.maven.model.Model
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
 import spock.lang.Specification
@@ -24,6 +25,7 @@ class MojoSpecification
 
     protected MavenProject projectMock
     protected Path pom
+    protected Model model
     protected Properties projectProperties
 
     protected MavenSession sessionMock
@@ -39,6 +41,9 @@ class MojoSpecification
         projectMock = Mock(MavenProject)
         pom = createTempFile("pom-", ".xml")
         projectMock.getFile() >> pom.toFile()
+        model = new Model()
+        model.setModelEncoding("UTF-8")
+        projectMock.getModel() >> model
         projectProperties = new Properties()
         projectMock.getProperties() >> projectProperties
 

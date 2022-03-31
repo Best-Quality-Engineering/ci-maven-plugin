@@ -7,6 +7,7 @@ import tools.bestquality.io.Content
 import tools.bestquality.maven.test.MojoSpecification
 
 import static java.lang.String.format
+import static java.nio.charset.StandardCharsets.UTF_8
 import static java.nio.file.Files.exists
 import static java.nio.file.Files.readAllBytes
 
@@ -67,7 +68,7 @@ class IncrementPomMojoTest
 
         and: "an error to be thrown while reading the pom file"
         def error = new IOException("nope")
-        contentSpy.read(pom) >> { throw error }
+        contentSpy.read(pom, UTF_8) >> { throw error }
 
         when: "the mojo is executed"
         mojo.execute()
@@ -94,7 +95,7 @@ class IncrementPomMojoTest
 
         and: "an error to be thrown while writing the pom file"
         def error = new IOException("nope")
-        contentSpy.write(pom, _ as String) >> { throw error }
+        contentSpy.write(pom, UTF_8, _ as String) >> { throw error }
 
         when: "the mojo is executed"
         mojo.execute()

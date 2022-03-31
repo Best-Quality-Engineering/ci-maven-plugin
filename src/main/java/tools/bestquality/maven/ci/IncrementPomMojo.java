@@ -87,7 +87,7 @@ public class IncrementPomMojo
         info("Reading project POM file");
         File pomFile = project.getFile();
         try {
-            return content.read(pomFile.toPath());
+            return content.read(pomFile.toPath(), charset(project));
         } catch (Exception e) {
             error(format("Failure reading project POM file: %s", pomFile.getAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
@@ -99,7 +99,7 @@ public class IncrementPomMojo
         Path pomPath = project.getFile().toPath();
         info(format("Writing incremented POM file to %s", pomPath.toAbsolutePath()));
         try {
-            content.write(pomPath, pom);
+            content.write(pomPath, charset(project), pom);
         } catch (Exception e) {
             error(format("Failure writing incremented POM file: %s", pomPath.toAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);

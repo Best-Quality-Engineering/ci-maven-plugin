@@ -1,6 +1,9 @@
 package tools.bestquality.maven.ci;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.project.MavenProject;
+
+import java.nio.charset.Charset;
 
 public abstract class CiMojo
         extends AbstractMojo {
@@ -15,5 +18,11 @@ public abstract class CiMojo
 
     protected void warn(CharSequence message) {
         getLog().warn(message);
+    }
+
+    public static Charset charset(MavenProject project) {
+        String encoding = project.getModel()
+                .getModelEncoding();
+        return Charset.forName(encoding);
     }
 }

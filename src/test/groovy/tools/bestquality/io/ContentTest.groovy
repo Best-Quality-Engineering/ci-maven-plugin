@@ -32,7 +32,7 @@ class ContentTest
         }
 
         when:
-        def actual = helper.read(file)
+        def actual = helper.read(file, UTF_8)
 
         then:
         actual == expected
@@ -43,7 +43,7 @@ class ContentTest
         def expected = "Hello"
 
         when:
-        helper.write(file, expected)
+        helper.write(file, UTF_8, expected)
 
         then:
         new String(readAllBytes(file), UTF_8) == expected

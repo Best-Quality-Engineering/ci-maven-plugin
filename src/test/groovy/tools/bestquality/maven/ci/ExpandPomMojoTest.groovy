@@ -4,7 +4,10 @@ import org.apache.maven.plugin.MojoExecutionException
 import tools.bestquality.io.Content
 import tools.bestquality.maven.test.MojoSpecification
 
+import java.nio.charset.StandardCharsets
+
 import static java.lang.String.format
+import static java.nio.charset.StandardCharsets.UTF_8
 import static java.nio.file.Files.list
 
 class ExpandPomMojoTest
@@ -47,7 +50,7 @@ class ExpandPomMojoTest
 
         and: "an error to be thrown while reading the pom file"
         def error = new IOException("nope")
-        contentSpy.read(pom) >> { throw error }
+        contentSpy.read(pom, UTF_8) >> { throw error }
 
         when: "the mojo is executed"
         mojo.execute()
@@ -110,7 +113,7 @@ class ExpandPomMojoTest
         and: "an error thrown when writing the ci pom file"
         def ciPomPath = mojo.ciPomPath()
         def error = new RuntimeException("nope")
-        contentSpy.write(ciPomPath, _) >> { throw error }
+        contentSpy.write(ciPomPath, UTF_8, _) >> { throw error }
 
         when: "the mojo is executed"
         mojo.execute()

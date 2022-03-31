@@ -1,7 +1,12 @@
 package tools.bestquality.maven.ci
 
-
+import org.apache.maven.model.Model
+import org.apache.maven.project.MavenProject
+import spock.lang.Unroll
 import tools.bestquality.maven.test.MojoSpecification
+
+import static java.nio.charset.StandardCharsets.US_ASCII
+import static java.nio.charset.StandardCharsets.UTF_8
 
 class CiMojoTest
         extends MojoSpecification {
@@ -41,5 +46,30 @@ class CiMojoTest
 
         then:
         1 * logMock.error("message", error)
+    }
+
+    @Unroll
+    def "should select #expected charset for project when encoding is #encoding"() {
+        given:
+        def project = Mock(MavenProject) {
+            getModel() >> {
+                def model = new Model()
+                model.setModelEncoding(encoding)
+                return model
+            }
+        }
+
+        when:
+        def actual = CiMojo.charset(project);
+
+        then:
+        actual == expected
+
+        where:
+        encoding   | expected
+        "us-ascii" | US_ASCII
+        "US-ASCII" | US_ASCII
+        "UTF-8"    | UTF_8
+        "utf-8"    | UTF_8
     }
 }

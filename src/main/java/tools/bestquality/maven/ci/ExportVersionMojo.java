@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 import static java.lang.String.format;
 import static java.lang.System.out;
+import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.Files.createDirectories;
 import static tools.bestquality.maven.ci.CiVersionSource.ciVersionSource;
 
@@ -114,7 +115,7 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
             info(format("Exporting version to %s", file.toAbsolutePath()));
             try {
                 createDirectories(directory);
-                content.write(file, version);
+                content.write(file, US_ASCII, version);
             } catch (Exception e) {
                 error(format("Failure exporting version to: %s", file.toAbsolutePath()), e);
                 throw new MojoExecutionException(e.getLocalizedMessage(), e);

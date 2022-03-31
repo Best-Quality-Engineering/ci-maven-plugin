@@ -5,6 +5,7 @@ import tools.bestquality.io.Content
 import tools.bestquality.maven.test.MojoSpecification
 
 import static java.lang.String.format
+import static java.nio.charset.StandardCharsets.US_ASCII
 import static java.nio.file.Files.exists
 import static java.nio.file.Files.list
 import static java.nio.file.Files.readAllBytes
@@ -47,7 +48,7 @@ class ExportVersionMojoTest
 
         and: "an error to throw when writing the version to file"
         def error = new RuntimeException("nope")
-        contentSpy.write(outputPath.resolve("file.txt"), "2.22.2-22-SNAPSHOT") >> {
+        contentSpy.write(outputPath.resolve("file.txt"), US_ASCII, "2.22.2-22-SNAPSHOT") >> {
             throw error
         }
 

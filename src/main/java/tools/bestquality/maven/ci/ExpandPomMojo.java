@@ -12,7 +12,6 @@ import java.nio.file.Path;
 
 import static java.lang.String.format;
 import static java.nio.file.Files.createDirectories;
-import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 import static tools.bestquality.maven.ci.CiVersion.versionFrom;
 
@@ -67,7 +66,7 @@ public class ExpandPomMojo
         info("Reading project POM file");
         File currentPomFile = project.getFile();
         try {
-            return content.read(currentPomFile.toPath());
+            return content.read(currentPomFile.toPath(), charset(project));
         } catch (Exception e) {
             error(format("Failure reading project POM file: %s", currentPomFile.getAbsolutePath()), e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
@@ -93,7 +92,7 @@ public class ExpandPomMojo
         info(format("Writing expanded POM file to %s", ciPomPath.toAbsolutePath()));
         try {
             createDirectories(ciPomPath.getParent());
-            content.write(ciPomPath, pom);
+            content.write(ciPomPath, charset(project), pom);
             return ciPomPath;
         } catch (Exception e) {
             error(format("Failure writing expanded POM file: %s", ciPomPath.toAbsolutePath()), e);
