@@ -21,7 +21,7 @@
         <ossrh.hostname>s01.oss.sonatype.org</ossrh.hostname>
         <ossrh.staging-profile>7e430683fef886</ossrh.staging-profile>
         <repository.slug>ruffkat/ci-maven-plugin</repository.slug>
-        <revision>0.0.9</revision>
+        <revision>0.0.10</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
         <!-- Maven specific properties -->
