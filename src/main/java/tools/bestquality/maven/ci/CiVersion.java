@@ -136,8 +136,18 @@ public class CiVersion {
             throws MojoFailureException {
         return new CiVersion()
                 .withRevision(nextRevision(incrementor))
-                .withSha1(this.sha1)
-                .withChangelist(this.changelist);
+                .withSha1(sha1)
+                .withChangelist(changelist);
+    }
+
+    public CiVersion release() {
+        return changelist.filter(value -> "-SNAPSHOT".equalsIgnoreCase(value))
+                .map(value -> withChangelist(ofNullable(null)))
+                .orElseGet(() ->
+                        revision.filter(value -> value.endsWith("-SNAPSHOT"))
+                                .map(value -> value.substring(0, value.length() - 9))
+                                .map(value -> withRevision(value))
+                                .orElse(CiVersion.this));
     }
 
     public String toExternalForm() {

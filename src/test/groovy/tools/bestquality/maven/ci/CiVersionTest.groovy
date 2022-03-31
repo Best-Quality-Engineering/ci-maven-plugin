@@ -237,4 +237,21 @@ class CiVersionTest
         AUTO        | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
         AUTO        | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
     }
+
+    @Unroll
+    def "should provide release version #expected when #current"() {
+        when:
+        def actual = current.release()
+
+        then:
+        actual == expected
+
+        where:
+        current                                     | expected
+        new CiVersion("2.2.2", "22", "-SNAPSHOT")   | new CiVersion("2.2.2", "22", null)
+        new CiVersion("2.2.2", "22", null)          | new CiVersion("2.2.2", "22", null)
+        new CiVersion("2.2.2", "22", "")            | new CiVersion("2.2.2", "22", "")
+        new CiVersion("2.2.2-SNAPSHOT", "22", null) | new CiVersion("2.2.2", "22", null)
+        new CiVersion("2.2.2-SNAPSHOT", "22", "")   | new CiVersion("2.2.2", "22", "")
+    }
 }

@@ -1,18 +1,16 @@
 package tools.bestquality.maven.ci
 
-
 import tools.bestquality.maven.test.MojoSpecification
 
-class NextRevisionMojoTest
+class ReleaseVersionMojoTest
         extends MojoSpecification {
-    NextRevisionMojo mojo
+    ReleaseVersionMojo mojo
 
     def setup() {
-        mojo = new NextRevisionMojo()
+        mojo = new ReleaseVersionMojo()
                 .withProject(projectMock)
-                .withIncrementor("auto")
                 .withOutputDirectory(outputPath.toFile())
-                .withFilename("next-revision.txt")
+                .withFilename("release-version.txt")
         mojo.setLog(logMock)
     }
 
@@ -21,7 +19,7 @@ class NextRevisionMojoTest
         def spy = Spy(mojo)
 
         and: "a project with ci properties"
-        projectProperties.setProperty("revision", "2.2.1")
+        projectProperties.setProperty("revision", "2.22.2")
         projectProperties.setProperty("sha1", "-22")
         projectProperties.setProperty("changelist", "-SNAPSHOT")
 
@@ -29,6 +27,6 @@ class NextRevisionMojoTest
         spy.execute()
 
         then:
-        1 * spy.outputNextRevision(mojo.next())
+        1 * spy.exportVersion("release-version.txt", "2.22.2-22")
     }
 }

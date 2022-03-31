@@ -2,6 +2,7 @@ package tools.bestquality.maven.ci
 
 import groovy.xml.XmlParser
 import org.apache.maven.plugin.MojoExecutionException
+import spock.lang.Unroll
 import tools.bestquality.io.Content
 import tools.bestquality.maven.test.MojoSpecification
 
@@ -23,6 +24,34 @@ class IncrementPomMojoTest
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("next-revision.txt")
         mojo.setLog(logMock)
+    }
+
+    @Unroll
+    def "should compute next version when incrementor when set to #incrementor"() {
+        given:
+        mojo.withIncrementor(incrementor)
+
+        and: "the ci properties are available as project properties"
+        projectProperties.setProperty("revision", "2.2.2-2")
+        projectProperties.setProperty("sha1", ".22")
+        projectProperties.setProperty("changelist", "-SNAPSHOT")
+
+        when:
+        def actual = mojo.next()
+
+        then:
+        actual == expected
+
+        and:
+        1 * logMock.info(format("Next revision is: %s", expected.toExternalForm()))
+
+        where:
+        incrementor | expected
+        "auto"      | new CiVersion("2.2.2-3", ".22", "-SNAPSHOT")
+        "build"     | new CiVersion("2.2.2-3", ".22", "-SNAPSHOT")
+        "patch"     | new CiVersion("2.2.3-2", ".22", "-SNAPSHOT")
+        "minor"     | new CiVersion("2.3.2-2", ".22", "-SNAPSHOT")
+        "major"     | new CiVersion("3.2.2-2", ".22", "-SNAPSHOT")
     }
 
     def "should raise exception on error reading project pom"() {
@@ -49,7 +78,7 @@ class IncrementPomMojoTest
         thrown(MojoExecutionException)
 
         and: "the next revision file was not written"
-        !exists(mojo.nextRevisionPath())
+        !exists(outputPath.resolve("next-revision.txt"))
     }
 
     def "should raise exception on error writing the project pom"() {
@@ -63,7 +92,7 @@ class IncrementPomMojoTest
 
         and: "an error to be thrown while writing the pom file"
         def error = new IOException("nope")
-        contentSpy.write(pom, _) >> { throw error }
+        contentSpy.write(pom, _ as String) >> { throw error }
 
         when: "the mojo is executed"
         mojo.execute()
@@ -77,7 +106,7 @@ class IncrementPomMojoTest
         thrown(MojoExecutionException)
 
         and: "the next revision file was not written"
-        !exists(mojo.nextRevisionPath())
+        !exists(outputPath.resolve("next-revision.txt"))
     }
 
     def "should increment revision in project pom"() {
@@ -93,8 +122,8 @@ class IncrementPomMojoTest
         mojo.execute()
 
         then: "the version is written to file"
-        exists(mojo.nextRevisionPath())
-        new String(readAllBytes(mojo.nextRevisionPath())) == "1.1.2.11-SNAPSHOT"
+        exists(outputPath.resolve("next-revision.txt"))
+        new String(readAllBytes(outputPath.resolve("next-revision.txt"))) == "1.1.2.11-SNAPSHOT"
 
         and: "the pom revision is incremented"
         def project = new XmlParser()

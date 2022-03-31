@@ -36,29 +36,35 @@ producing an expanded version performing the following actions on the template:
 * updates the values of `revision`, `sha1`, and `changelist` defined in the `<properties>` element
 * writes the expanded pom file to `target/generated-poms/pom-ci.xml` and sets it as the project's `pom.xml` file
 
-### `ci:next-revision`
-By default, this aggregator goal is bound to the `validate` phase and will read the top-level project's `revision`
-property and increment it according to the desired version component.
+### `ci:increment-pom`
+By default, this aggregator goal is bound to the `process-resources` phase and will update the project's top-level
+`pom.xml` ci `revision` property with the next selected component to increment. Use to prepare the `pom.xml`
+file for the next development snapshot.
 
 Without customization, the goal will attempt to resolve the version component to increment by starting with the `build` 
-and working it's way up to the `major` component. The following incrementors are available:
+and working it's way up to the `major` component. The following standard incrementors are available:
 * `auto` (default)
 * `major`
 * `minor`
 * `patch`
 * `build`
 
-It will write the results into `target/ci/next-revision.txt`
+To use a specific incrementor:
+```shell
+mvn -q ci:increment-pom -Dincrementor=minor
+```
+
+### `ci:release-version`
+By default, this aggregator goal is bound to the `validate` phase and will read the top-level project's `revision`
+property and remove the `-SNAPSHOT` qualifier. This goal can be used if the release process is not event driven.
+
+It will write the results into `target/ci/release-version.txt`
 
 #### Writing to `stdout`
 The goal can be executed from the command line to capture and assign the output to a variable:
 
 ```shell
-next_revision=$(mvn -q ci:next-revision -Dforce-stdout=true)
-```
-or using a specific incrementor:
-```shell
-next_revision=$(mvn -q ci:next-revision -Dforce-stdout=true -incrementor=patch)
+release_revision=$(mvn -q ci:release-version -Dscriptable=true)
 ```
 
 ### `ci:clean`
