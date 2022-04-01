@@ -17,8 +17,11 @@ public class ReleaseVersionMojo
 
     /**
      * The filename in the output directory which will contain the exported release version.
+     * <p/>
+     * This file will not be generated when the <code>scriptable</code> property is
+     * <code>true</code>
      */
-    @Parameter(defaultValue = "release-version.txt")
+    @Parameter(property = "filename", defaultValue = "release-version.txt")
     private String filename;
 
     ReleaseVersionMojo(Content content) {

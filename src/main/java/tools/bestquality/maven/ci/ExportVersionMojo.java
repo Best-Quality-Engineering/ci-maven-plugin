@@ -47,19 +47,14 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
     /**
      * The directory containing exported version information
      */
-    @Parameter(alias = "output-directory", defaultValue = "${project.build.directory}/ci")
+    @Parameter(alias = "output-directory", property = "output-directory", defaultValue = "${project.build.directory}/ci")
     protected File outputDirectory;
 
     /**
      * Indicates that version information should be exported to standard out rather
      * than a file so that it may be directly assigned to a scripting variable.
-     * <p/>
-     * For example:
-     * <code>
-     * export release_revision=$(mvn -q ci:release-version -Dscriptable=true)
-     * </code>
      */
-    @Parameter(alias = "scriptable", property = "scriptable", defaultValue = "false")
+    @Parameter(alias = "scriptable", property = "scriptable", defaultValue = "true")
     protected boolean scriptable;
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)

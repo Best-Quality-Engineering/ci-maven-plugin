@@ -59,14 +59,23 @@ By default, this aggregator goal is bound to the `validate` phase and will read 
 property and output the value to a file or standard out while removing the `-SNAPSHOT` qualifier. It does not make 
 any pom modifications and can be used if the release process is not event driven.
 
-If not explicitly configured to export the version to standard out, it will write the results 
-into `target/ci/release-version.txt`.
-
 #### Writing to `stdout`
-The goal can be executed from the command line to capture and assign the output to a variable:
+The goal is designed to be executed from the command line to capture and assign the output to a variable:
 
 ```shell
-release_revision=$(mvn -q ci:release-version -Dscriptable=true)
+release_revision=$(mvn -q ci:release-version)
+```
+#### Writing to a filename
+The goal can be configured to write the output to a file:
+
+```shell
+# writes to target/ci/release-version.txt
+mvn -q ci:release-version -Dscriptable=false
+```
+
+```shell
+# customize the file location
+mvn -q ci:release-version -Dscriptable=false -Doutput-directory="." -Dfilename="release.txt"
 ```
 
 ### `ci:clean`

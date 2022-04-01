@@ -41,10 +41,10 @@ public class IncrementPomMojo
     /**
      * The filename in the output directory which will contain the exported release version.
      * <p/>
-     * This file will not be generated if the <code>scriptable</code> property is
+     * This file will not be generated when the <code>scriptable</code> property is
      * <code>true</code>
      */
-    @Parameter(defaultValue = "next-version.txt")
+    @Parameter(property = "filename", defaultValue = "next-version.txt")
     private String filename;
 
 
