@@ -30,14 +30,14 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
 ## Goals
 
 ### `ci:expand-pom` 
-By default, this goal is bound to the `process-resources` phase and considers the project's `pom.xml` as a template
+By default, this goal is bound to the `validate` phase and considers the project's `pom.xml` as a template
 producing an expanded version performing the following actions on the template:
 * replaces all `${revision}`, `${sha1}`, and `${changelist}` property references found in the project's `pom.xml` file
 * updates the values of `revision`, `sha1`, and `changelist` defined in the `<properties>` element
 * writes the expanded pom file to `target/generated-poms/pom-ci.xml` and sets it as the project's `pom.xml` file
 
 ### `ci:increment-pom`
-By default, this aggregator goal is bound to the `process-resources` phase and will update the project's top-level
+By default, this aggregator goal is bound to the `validate` phase and will update the project's top-level
 `pom.xml` ci `revision` property with the next selected component to increment. Use to prepare the `pom.xml`
 file for the next development snapshot.
 
