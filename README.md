@@ -54,6 +54,26 @@ To use a specific incrementor:
 mvn ci:increment-pom -Dincrementor=minor
 ```
 
+This goal exports the incremented version and can be configured to export to standard out (default) or a file:
+
+#### Writing to `stdout`
+
+```shell
+# assign next version to script variable
+next_version=$(mvn -q ci:increment-pom)
+```
+#### Writing to a file
+
+```shell
+# writes to target/ci/next-version.txt
+mvn ci:increment-pom -Dscriptable=false
+```
+
+```shell
+# customize the file location (both file properties are optional)
+mvn ci:increment-pom -Dscriptable=false -Doutput-directory="." -Dfilename="next.txt"
+```
+
 ### `ci:release-version`
 By default, this aggregator goal is bound to the `validate` phase and will read the top-level project's `revision`
 property and output the value to a file or standard out while removing the `-SNAPSHOT` qualifier. It does not make 
@@ -65,17 +85,17 @@ The goal is designed to be executed from the command line to capture and assign 
 ```shell
 release_revision=$(mvn -q ci:release-version)
 ```
-#### Writing to a filename
+#### Writing to a file
 The goal can be configured to write the output to a file:
 
 ```shell
 # writes to target/ci/release-version.txt
-mvn -q ci:release-version -Dscriptable=false
+mvn ci:release-version -Dscriptable=false
 ```
 
 ```shell
-# customize the file location
-mvn -q ci:release-version -Dscriptable=false -Doutput-directory="." -Dfilename="release.txt"
+# customize the file location (both file properties are optional)
+mvn ci:release-version -Dscriptable=false -Doutput-directory="." -Dfilename="release.txt"
 ```
 
 ### `ci:clean`
