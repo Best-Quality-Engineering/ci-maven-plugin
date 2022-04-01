@@ -19,6 +19,7 @@ if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
   mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
 
   echo "Updating version references in documentation"
+  sed --in-place --regexp-extended --expression="s/(<plugin.ci.version>).*(<\/plugin.ci.version>)/\1${GITHUB_REF_NAME}\2/g" pom.xml
   sed --in-place --regexp-extended --expression="s/(<version>).*(<\/version>)/\1${GITHUB_REF_NAME}\2/g" README.md
   sed --in-place --regexp-extended --expression="s/^(version:).*$/\1 ${GITHUB_REF_NAME}/g" docs/_config.yml
 
