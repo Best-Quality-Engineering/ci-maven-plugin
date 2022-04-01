@@ -14,7 +14,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
         <plugin>
             <groupId>tools.bestquality</groupId>
             <artifactId>ci-maven-plugin</artifactId>
-            <version>0.0.11</version>
+            <version>0.0.12</version>
             <executions>
                 <execution>
                     <goals>
@@ -101,7 +101,7 @@ This configuration results in consistent developer and pipeline builds:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.11</version>
+                <version>0.0.12</version>
                 <executions>
                     <execution>
                         <goals>
@@ -147,7 +147,7 @@ When installed, this will become:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.11</version>
+                <version>0.0.12</version>
                 <executions>
                     <execution>
                         <goals>
@@ -192,7 +192,7 @@ When deployed, this will become:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.11</version>
+                <version>0.0.12</version>
                 <executions>
                     <execution>
                         <goals>
