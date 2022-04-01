@@ -1,5 +1,6 @@
 package tools.bestquality.maven.ci
 
+import org.apache.maven.model.Model
 import org.apache.maven.plugin.MojoFailureException
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -14,28 +15,28 @@ import static tools.bestquality.maven.versioning.StandardIncrementor.PATCH
 
 class CiVersionTest
         extends Specification {
-    CiVersion version
+    CiVersion ciVersion
 
     def setup() {
-        version = new CiVersion()
+        ciVersion = new CiVersion()
     }
 
     def "should have all nullable components by default"() {
         expect:
-        !version.revision().isPresent()
-        !version.sha1().isPresent()
-        !version.changelist().isPresent()
+        !ciVersion.revision().isPresent()
+        !ciVersion.sha1().isPresent()
+        !ciVersion.changelist().isPresent()
     }
 
     @Unroll
     def "should equal self when r: #revision s: #sha1 c: #changelist"() {
         given:
-        version.withRevision(revision as String)
+        ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def equal = version.equals(expected)
+        def equal = ciVersion.equals(expected)
 
         then:
         equal
@@ -52,12 +53,12 @@ class CiVersionTest
     @Unroll
     def "should hash self to #expected when r: #revision s: #sha1 c: #changelist"() {
         given:
-        version.withRevision(revision as String)
+        ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.hashCode()
+        def actual = ciVersion.hashCode()
 
         then:
         actual == expected
@@ -105,12 +106,12 @@ class CiVersionTest
     @Unroll
     def "should expand ci friendly properties in #template with r: #revision s: #sha1 c: #changelist to #expected"() {
         given:
-        version.withRevision(revision as String)
+        ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.expand(template)
+        def actual = ciVersion.expand(template)
 
         then:
         actual == expected
@@ -128,7 +129,7 @@ class CiVersionTest
     @Unroll
     def "should replace ci friendly properties in #content with r: #revision s: #sha1 c: #changelist to #expected"() {
         given:
-        version.withRevision(revision as String)
+        ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
@@ -139,7 +140,7 @@ class CiVersionTest
         def element = "\n<properties>\n\t${content}\n</properties>\n"
 
         when:
-        def actual = version.replace(element)
+        def actual = ciVersion.replace(element)
 
         then:
         actual == expected
@@ -170,12 +171,12 @@ class CiVersionTest
     @Unroll
     def "should provide string representation when r: #revision and s: #sha1 and c: #changelist"() {
         given:
-        version.withRevision(revision as String)
+        ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.toString()
+        def actual = ciVersion.toString()
 
         then:
         actual == expected
@@ -190,7 +191,7 @@ class CiVersionTest
 
     def "should raise exception on error incrementing revision"() {
         given:
-        version.withRevision("a.b.c")
+        ciVersion.withRevision("a.b.c")
 
         and:
         def mockIncrementor = Mock(Incrementor) {
@@ -198,7 +199,7 @@ class CiVersionTest
         }
 
         when:
-        version.next(mockIncrementor)
+        ciVersion.next(mockIncrementor)
 
         then:
         thrown(MojoFailureException)
@@ -206,7 +207,7 @@ class CiVersionTest
 
     def "should raise exception when revision not present"() {
         when:
-        version.next(MAJOR)
+        ciVersion.next(MAJOR)
 
         then:
         thrown(MojoFailureException)
@@ -215,12 +216,12 @@ class CiVersionTest
     @Unroll
     def "should compute next version using #incrementor when r: #revision and s: #sha1 and c: #changelist"() {
         given:
-        version.withRevision(revision as String)
+        ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = version.next(incrementor)
+        def actual = ciVersion.next(incrementor)
 
         then:
         actual.toExternalForm() == expected
@@ -253,5 +254,33 @@ class CiVersionTest
         new CiVersion("2.2.2", "22", "")            | new CiVersion("2.2.2", "22", "")
         new CiVersion("2.2.2-SNAPSHOT", "22", null) | new CiVersion("2.2.2", "22", null)
         new CiVersion("2.2.2-SNAPSHOT", "22", "")   | new CiVersion("2.2.2", "22", "")
+    }
+
+    @Unroll
+    def "should apply ci version to project model when r: #revision and s: #sha1 and c: #changelist"() {
+        given: "a version with all components"
+        ciVersion.withRevision(revision as String).
+                withSha1(sha1 as String)
+                .withChangelist(changelist as String)
+
+        and: "a maven model with empty properties"
+        def model = new Model()
+
+        when:
+        ciVersion.applyTo(model)
+
+        then:
+        model.version == version
+        model.properties.getProperty("revision") == revision
+        model.properties.getProperty("sha1") == sha1
+        model.properties.getProperty("changelist") == changelist
+
+        where:
+        revision | sha1  | changelist  | version
+        "2.22.2" | "-22" | "-SNAPSHOT" | "2.22.2-22-SNAPSHOT"
+        null     | "-22" | "-SNAPSHOT" | "-22-SNAPSHOT"
+        "2.22.2" | null  | "-SNAPSHOT" | "2.22.2-SNAPSHOT"
+        "2.22.2" | "-22" | null        | "2.22.2-22"
+        null     | null  | null        | ""
     }
 }

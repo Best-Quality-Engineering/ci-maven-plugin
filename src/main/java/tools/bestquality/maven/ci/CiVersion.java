@@ -1,5 +1,6 @@
 package tools.bestquality.maven.ci;
 
+import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
 import tools.bestquality.maven.versioning.Incrementor;
@@ -14,14 +15,14 @@ import static java.util.Optional.ofNullable;
 import static tools.bestquality.maven.versioning.Version.parseVersion;
 
 public class CiVersion {
-    private Optional<String> revision = empty();
-    private Optional<String> sha1 = empty();
-    private Optional<String> changelist = empty();
+    private Optional<String> revision;
+    private Optional<String> sha1;
+    private Optional<String> changelist;
 
     public CiVersion(String revision, String sha1, String changelist) {
-        withRevision(revision);
-        withSha1(sha1);
-        withChangelist(changelist);
+        this.revision = ofNullable(revision);
+        this.sha1 = ofNullable(sha1);
+        this.changelist = ofNullable(changelist);
     }
 
     public CiVersion() {
@@ -157,6 +158,14 @@ public class CiVersion {
         sha1.ifPresent(builder::append);
         changelist.ifPresent(builder::append);
         return builder.toString();
+    }
+
+    public void applyTo(Model model) {
+        model.setVersion(toExternalForm());
+        Properties properties = model.getProperties();
+        revision.ifPresent(value -> properties.setProperty("revision", value));
+        sha1.ifPresent(value -> properties.setProperty("sha1", value));
+        changelist.ifPresent(value -> properties.setProperty("changelist", value));
     }
 
     @Override

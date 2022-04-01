@@ -29,8 +29,11 @@
         <maven.plugin-annotations.version>3.6.4</maven.plugin-annotations.version>
         <maven.plugin-plugin.version>3.6.4</maven.plugin-plugin.version>
         <!-- Dependency versions -->
+        <assertj.version>3.22.0</assertj.version>
         <byte-buddy.version>1.12.8</byte-buddy.version>
         <groovy.version>3.0.10</groovy.version>
+        <junit.jupiter.version>5.8.2</junit.jupiter.version>
+        <maven-itf.version>0.11.0</maven-itf.version>
         <objenesis.version>3.2</objenesis.version>
         <spock.version>2.1-groovy-3.0</spock.version>
         <!-- Plugin versions -->
@@ -96,6 +99,31 @@
             <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Maven ITF dependencies -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.soebes.itf.jupiter.extension</groupId>
+            <artifactId>itf-assertj</artifactId>
+            <version>${maven-itf.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.soebes.itf.jupiter.extension</groupId>
+            <artifactId>itf-jupiter-extension</artifactId>
+            <version>${maven-itf.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -146,6 +174,37 @@
                         <id>generated-helpmojo</id>
                         <goals>
                             <goal>helpmojo</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <skip>${skipITests}</skip>
+                    <skipITs>${skipITests}</skipITs>
+                    <skipTests>${skipITests}</skipTests>
+                    <argLine>${failsafe.jacoco.args}</argLine>
+                    <parallel>classes</parallel>
+                    <threadCount>5</threadCount>
+                    <systemProperties>
+                        <maven.version>${maven.version}</maven.version>
+                        <maven.home>${maven.home}</maven.home>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.soebes.itf.jupiter.extension</groupId>
+                <artifactId>itf-maven-plugin</artifactId>
+                <version>${maven-itf.version}</version>
+                <executions>
+                    <execution>
+                        <id>installing</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>install</goal>
+                            <goal>resources-its</goal>
                         </goals>
                     </execution>
                 </executions>
