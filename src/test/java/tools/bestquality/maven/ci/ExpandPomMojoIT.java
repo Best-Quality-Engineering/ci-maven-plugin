@@ -31,6 +31,10 @@ public class ExpandPomMojoIT {
                     .has("target/generated-poms")
                     .withFile("pom-ci.xml")
                     .usingCharset(UTF_8);
+
+            // TODO: assert pom written with expanded version
+            // TODO: assert pom written with replaced properties
+            // TODO: assert artifact generated with correct version
         }
     }
 
@@ -50,6 +54,10 @@ public class ExpandPomMojoIT {
                     .has("target/generated-poms")
                     .withFile("pom-ci.xml")
                     .usingCharset(UTF_8);
+
+            // TODO: assert pom written with expanded version
+            // TODO: assert pom written with replaced properties
+            // TODO: assert artifact generated with correct version
         }
     }
 
@@ -69,6 +77,10 @@ public class ExpandPomMojoIT {
                     .has("target/generated-poms")
                     .withFile("pom-ci.xml")
                     .usingCharset(UTF_8);
+
+            // TODO: assert pom written with expanded version
+            // TODO: assert pom written with replaced properties
+            // TODO: assert artifact generated with correct version
         }
     }
 
@@ -88,6 +100,10 @@ public class ExpandPomMojoIT {
                     .has("target/generated-poms")
                     .withFile("pom-ci.xml")
                     .usingCharset(UTF_8);
+
+            // TODO: assert pom written with expanded version
+            // TODO: assert pom written with replaced properties
+            // TODO: assert artifact generated with correct version
         }
     }
 }

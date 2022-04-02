@@ -20,7 +20,7 @@ if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
 
   echo "Updating version references in documentation"
   sed --in-place --regexp-extended --expression="s/(<plugin.ci.version>).*(<\/plugin.ci.version>)/\1${GITHUB_REF_NAME}\2/g" pom.xml
-  sed --in-place --regexp-extended --expression="s/(<version>).*(<\/version>)/\1${GITHUB_REF_NAME}\2/g" README.md
+  perl -0777 -p -i -w -e "s/<(artifactId>ci-maven-plugin<\/artifactId>\s+<version)>.*?<(\/version)>/<\$1>${GITHUB_REF_NAME}<\$2>/g;" README.md
   sed --in-place --regexp-extended --expression="s/^(version:).*$/\1 ${GITHUB_REF_NAME}/g" docs/_config.yml
 
   echo "Pushing release/${GITHUB_REF_NAME}"
