@@ -145,14 +145,16 @@ This configuration results in consistent developer and pipeline builds:
 </project>
 ```
 
-### Installing
-To install from a typical non-release build:
+### Installing from workflow or pipeline
+A typical workflow or pipeline step will involve building and testing the project. In this case, the
+`sha1` ci property can be used to namespace the branch build preventing any artifact collisions. This
+is necessary if your organization captures all build artifacts:
 ```shell
 # export BUILD_NUMBER=22
-mvn clean install -Dsha1=".${BUILD_NUMBER}"
+mvn clean install -Dsha1="-${BUILD_NUMBER}"
 ```
 
-When installed, this will become:
+When built, the installed `pom.xml` will be expanded to:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
@@ -162,12 +164,12 @@ When installed, this will become:
 
     <groupId>...</groupId>
     <artifactId>...</artifactId>
-    <version>2.22.2.22-SNAPSHOT</version>
+    <version>2.22.2-22-SNAPSHOT</version>
     <packaging>...</packaging>
 
     <properties>
         <revision>2.22.2</revision>
-        <sha1>.22</sha1>
+        <sha1>-22</sha1>
         <changelist>-SNAPSHOT</changelist>
     </properties>
 
@@ -192,12 +194,13 @@ When installed, this will become:
 ```
 
 ### Deploying
-To deploy a release:
+To deploy a release or non-snapshot build, such as when a tag is pushed:
 ```shell
-mvn clean deploy -Dchangelist=
+# export RELEASE_VERSION=2.22.2
+mvn clean deploy -Drevision="${RELEASE_VERSION}" -Dchangelist=
 ```
 
-When deployed, this will become:
+When deployed, the uploaded `pom.xml` will be expanded to:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
