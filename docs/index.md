@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: default
 title: "Maven CI Plugin"
 ---
 # Maven CI Plugin
