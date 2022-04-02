@@ -17,7 +17,26 @@ public class ExpandPomMojoIT {
 
     @Nested
     @MavenProject
-    class single_project_with_all_ci_properties {
+    class single_module_with_all_properties {
+
+        @MavenTest
+        void no_system_properties(MavenExecutionResult execution) {
+            assertThat(execution)
+                    .isSuccessful();
+
+            MavenProjectResult project = execution.getMavenProjectResult();
+
+            // POM file is generated with correct charset
+            assertThat(project)
+                    .has("target/generated-poms")
+                    .withFile("pom-ci.xml")
+                    .usingCharset(UTF_8);
+        }
+    }
+
+    @Nested
+    @MavenProject
+    class single_module_with_revision_property {
 
         @MavenTest
         void no_system_properties(MavenExecutionResult execution) {

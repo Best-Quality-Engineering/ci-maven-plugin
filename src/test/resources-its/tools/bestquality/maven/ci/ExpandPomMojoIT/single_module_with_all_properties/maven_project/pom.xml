@@ -5,7 +5,7 @@
     <groupId>bestquality</groupId>
     <artifactId>maven-ci-pom</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}.${sha1}${changelist}</version>
+    <version>${revision}${sha1}${changelist}</version>
     <properties>
         <revision>2.22.2</revision>
         <sha1/>
