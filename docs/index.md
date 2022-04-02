@@ -1,3 +1,7 @@
+---
+layout: page
+title: "Maven CI Plugin"
+---
 # Maven CI Plugin
 A Maven plugin for use in CI pipelines based on the patterns described in the
 [Maven CI Friendly documentation](https://maven.apache.org/maven-ci-friendly.html).
@@ -14,7 +18,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
         <plugin>
             <groupId>tools.bestquality</groupId>
             <artifactId>ci-maven-plugin</artifactId>
-            <version>0.0.13</version>
+            <version>{{site.version}}</version>
             <executions>
                 <execution>
                     <goals>

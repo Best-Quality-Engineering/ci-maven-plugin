@@ -36,6 +36,8 @@ timezone: Etc/CST
 paginate: 10
 paginate_path: "/blog/:num/"
 permalink: pretty
+domain: ci.bestquality.tools
+url: https://ci.bestquality.tools
 
 # plugins:
 plugins:
