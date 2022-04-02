@@ -3,12 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>bestquality</groupId>
-    <artifactId>ci-pom</artifactId>
-    <version>${revision}</version>
-    <packaging>jar</packaging>
+    <artifactId>ci-parent-pom</artifactId>
+    <version>${revision}${sha1}${changelist}</version>
+    <packaging>pom</packaging>
     <properties>
-        <revision>2.22.2-SNAPSHOT</revision>
+        <revision>2.22.2</revision>
+        <sha1/>
+        <changelist>-SNAPSHOT</changelist>
     </properties>
+    <modules>
+        <module>child</module>
+    </modules>
     <build>
         <plugins>
             <plugin>

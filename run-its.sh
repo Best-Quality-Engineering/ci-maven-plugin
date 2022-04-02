@@ -1,2 +1,2 @@
 #!/bin/bash -e
-mvn -e -ntp verify -P ci -DskipTests=true -DskipITests=false
+mvn -e -ntp clean verify -P ci -DskipTests=true -DskipITests=false

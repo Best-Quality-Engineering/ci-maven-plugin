@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>bestquality</groupId>
-    <artifactId>maven-ci-pom</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>ci-pom</artifactId>
     <version>${revision}${sha1}${changelist}</version>
+    <packaging>jar</packaging>
     <properties>
         <revision>2.22.2</revision>
         <sha1/>
