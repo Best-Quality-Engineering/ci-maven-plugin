@@ -1,6 +1,6 @@
 # Maven CI Plugin
 A Maven plugin for use in CI pipelines based on the patterns described in the
-[Maven Ci Friendly documentation](https://maven.apache.org/maven-ci-friendly.html).
+[Maven CI Friendly documentation](https://maven.apache.org/maven-ci-friendly.html).
 
 [![Build Status](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/ossrh-snapshot.yml/badge.svg)](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/ossrh-snapshot.yml)
 [![Release Status](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/ossrh-release.yml/badge.svg)](https://github.com/ruffkat/ci-maven-plugin/actions/workflows/ossrh-release.yml)
