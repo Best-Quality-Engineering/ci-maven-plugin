@@ -1,4 +1,4 @@
-# Maven CI Plugin
+# CI Maven Plugin
 A Maven plugin for use in CI pipelines based on the patterns described in the
 [Maven CI Friendly documentation](https://maven.apache.org/maven-ci-friendly.html).
 

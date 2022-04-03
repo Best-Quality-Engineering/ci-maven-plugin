@@ -33,14 +33,16 @@ github_username:  ruffkat
 version: 0.0.13
 
 # Build settings
+markdown: kramdown
 theme: jekyll-theme-cayman
 timezone: Etc/CST
 permalink: pretty
 plugins:
   - jekyll-archives
-  - jekyll-sitemap
-  - jekyll-seo-tag
   - jekyll-feed
+  - jekyll-gist
+  - jekyll-seo-tag
+  - jekyll-sitemap
 
 # Exclude from processing.
 # The following items will not be processed, by default.
