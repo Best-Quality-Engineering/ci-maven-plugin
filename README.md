@@ -282,6 +282,19 @@ Pushes to feature branches or pull requests result in a build that uses the curr
 mvn -e -B -ntp -P ci clean install -Dsha1="-${GITHUB_RUN_ID}"
 ```
 
+Generated POM:
+```xml
+<project>
+    <version>2.22.2-2074468849-SNAPSHOT</version>
+    <properties>
+        <revision>2.22.2</revision>
+        <sha1>-2074468849</sha1>
+        <changelist>-SNAPSHOT</changelist>
+    </properties>
+    ...
+</project>
+```
+
 ### OSSRH Snapshot Deployment
 Pushes to the default branch result in a snapshot deployment to the OSSRH snapshot repository. In this case, all CI 
 friendly properties obtain their values from the property definitions held in the `pom.xml`. The maven command looks 
@@ -290,6 +303,19 @@ like this:
 ```shell
 # POM version expanded to: 2.22.2-SNAPSHOT
 mvn -e -B -ntp -P ci -P ossrh clean deploy
+```
+
+Generated POM:
+```xml
+<project>
+    <version>2.22.2-SNAPSHOT</version>
+    <properties>
+        <revision>2.22.2</revision>
+        <sha1/>
+        <changelist>-SNAPSHOT</changelist>
+    </properties>
+    ...
+</project>
 ```
 
 ### OSSRH Release Deployment
@@ -303,6 +329,19 @@ qualifier:
 mvn -e -B -ntp -P ci -P ossrh clean deploy -Drevision="${GITHUB_REF_NAME}" -Dchangelist=""
 ```
 
+Generated POM:
+```xml
+<project>
+    <version>2.22.22</version>
+    <properties>
+        <revision>2.22.22</revision>
+        <sha1/>
+        <changelist/>
+    </properties>
+    ...
+</project>
+```
+
 Next, the patch component of the revision project property value is incremented by one and the `changelist` property
 retains its project value of `-SNAPSHOT` to prepare the default branch for the next iteration of development:
 
@@ -312,6 +351,7 @@ retains its project value of `-SNAPSHOT` to prepare the default branch for the n
 mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
 ```
 
+Updated `pom.xml`:
 ```xml
 <project>
     <version>${revision}${sha1}${changelist}</version>
