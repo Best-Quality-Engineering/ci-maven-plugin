@@ -40,6 +40,12 @@ producing an expanded version performing the following actions on the template:
 * updates the values of `revision`, `sha1`, and `changelist` defined in the `<properties>` element
 * writes the expanded pom file to `target/generated-poms/pom-ci.xml` and sets it as the project's `pom.xml` file
 
+{% include important.html content="
+Unlike the [Flatten Maven Plugin](https://www.mojohaus.org/flatten-maven-plugin/) this goal will **not reformat
+and strip comments** from the published `pom.xml` files. This is critical if your POMs contain important
+information in its comments.
+" %}
+
 ### `ci:increment-pom`
 By default, this aggregator goal is bound to the `validate` phase and will update the project's top-level
 `pom.xml` ci `revision` property with the next selected component to increment. Use to prepare the `pom.xml`

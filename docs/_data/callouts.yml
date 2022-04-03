@@ -1,0 +1,7 @@
+danger: '<div class="bs-callout bs-callout-danger">'
+default: '<div class="bs-callout bs-callout-default">'
+primary: '<div class="bs-callout bs-callout-primary">'
+success: '<div class="bs-callout bs-callout-success">'
+info: '<div class="bs-callout bs-callout-info">'
+warning: '<div class="bs-callout bs-callout-warning">'
+end: '</div>'

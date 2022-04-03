@@ -34,6 +34,11 @@ version: 0.0.13
 
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
+  auto_ids: true
+  hard_wrap: false
+  syntax_highlighter: rouge
 theme: jekyll-theme-cayman
 timezone: Etc/CST
 permalink: pretty
