@@ -1,5 +1,9 @@
 name: PR Build
 on:
+  push:
+    branches:
+      - "feature/**"
+      - "fix/**"
   pull_request:
     branches:
       - "master"

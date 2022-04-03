@@ -36,6 +36,10 @@ producing an expanded version performing the following actions on the template:
 * updates the values of `revision`, `sha1`, and `changelist` defined in the `<properties>` element
 * writes the expanded pom file to `target/generated-poms/pom-ci.xml` and sets it as the project's `pom.xml` file
 
+_NOTE: Unlike the [Flatten Maven Plugin](https://www.mojohaus.org/flatten-maven-plugin/) this goal will **not reformat
+and strip comments** from the published `pom.xml` files. This is critical if your POMs contain important
+information in its comments._
+
 ### `ci:increment-pom`
 By default, this aggregator goal is bound to the `validate` phase and will update the project's top-level
 `pom.xml` ci `revision` property with the next selected component to increment. Use to prepare the `pom.xml`
@@ -238,6 +242,72 @@ When deployed, the uploaded `pom.xml` will be expanded to:
     
 </project>
 ```
+
+## Example Uses
+This project uses the plugin combined with GitHub actions workflows. Here is the essential project config:
+
+```xml
+<project>
+    <version>${revision}${sha1}${changelist}</version>
+    <properties>
+        <revision>0.0.14</revision>
+        <sha1/>
+        <changelist>-SNAPSHOT</changelist>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>tools.bestquality</groupId>
+                <artifactId>ci-maven-plugin</artifactId>
+                <version>...</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>expand-pom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+### Feature Branch Builds & Pull Requests
+Pushes to feature branches or pull requests result in a build that uses the current run number as the `sha1` value:
+
+```shell
+mvn -e -B -ntp -P ci clean install -Dsha1="-${GITHUB_RUN_ID}"
+```
+
+### OSSRH Snapshot Deployment
+Pushes to the default branch result in a snapshot deployment to the OSSRH snapshot repository. In this case, all CI 
+friendly properties obtain their values from the property definitions held in the `pom.xml`. The maven command looks 
+like this:
+
+```shell
+mvn -e -B -ntp -P ci -P ossrh clean deploy
+```
+
+### OSSRH Release Deployment
+Tags applied to the repository result in a release deployment to the OSSRH release repository. In this case the
+`revision` property takes its value from the tag name and the `changelist` is cleared to remove the `-SNAPSHOT`
+qualifier:
+
+```shell
+mvn -e -B -ntp -P ci -P ossrh clean deploy -Drevision="${GITHUB_REF_NAME}" -Dchangelist=""
+```
+
+Next, the patch component of the revision number is incremented by one and the `changelist` property retains its 
+project value of `-SNAPSHOT` to prepare the default branch for the next iteration of development:
+
+```shell
+mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
+```
+
+Finally, version references to the current release are updated in documentation and the `pom.xml`
+along with the updated docs are pushed to a release branch where they can be reviewed and merged
+back into the default branch.
 
 ## Upcoming Features
 * Goal to update any references to the project version in documentation, i.e. `README.md`
