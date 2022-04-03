@@ -4,15 +4,15 @@ package tools.bestquality.maven.versioning
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static StandardIncrementor.AUTO
-import static StandardIncrementor.BUILD
-import static StandardIncrementor.MAJOR
-import static StandardIncrementor.MINOR
-import static StandardIncrementor.PATCH
-import static StandardIncrementor.incrementor
+import static Incrementors.AUTO
+import static Incrementors.BUILD
+import static Incrementors.MAJOR
+import static Incrementors.MINOR
+import static Incrementors.PATCH
+import static Incrementors.incrementor
 import static tools.bestquality.maven.versioning.Version.parseVersion
 
-class StandardIncrementorTest
+class IncrementorsTest
         extends Specification {
 
     @Unroll
@@ -40,7 +40,7 @@ class StandardIncrementorTest
 
         then:
         def thrown = thrown(IllegalArgumentException)
-        thrown.message == "No enum constant in tools.bestquality.maven.versioning.StandardIncrementor matching unknown"
+        thrown.message == "No enum constant in tools.bestquality.maven.versioning.Incrementors matching unknown"
     }
 
     @Unroll

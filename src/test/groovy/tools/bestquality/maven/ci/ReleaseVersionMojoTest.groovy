@@ -2,6 +2,8 @@ package tools.bestquality.maven.ci
 
 import tools.bestquality.maven.test.MojoSpecification
 
+import static tools.bestquality.maven.ci.CiVersionSources.MERGE_SYSTEM_FIRST
+
 class ReleaseVersionMojoTest
         extends MojoSpecification {
     ReleaseVersionMojo mojo
@@ -10,7 +12,7 @@ class ReleaseVersionMojoTest
         mojo = new ReleaseVersionMojo()
                 .withProject(projectMock)
                 .withSession(sessionMock)
-                .withSource("merge-system-first")
+                .withSource(MERGE_SYSTEM_FIRST)
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("release-version.txt")
         mojo.setLog(logMock)

@@ -10,7 +10,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static java.util.regex.Pattern.compile;
-import static org.codehaus.plexus.util.StringUtils.isNotEmpty;
+import static tools.bestquality.util.Strings.isNotBlank;
 
 /**
  * A version class that parses versions according to the Maven Build Helper Plugin but
@@ -205,7 +205,7 @@ public final class Version {
                 qualifierString = matcher.group(9);
             }
             if (qualifierString != null) {
-                if (isNotEmpty(qualifierString)) {
+                if (isNotBlank(qualifierString)) {
                     qualifier = of(qualifierString);
                     if (!qualifierString.startsWith(".") &&
                             !qualifierString.startsWith("-")) {

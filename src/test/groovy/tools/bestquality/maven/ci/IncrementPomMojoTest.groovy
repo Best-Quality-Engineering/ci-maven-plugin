@@ -10,6 +10,12 @@ import static java.lang.String.format
 import static java.nio.charset.StandardCharsets.UTF_8
 import static java.nio.file.Files.exists
 import static java.nio.file.Files.readAllBytes
+import static tools.bestquality.maven.ci.CiVersionSources.MERGE_SYSTEM_FIRST
+import static tools.bestquality.maven.versioning.Incrementors.AUTO
+import static tools.bestquality.maven.versioning.Incrementors.BUILD
+import static tools.bestquality.maven.versioning.Incrementors.MAJOR
+import static tools.bestquality.maven.versioning.Incrementors.MINOR
+import static tools.bestquality.maven.versioning.Incrementors.PATCH
 
 class IncrementPomMojoTest
         extends MojoSpecification {
@@ -22,8 +28,8 @@ class IncrementPomMojoTest
         mojo = new IncrementPomMojo(contentSpy)
                 .withProject(projectMock)
                 .withSession(sessionMock)
-                .withSource("merge-system-first")
-                .withIncrementor("auto")
+                .withSource(MERGE_SYSTEM_FIRST)
+                .withIncrementor(AUTO)
                 .withOutputDirectory(outputPath.toFile())
                 .withFilename("next-revision.txt")
         mojo.setLog(logMock)
@@ -50,11 +56,11 @@ class IncrementPomMojoTest
 
         where:
         incrementor | expected
-        "auto"      | new CiVersion("2.2.2-3", ".22", "-SNAPSHOT")
-        "build"     | new CiVersion("2.2.2-3", ".22", "-SNAPSHOT")
-        "patch"     | new CiVersion("2.2.3-2", ".22", "-SNAPSHOT")
-        "minor"     | new CiVersion("2.3.2-2", ".22", "-SNAPSHOT")
-        "major"     | new CiVersion("3.2.2-2", ".22", "-SNAPSHOT")
+        AUTO        | new CiVersion("2.2.2-3", ".22", "-SNAPSHOT")
+        BUILD       | new CiVersion("2.2.2-3", ".22", "-SNAPSHOT")
+        PATCH       | new CiVersion("2.2.3-2", ".22", "-SNAPSHOT")
+        MINOR       | new CiVersion("2.3.2-2", ".22", "-SNAPSHOT")
+        MAJOR       | new CiVersion("3.2.2-2", ".22", "-SNAPSHOT")
     }
 
     def "should raise exception on error reading project pom"() {
