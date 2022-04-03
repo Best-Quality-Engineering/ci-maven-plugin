@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import static java.lang.String.format;
 import static java.nio.file.Files.createDirectories;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
-import static tools.bestquality.maven.ci.CiVersion.versionFrom;
+import static tools.bestquality.maven.ci.CiVersionSource.MERGE_SYSTEM_FIRST;
 
 
 @Mojo(name = "expand-pom",
@@ -77,8 +77,8 @@ public class ExpandPomMojo
             throws MojoExecutionException {
         info("Expanding contents of project POM file");
         try {
-            CiVersion version = versionFrom(session.getSystemProperties())
-                    .withMissingFrom(project.getProperties());
+            CiVersionSource source = MERGE_SYSTEM_FIRST;
+            CiVersion version = source.from(project, session);
             return version.replace(version.expand(projectPom));
         } catch (Exception e) {
             error("Failure expanding template POM file", e);

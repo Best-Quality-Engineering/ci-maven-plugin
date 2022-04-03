@@ -39,6 +39,11 @@ public class ExpandPomAssert
         return myself;
     }
 
+    public ExpandPomAssert withCharset(Charset charset) {
+        this.charset = charset;
+        return myself;
+    }
+
     public ExpandPomAssert wasSuccessful() {
         isNotNull();
         if (!actual.isSuccessful()) {

@@ -2,14 +2,13 @@ package tools.bestquality.maven.ci;
 
 import com.soebes.itf.jupiter.maven.MavenProjectResult;
 import org.apache.maven.model.Model;
-import org.assertj.core.api.AbstractAssert;
 
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GeneratedProjectAssert
-        extends AbstractAssert<GeneratedProjectAssert, Model> {
+        extends GeneratedModelAssert<GeneratedProjectAssert> {
     private final ExpandPomAssert originator;
     private final MavenProjectResult project;
 
@@ -19,49 +18,8 @@ public class GeneratedProjectAssert
         this.project = project;
     }
 
-    public GeneratedProjectAssert revisionIsEqualTo(String expected) {
-        assertThat(actual.getProperties()).containsEntry("revision", expected);
-        return myself;
-    }
-
-    public GeneratedProjectAssert revisionIsNotPresent() {
-        assertThat(actual.getProperties()).doesNotContainKey("revision");
-        return myself;
-    }
-
-    public GeneratedProjectAssert revisionIsEmpty() {
-        assertThat(actual.getProperties()).containsEntry("revision", "");
-        return myself;
-    }
-
-    public GeneratedProjectAssert sha1IsEqualTo(String expected) {
-        assertThat(actual.getProperties()).containsEntry("sha1", expected);
-        return myself;
-    }
-
-    public GeneratedProjectAssert sha1IsNotPresent() {
-        assertThat(actual.getProperties()).doesNotContainKey("sha1");
-        return myself;
-    }
-
-    public GeneratedProjectAssert sha1IsEmpty() {
-        assertThat(actual.getProperties()).containsEntry("sha1", "");
-        return myself;
-    }
-
-    public GeneratedProjectAssert changelistIsEqualTo(String expected) {
-        assertThat(actual.getProperties()).containsEntry("changelist", expected);
-        return myself;
-    }
-
-    public GeneratedProjectAssert changelistIsNotPresent() {
-        assertThat(actual.getProperties()).doesNotContainKey("changelist");
-        return myself;
-    }
-
-    public GeneratedProjectAssert changelistIsEmpty() {
-        assertThat(actual.getProperties()).containsEntry("changelist", "");
-        return myself;
+    public ExpandPomAssert and() {
+        return originator;
     }
 
     public GeneratedProjectAssert artifactIsCorrectlyVersioned() {

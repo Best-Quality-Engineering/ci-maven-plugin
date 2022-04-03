@@ -37,7 +37,7 @@ enum CiVersionSource {
 
     public abstract CiVersion from(MavenProject project, MavenSession session);
 
-    public static CiVersionSource ciVersionSource(String name) {
+    public static CiVersionSource source(String name) {
         return stream(values())
                 .filter(item -> item.name()
                         .equalsIgnoreCase(name.replace("-", "_")))

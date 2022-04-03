@@ -13,7 +13,7 @@ import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.Files.createDirectories;
-import static tools.bestquality.maven.ci.CiVersionSource.ciVersionSource;
+import static tools.bestquality.maven.ci.CiVersionSource.source;
 
 public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
         extends CiMojo {
@@ -95,7 +95,7 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
     }
 
     protected CiVersion current() {
-        CiVersionSource source = ciVersionSource(this.source);
+        CiVersionSource source = source(this.source);
         return source.from(project, session);
     }
 

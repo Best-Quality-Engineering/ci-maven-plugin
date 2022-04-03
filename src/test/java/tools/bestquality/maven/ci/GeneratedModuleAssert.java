@@ -2,12 +2,11 @@ package tools.bestquality.maven.ci;
 
 import com.soebes.itf.jupiter.maven.MavenProjectResult;
 import org.apache.maven.model.Model;
-import org.assertj.core.api.AbstractAssert;
 
 import java.io.File;
 
 public class GeneratedModuleAssert
-        extends AbstractAssert<GeneratedModuleAssert, Model> {
+        extends GeneratedModelAssert<GeneratedModuleAssert> {
     private final GeneratedProjectAssert originator;
     private final MavenProjectResult project;
     private final Model parent;
@@ -20,6 +19,10 @@ public class GeneratedModuleAssert
         this.project = project;
         this.parent = parent;
         this.module = module;
+    }
+
+    public GeneratedProjectAssert and() {
+        return originator;
     }
 
     public GeneratedModuleAssert artifactIsCorrectlyVersioned() {

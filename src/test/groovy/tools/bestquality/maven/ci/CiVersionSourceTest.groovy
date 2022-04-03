@@ -9,7 +9,7 @@ import static tools.bestquality.maven.ci.CiVersionSource.MERGE_PROJECT_FIRST
 import static tools.bestquality.maven.ci.CiVersionSource.MERGE_SYSTEM_FIRST
 import static tools.bestquality.maven.ci.CiVersionSource.PROJECT
 import static tools.bestquality.maven.ci.CiVersionSource.SYSTEM
-import static tools.bestquality.maven.ci.CiVersionSource.ciVersionSource
+import static tools.bestquality.maven.ci.CiVersionSource.source
 
 class CiVersionSourceTest
         extends Specification {
@@ -17,7 +17,7 @@ class CiVersionSourceTest
     @Unroll
     def "should find item from name when name is #name"() {
         expect:
-        ciVersionSource(name) == expected
+        source(name) == expected
 
         where:
         name                  | expected
@@ -37,7 +37,7 @@ class CiVersionSourceTest
 
     def "should raise exception when item not found from name"() {
         when:
-        ciVersionSource("unknown")
+        source("unknown")
 
         then:
         def thrown = thrown(IllegalArgumentException)
