@@ -309,13 +309,25 @@ qualifier:
 mvn -e -B -ntp -P ci -P ossrh clean deploy -Drevision="${GITHUB_REF_NAME}" -Dchangelist=""
 ```
 
-Next, the patch component of the revision number is incremented by one and the `changelist` property retains its
-project value of `-SNAPSHOT` to prepare the default branch for the next iteration of development:
+Next, the patch component of the revision project property value is incremented by one and the `changelist` property 
+retains its project value of `-SNAPSHOT` to prepare the default branch for the next iteration of development:
 
 ```shell
 # GITHUB_REF_NAME: 2.22.22
 # POM revision property updated to: 2.22.23
 mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
+```
+
+```xml
+<project>
+    <version>${revision}${sha1}${changelist}</version>
+    <properties>
+        <revision>2.22.23</revision>
+        <sha1/>
+        <changelist>-SNAPSHOT</changelist>
+    </properties>
+    ...
+</project>
 ```
 
 Finally, version references to the current release are updated in documentation and the `pom.xml`
