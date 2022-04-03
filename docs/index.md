@@ -256,7 +256,7 @@ This project uses the plugin combined with GitHub actions workflows. Here is the
 <project>
     <version>${revision}${sha1}${changelist}</version>
     <properties>
-        <revision>0.0.14</revision>
+        <revision>2.22.2</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
     </properties>
@@ -283,6 +283,8 @@ This project uses the plugin combined with GitHub actions workflows. Here is the
 Pushes to feature branches or pull requests result in a build that uses the current run number as the `sha1` value:
 
 ```shell
+# GITHUB_RUN_ID: 2074468849
+# POM version expanded to: 2.22.2-2074468849-SNAPSHOT
 mvn -e -B -ntp -P ci clean install -Dsha1="-${GITHUB_RUN_ID}"
 ```
 
@@ -292,6 +294,7 @@ friendly properties obtain their values from the property definitions held in th
 like this:
 
 ```shell
+# POM version expanded to: 2.22.2-SNAPSHOT
 mvn -e -B -ntp -P ci -P ossrh clean deploy
 ```
 
@@ -301,6 +304,8 @@ Tags applied to the repository result in a release deployment to the OSSRH relea
 qualifier:
 
 ```shell
+# GITHUB_REF_NAME: 2.22.22
+# POM version expanded to: 2.22.22
 mvn -e -B -ntp -P ci -P ossrh clean deploy -Drevision="${GITHUB_REF_NAME}" -Dchangelist=""
 ```
 
@@ -308,6 +313,8 @@ Next, the patch component of the revision number is incremented by one and the `
 project value of `-SNAPSHOT` to prepare the default branch for the next iteration of development:
 
 ```shell
+# GITHUB_REF_NAME: 2.22.22
+# POM revision property updated to: 2.22.23
 mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
 ```
 
