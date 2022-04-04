@@ -4,11 +4,10 @@ import org.apache.maven.plugin.MojoExecutionException
 import tools.bestquality.io.Content
 import tools.bestquality.maven.test.MojoSpecification
 
-import java.nio.charset.StandardCharsets
-
 import static java.lang.String.format
 import static java.nio.charset.StandardCharsets.UTF_8
 import static java.nio.file.Files.list
+import static tools.bestquality.maven.ci.CiVersionSources.MERGE_SYSTEM_FIRST
 
 class ExpandPomMojoTest
         extends MojoSpecification {
@@ -20,6 +19,7 @@ class ExpandPomMojoTest
         mojo = new ExpandPomMojo(contentSpy)
                 .withProject(projectMock)
                 .withSession(sessionMock)
+                .withSource(MERGE_SYSTEM_FIRST)
                 .withOutputDirectory(outputPath.toFile())
                 .withCiPomFilename("pom-ci.xml")
         mojo.setLog(logMock)
@@ -46,7 +46,7 @@ class ExpandPomMojoTest
         and: "the ci properties are available as system properties"
         systemProperties.setProperty("revision", "2.2.2")
         systemProperties.setProperty("sha1", "22")
-        systemProperties.setProperty("changelist", ".RELEASE")
+        systemProperties.setProperty("changelist", "-RELEASE")
 
         and: "an error to be thrown while reading the pom file"
         def error = new IOException("nope")
@@ -75,19 +75,23 @@ class ExpandPomMojoTest
 
         and: "the ci properties are available as system properties"
         systemProperties.setProperty("revision", "2.2.2")
-        systemProperties.setProperty("sha1", "22")
-        systemProperties.setProperty("changelist", ".RELEASE")
+        systemProperties.setProperty("sha1", "-22")
+        systemProperties.setProperty("changelist", "-RELEASE")
 
-        and: "an error to be thrown"
+        and: "an error to throw"
         def error = new RuntimeException("nope")
+        def versionSpy = Spy(new CiVersion(null, null, null))
+        versionSpy.expand(_) >> { throw error }
+        mojo.withSource(Mock(CiVersionSource) {
+            from(_, _) >> {
+                return versionSpy;
+            }
+        })
 
         when: "the mojo is executed"
         mojo.execute()
 
-        then: "the error is thrown when accessing the revision"
-        sessionMock.getSystemProperties() >> { throw error }
-
-        and: "an error message is logged"
+        then: "an error message is logged"
         1 * logMock.error("Failure expanding template POM file", error)
         _ * logMock._
 
@@ -108,7 +112,7 @@ class ExpandPomMojoTest
         and: "the ci properties are available as system properties"
         systemProperties.setProperty("revision", "2.2.2")
         systemProperties.setProperty("sha1", "22")
-        systemProperties.setProperty("changelist", ".RELEASE")
+        systemProperties.setProperty("changelist", "-RELEASE")
 
         and: "an error thrown when writing the ci pom file"
         def ciPomPath = mojo.ciPomPath()
@@ -139,7 +143,7 @@ class ExpandPomMojoTest
         and: "the ci properties are available as system properties"
         systemProperties.setProperty("revision", "2.2.2")
         systemProperties.setProperty("sha1", "22")
-        systemProperties.setProperty("changelist", ".RELEASE")
+        systemProperties.setProperty("changelist", "-RELEASE")
 
         and: "the ci properties are available as project properties"
         projectProperties.setProperty("revision", "1.1.1")
@@ -151,12 +155,12 @@ class ExpandPomMojoTest
 
         then: "a maven consumable POM is expanded with the specified version"
         def expanded = parser.parse(mojo.ciPomPath().toFile())
-        expanded.version.text() == "2.2.2.22.RELEASE"
+        expanded.version.text() == "2.2.2.22-RELEASE"
 
         and: "the ci properties in the pom file are updated"
         expanded.properties.revision.text() == "2.2.2"
         expanded.properties.sha1.text() == "22"
-        expanded.properties.changelist.text() == ".RELEASE"
+        expanded.properties.changelist.text() == "-RELEASE"
 
         and: "the expanded POM is set as the project POM file"
         1 * projectMock.setPomFile(mojo.ciPomPath().toFile())

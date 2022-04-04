@@ -2,6 +2,7 @@ package tools.bestquality.maven.ci;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import tools.bestquality.io.Content;
@@ -13,7 +14,6 @@ import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.file.Files.createDirectories;
-import static tools.bestquality.maven.ci.CiVersionSource.source;
 
 public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
         extends CiMojo {
@@ -42,7 +42,7 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
      * </ul>
      */
     @Parameter(alias = "source", property = "source", defaultValue = "merge-system-first")
-    protected String source;
+    protected CiVersionSource source;
 
     /**
      * The directory containing exported version information
@@ -77,7 +77,7 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
     }
 
     @SuppressWarnings("unchecked")
-    public M withSource(String source) {
+    public M withSource(CiVersionSource source) {
         this.source = source;
         return (M) this;
     }
@@ -94,8 +94,8 @@ public abstract class ExportVersionMojo<M extends ExportVersionMojo<M>>
         return (M) this;
     }
 
-    protected CiVersion current() {
-        CiVersionSource source = source(this.source);
+    protected CiVersion current()
+            throws MojoFailureException {
         return source.from(project, session);
     }
 

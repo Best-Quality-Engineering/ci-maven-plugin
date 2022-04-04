@@ -9,6 +9,7 @@ import tools.bestquality.io.Content;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 
 @Mojo(name = "release-version",
+        configurator = "ci-mojo-configurator",
         aggregator = true,
         threadSafe = true,
         defaultPhase = VALIDATE)

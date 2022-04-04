@@ -7,11 +7,11 @@ import spock.lang.Unroll
 import tools.bestquality.maven.versioning.Incrementor
 import tools.bestquality.maven.versioning.Version
 
-import static tools.bestquality.maven.versioning.StandardIncrementor.AUTO
-import static tools.bestquality.maven.versioning.StandardIncrementor.BUILD
-import static tools.bestquality.maven.versioning.StandardIncrementor.MAJOR
-import static tools.bestquality.maven.versioning.StandardIncrementor.MINOR
-import static tools.bestquality.maven.versioning.StandardIncrementor.PATCH
+import static tools.bestquality.maven.versioning.Incrementors.AUTO
+import static tools.bestquality.maven.versioning.Incrementors.BUILD
+import static tools.bestquality.maven.versioning.Incrementors.MAJOR
+import static tools.bestquality.maven.versioning.Incrementors.MINOR
+import static tools.bestquality.maven.versioning.Incrementors.PATCH
 
 class CiVersionTest
         extends Specification {
@@ -73,16 +73,37 @@ class CiVersionTest
     }
 
     @Unroll
+    def "should raise exception when property is specified as boolean"() {
+        given:
+        def properties = new Properties()
+        properties.setProperty("revision", revision)
+        properties.setProperty("sha1", sha1)
+        properties.setProperty("changelist", changelist)
+
+        when:
+        ciVersion.withMissingFrom(properties)
+
+        then:
+        thrown(MojoFailureException)
+
+        where:
+        revision | sha1   | changelist
+        "true"   | "5"    | "6"
+        "4"      | "true" | "6"
+        "4"      | "5"    | "true"
+    }
+
+    @Unroll
     def "should supply missing component from properties"() {
         given:
         def properties = new Properties()
-        if (revision) {
+        if (revision != null) {
             properties.setProperty("revision", revision)
         }
-        if (sha1) {
+        if (sha1 != null) {
             properties.setProperty("sha1", sha1)
         }
-        if (changelist) {
+        if (changelist != null) {
             properties.setProperty("changelist", changelist)
         }
 
@@ -101,6 +122,9 @@ class CiVersionTest
         new CiVersion("1", "2", null)   | "4"      | "5"  | "6"        | new CiVersion("1", "2", "6")
         new CiVersion(null, null, null) | "4"      | "5"  | "6"        | new CiVersion("4", "5", "6")
         new CiVersion(null, null, null) | null     | null | null       | new CiVersion(null, null, null)
+        new CiVersion(null, null, null) | ""       | ""   | ""         | new CiVersion("", "", "")
+        new CiVersion(null, null, null) | " "      | " "  | " "        | new CiVersion("", "", "")
+        new CiVersion(null, null, null) | "\t"     | "\t" | "\t"       | new CiVersion("", "", "")
     }
 
     @Unroll
@@ -117,13 +141,13 @@ class CiVersionTest
         actual == expected
 
         where:
-        template                              | revision | sha1   | changelist  | expected
-        "\${revision}"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "2.2.2"
-        "\${revision}"                        | "2.2.2"  | null   | null        | "2.2.2"
-        "\${revision}"                        | "2.2.2"  | ""     | ""          | "2.2.2"
-        "\${revision}"                        | null     | null   | null        | "\${revision}"
-        "\${revision}.\${sha1}\${changelist}" | "2.2.2"  | "2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        "\${revision}.\${sha1}\${changelist}" | null     | null   | null        | "\${revision}.\${sha1}\${changelist}"
+        template                             | revision | sha1    | changelist  | expected
+        "\${revision}"                       | "2.2.2"  | "-2222" | "-SNAPSHOT" | "2.2.2"
+        "\${revision}"                       | "2.2.2"  | null    | null        | "2.2.2"
+        "\${revision}"                       | "2.2.2"  | ""      | ""          | "2.2.2"
+        "\${revision}"                       | null     | null    | null        | "\${revision}"
+        "\${revision}\${sha1}\${changelist}" | "2.2.2"  | "-2222" | "-SNAPSHOT" | "2.2.2-2222-SNAPSHOT"
+        "\${revision}\${sha1}\${changelist}" | null     | null    | null        | "\${revision}\${sha1}\${changelist}"
     }
 
     @Unroll
@@ -146,47 +170,71 @@ class CiVersionTest
         actual == expected
 
         where:
-        content                                 | revision | sha1   | changelist  | expected
-        "<revision>123</revision>"              | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
-        "<revision  >123</revision  >"          | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
-        "<revision/>"                           | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
-        "<revision />"                          | "2.2.2"  | "2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
-        "<sha1>123</sha1>"                      | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1>"
-        "<sha1  >123</sha1  >"                  | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1>"
-        "<sha1/>"                               | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1>"
-        "<sha1 />"                              | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1>"
-        "<changelist>.RELEASE</changelist>"     | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
-        "<changelist  >.RELEASE</changelist  >" | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
-        "<changelist/>"                         | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
-        "<changelist />"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
-        "<revision/>"                           | null     | "2222" | "-SNAPSHOT" | "<revision/>"
-        "<revision/>"                           | ""       | "2222" | "-SNAPSHOT" | "<revision/>"
-        "<sha1/>"                               | "2.2.2"  | null   | "-SNAPSHOT" | "<sha1/>"
-        "<sha1/>"                               | "2.2.2"  | ""     | "-SNAPSHOT" | "<sha1/>"
-        "<changelist/>"                         | "2.2.2"  | "2222" | null        | "<changelist/>"
-        "<changelist/>"                         | "2.2.2"  | "2222" | ""          | "<changelist/>"
-        "<sha1/><sha1/>"                        | "2.2.2"  | "2222" | "-SNAPSHOT" | "<sha1>2222</sha1><sha1/>"
+        content                                 | revision | sha1    | changelist  | expected
+        "<revision>123</revision>"              | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
+        "<revision  >123</revision  >"          | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
+        "<revision/>"                           | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
+        "<revision />"                          | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<revision>2.2.2</revision>"
+        "<sha1>-123</sha1>"                     | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<sha1>-2222</sha1>"
+        "<sha1  >-123</sha1  >"                 | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<sha1>-2222</sha1>"
+        "<sha1/>"                               | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<sha1>-2222</sha1>"
+        "<sha1 />"                              | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<sha1>-2222</sha1>"
+        "<changelist>-RELEASE</changelist>"     | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
+        "<changelist  >-RELEASE</changelist  >" | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
+        "<changelist/>"                         | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
+        "<changelist />"                        | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<changelist>-SNAPSHOT</changelist>"
+        "<revision/>"                           | null     | "-2222" | "-SNAPSHOT" | "<revision/>"
+        "<revision/>"                           | ""       | "-2222" | "-SNAPSHOT" | "<revision/>"
+        "<sha1/>"                               | "2.2.2"  | null    | "-SNAPSHOT" | "<sha1/>"
+        "<sha1/>"                               | "2.2.2"  | ""      | "-SNAPSHOT" | "<sha1/>"
+        "<changelist/>"                         | "2.2.2"  | "-2222" | null        | "<changelist/>"
+        "<changelist/>"                         | "2.2.2"  | "-2222" | ""          | "<changelist/>"
+        "<sha1/><sha1/>"                        | "2.2.2"  | "-2222" | "-SNAPSHOT" | "<sha1>-2222</sha1><sha1/>"
     }
 
     @Unroll
-    def "should provide string representation when r: #revision and s: #sha1 and c: #changelist"() {
+    def "should provide externalized representation when r: #revision and s: #sha1 and c: #changelist"() {
         given:
         ciVersion.withRevision(revision as String)
                 .withSha1(sha1 as String)
                 .withChangelist(changelist as String)
 
         when:
-        def actual = ciVersion.toString()
+        def actual = ciVersion.toExternalForm()
 
         then:
         actual == expected
 
         where:
         revision | sha1    | changelist  | expected
-        "2.2.2"  | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        null     | ".2222" | "-SNAPSHOT" | ".2222-SNAPSHOT"
+        "2.2.2"  | "-2222" | "-SNAPSHOT" | "2.2.2-2222-SNAPSHOT"
+        null     | "-2222" | "-SNAPSHOT" | "-2222-SNAPSHOT"
         "2.2.2"  | null    | "-SNAPSHOT" | "2.2.2-SNAPSHOT"
-        "2.2.2"  | ".2222" | null        | "2.2.2.2222"
+        "2.2.2"  | "-2222" | null        | "2.2.2-2222"
+    }
+
+    @Unroll
+    def "should provide component representation when r: #revision and s: #sha1 and c: #changelist"() {
+        given:
+        ciVersion.withRevision(revision as String)
+                .withSha1(sha1 as String)
+                .withChangelist(changelist as String)
+
+        when:
+        def actual = ciVersion.toComponentForm()
+
+        then:
+        actual == expected
+
+        where:
+        revision | sha1    | changelist  | expected
+        "2.2.2"  | "-2222" | "-SNAPSHOT" | "revision:2.2.2 sha1:-2222 changelist:-SNAPSHOT"
+        null     | "-2222" | "-SNAPSHOT" | "sha1:-2222 changelist:-SNAPSHOT"
+        ""       | "-2222" | "-SNAPSHOT" | "revision: sha1:-2222 changelist:-SNAPSHOT"
+        "2.2.2"  | null    | "-SNAPSHOT" | "revision:2.2.2 changelist:-SNAPSHOT"
+        "2.2.2"  | ""      | "-SNAPSHOT" | "revision:2.2.2 sha1: changelist:-SNAPSHOT"
+        "2.2.2"  | "-2222" | null        | "revision:2.2.2 sha1:-2222"
+        "2.2.2"  | "-2222" | ""          | "revision:2.2.2 sha1:-2222 changelist:"
     }
 
     def "should raise exception on error incrementing revision"() {
@@ -229,14 +277,14 @@ class CiVersionTest
 
         where:
         incrementor | revision  | sha1    | changelist  | expected
-        MAJOR       | "1.2.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        MINOR       | "2.1.2"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        PATCH       | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        BUILD       | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
-        AUTO        | "1"       | ".2222" | "-SNAPSHOT" | "2.2222-SNAPSHOT"
-        AUTO        | "2.1"     | ".2222" | "-SNAPSHOT" | "2.2.2222-SNAPSHOT"
-        AUTO        | "2.2.1"   | ".2222" | "-SNAPSHOT" | "2.2.2.2222-SNAPSHOT"
-        AUTO        | "2.2.2-1" | ".2222" | "-SNAPSHOT" | "2.2.2-2.2222-SNAPSHOT"
+        MAJOR       | "1.2.2"   | "-2222" | "-SNAPSHOT" | "2.2.2-2222-SNAPSHOT"
+        MINOR       | "2.1.2"   | "-2222" | "-SNAPSHOT" | "2.2.2-2222-SNAPSHOT"
+        PATCH       | "2.2.1"   | "-2222" | "-SNAPSHOT" | "2.2.2-2222-SNAPSHOT"
+        BUILD       | "2.2.2-1" | "-2222" | "-SNAPSHOT" | "2.2.2-2-2222-SNAPSHOT"
+        AUTO        | "1"       | "-2222" | "-SNAPSHOT" | "2-2222-SNAPSHOT"
+        AUTO        | "2.1"     | "-2222" | "-SNAPSHOT" | "2.2-2222-SNAPSHOT"
+        AUTO        | "2.2.1"   | "-2222" | "-SNAPSHOT" | "2.2.2-2222-SNAPSHOT"
+        AUTO        | "2.2.2-1" | "-2222" | "-SNAPSHOT" | "2.2.2-2-2222-SNAPSHOT"
     }
 
     @Unroll
@@ -248,12 +296,17 @@ class CiVersionTest
         actual == expected
 
         where:
-        current                                     | expected
-        new CiVersion("2.2.2", "22", "-SNAPSHOT")   | new CiVersion("2.2.2", "22", null)
-        new CiVersion("2.2.2", "22", null)          | new CiVersion("2.2.2", "22", null)
-        new CiVersion("2.2.2", "22", "")            | new CiVersion("2.2.2", "22", "")
-        new CiVersion("2.2.2-SNAPSHOT", "22", null) | new CiVersion("2.2.2", "22", null)
-        new CiVersion("2.2.2-SNAPSHOT", "22", "")   | new CiVersion("2.2.2", "22", "")
+        current                                      | expected
+        new CiVersion("2.2.2", "-22", "-SNAPSHOT")   | new CiVersion("2.2.2", "-22", null)
+        new CiVersion("2.2.2", null, "-SNAPSHOT")    | new CiVersion("2.2.2", null, null)
+        new CiVersion("2.2.2", "-22", null)          | new CiVersion("2.2.2", "-22", null)
+        new CiVersion("2.2.2", null, null)           | new CiVersion("2.2.2", null, null)
+        new CiVersion("2.2.2", "-22", "")            | new CiVersion("2.2.2", "-22", "")
+        new CiVersion("2.2.2", null, "")             | new CiVersion("2.2.2", null, "")
+        new CiVersion("2.2.2-SNAPSHOT", "-22", null) | new CiVersion("2.2.2", "-22", null)
+        new CiVersion("2.2.2-SNAPSHOT", null, null)  | new CiVersion("2.2.2", null, null)
+        new CiVersion("2.2.2-SNAPSHOT", "-22", "")   | new CiVersion("2.2.2", "-22", "")
+        new CiVersion("2.2.2-SNAPSHOT", null, "")    | new CiVersion("2.2.2", null, "")
     }
 
     @Unroll

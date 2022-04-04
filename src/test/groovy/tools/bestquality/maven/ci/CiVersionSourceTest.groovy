@@ -5,11 +5,11 @@ import org.apache.maven.project.MavenProject
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static tools.bestquality.maven.ci.CiVersionSource.MERGE_PROJECT_FIRST
-import static tools.bestquality.maven.ci.CiVersionSource.MERGE_SYSTEM_FIRST
-import static tools.bestquality.maven.ci.CiVersionSource.PROJECT
-import static tools.bestquality.maven.ci.CiVersionSource.SYSTEM
-import static tools.bestquality.maven.ci.CiVersionSource.source
+import static tools.bestquality.maven.ci.CiVersionSources.MERGE_PROJECT_FIRST
+import static tools.bestquality.maven.ci.CiVersionSources.MERGE_SYSTEM_FIRST
+import static tools.bestquality.maven.ci.CiVersionSources.PROJECT
+import static tools.bestquality.maven.ci.CiVersionSources.SYSTEM
+import static tools.bestquality.maven.ci.CiVersionSources.source
 
 class CiVersionSourceTest
         extends Specification {
@@ -41,7 +41,7 @@ class CiVersionSourceTest
 
         then:
         def thrown = thrown(IllegalArgumentException)
-        thrown.message == "No enum constant in tools.bestquality.maven.ci.CiVersionSource matching unknown"
+        thrown.message == "No enum constant in tools.bestquality.maven.ci.CiVersionSources matching unknown"
     }
 
     @Unroll
@@ -62,7 +62,7 @@ class CiVersionSourceTest
                 def properties = new Properties()
                 properties.setProperty("revision", "2.22.2")
                 properties.setProperty("sha1", "22")
-                properties.setProperty("changelist", ".RELEASE")
+                properties.setProperty("changelist", "-RELEASE")
                 return properties
             }
         }
@@ -76,8 +76,8 @@ class CiVersionSourceTest
         where:
         source              | expected
         PROJECT             | new CiVersion("1.11.1", null, "-SNAPSHOT")
-        SYSTEM              | new CiVersion("2.22.2", "22", ".RELEASE")
-        MERGE_SYSTEM_FIRST  | new CiVersion("2.22.2", "22", ".RELEASE")
+        SYSTEM              | new CiVersion("2.22.2", "22", "-RELEASE")
+        MERGE_SYSTEM_FIRST  | new CiVersion("2.22.2", "22", "-RELEASE")
         MERGE_PROJECT_FIRST | new CiVersion("1.11.1", "22", "-SNAPSHOT")
     }
 }

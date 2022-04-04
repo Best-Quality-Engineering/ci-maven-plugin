@@ -2,6 +2,7 @@ package tools.bestquality.maven.ci;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -13,10 +14,9 @@ import java.nio.file.Path;
 import static java.lang.String.format;
 import static java.nio.file.Files.createDirectories;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
-import static tools.bestquality.maven.ci.CiVersionSource.MERGE_SYSTEM_FIRST;
-
 
 @Mojo(name = "expand-pom",
+        configurator = "ci-mojo-configurator",
         threadSafe = true,
         defaultPhase = VALIDATE)
 public class ExpandPomMojo
@@ -28,6 +28,28 @@ public class ExpandPomMojo
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
+
+    /**
+     * The source of the properties used to compute the CI Version. There are 2
+     * primary sources of properties from which the CI version is built:
+     * <p/>
+     * <ul>
+     *     <li>The maven project's properties</li>
+     *     <li>The maven session's system properties</li>
+     * </ul>
+     * <p/>
+     * This parameter determines which set of properties is used, there are options
+     * for merging the properties as well. The possible values are:
+     * <p/>
+     * <ul>
+     *     <li><code>project</code></li>
+     *     <li><code>system</code></li>
+     *     <li><code>merge-system-first</code></li>
+     *     <li><code>merge-project-first</code></li>
+     * </ul>
+     */
+    @Parameter(alias = "source", property = "source", defaultValue = "merge-system-first")
+    private CiVersionSource source;
 
     public ExpandPomMojo() {
         this(new Content());
@@ -47,8 +69,13 @@ public class ExpandPomMojo
         return this;
     }
 
+    public ExpandPomMojo withSource(CiVersionSource source) {
+        this.source = source;
+        return this;
+    }
+
     public void execute()
-            throws MojoExecutionException {
+            throws MojoExecutionException, MojoFailureException {
         String projectPom = readProjectPom();
         String expandedPom = expandProjectPom(projectPom);
         if (projectPom.equals(expandedPom)) {
@@ -73,12 +100,18 @@ public class ExpandPomMojo
         }
     }
 
+    private CiVersion current()
+            throws MojoFailureException {
+        return source.from(project, session);
+    }
+
     private String expandProjectPom(String projectPom)
-            throws MojoExecutionException {
+            throws MojoExecutionException, MojoFailureException {
         info("Expanding contents of project POM file");
+        CiVersion version = current();
         try {
-            CiVersionSource source = MERGE_SYSTEM_FIRST;
-            CiVersion version = source.from(project, session);
+            info(format("Expanding POM file with %s [%s]",
+                    version.toExternalForm(), version.toComponentForm()));
             return version.replace(version.expand(projectPom));
         } catch (Exception e) {
             error("Failure expanding template POM file", e);

@@ -5,15 +5,16 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import tools.bestquality.io.Content;
+import tools.bestquality.maven.versioning.Incrementor;
 
 import java.io.File;
 import java.nio.file.Path;
 
 import static java.lang.String.format;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
-import static tools.bestquality.maven.versioning.StandardIncrementor.incrementor;
 
 @Mojo(name = "increment-pom",
+        configurator = "ci-mojo-configurator",
         aggregator = true,
         threadSafe = true,
         defaultPhase = VALIDATE)
@@ -36,7 +37,7 @@ public class IncrementPomMojo
      * <code>major</code>
      */
     @Parameter(alias = "incrementor", property = "incrementor", defaultValue = "auto")
-    private String incrementor;
+    private Incrementor incrementor;
 
     /**
      * The filename in the output directory which will contain the exported release version.
@@ -56,7 +57,7 @@ public class IncrementPomMojo
         this(new Content());
     }
 
-    public IncrementPomMojo withIncrementor(String incrementor) {
+    public IncrementPomMojo withIncrementor(Incrementor incrementor) {
         this.incrementor = incrementor;
         return this;
     }
@@ -77,7 +78,7 @@ public class IncrementPomMojo
     CiVersion next()
             throws MojoFailureException {
         CiVersion current = current();
-        CiVersion next = current.next(incrementor(incrementor));
+        CiVersion next = current.next(incrementor);
         info(format("Next ci version is: %s", next.toExternalForm()));
         return next;
     }

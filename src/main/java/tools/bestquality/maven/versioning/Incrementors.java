@@ -3,7 +3,7 @@ package tools.bestquality.maven.versioning;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;
 
-public enum StandardIncrementor
+public enum Incrementors
         implements Incrementor {
     MAJOR() {
         @Override
@@ -47,12 +47,12 @@ public enum StandardIncrementor
 
     public abstract Version next(Version current);
 
-    public static StandardIncrementor incrementor(String name) {
+    public static Incrementor incrementor(String name) {
         return stream(values())
                 .filter(item -> item.name().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         format("No enum constant in %s matching %s",
-                                StandardIncrementor.class.getCanonicalName(), name)));
+                                Incrementors.class.getCanonicalName(), name)));
     }
 }

@@ -9,6 +9,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII
 import static java.nio.file.Files.exists
 import static java.nio.file.Files.list
 import static java.nio.file.Files.readAllBytes
+import static tools.bestquality.maven.ci.CiVersionSources.MERGE_SYSTEM_FIRST
 
 class ExportVersionMojoTest
         extends MojoSpecification {
@@ -25,7 +26,7 @@ class ExportVersionMojoTest
         mojo.setLog(logMock)
         mojo.withProject(projectMock)
                 .withSession(sessionMock)
-                .withSource("merge-system-first")
+                .withSource(MERGE_SYSTEM_FIRST)
                 .withOutputDirectory(outputPath.toFile())
     }
 
