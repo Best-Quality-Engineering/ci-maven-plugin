@@ -30,7 +30,7 @@ url: https://ci.bestquality.tools
 github_username:  ruffkat
 
 # Released version
-version: 0.0.13
+version: 0.0.14
 
 # Build settings
 markdown: kramdown
