@@ -14,7 +14,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
         <plugin>
             <groupId>tools.bestquality</groupId>
             <artifactId>ci-maven-plugin</artifactId>
-            <version>0.0.13</version>
+            <version>0.0.14</version>
             <executions>
                 <execution>
                     <goals>
@@ -134,7 +134,7 @@ This configuration results in consistent developer and pipeline builds:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.13</version>
+                <version>0.0.14</version>
                 <executions>
                     <execution>
                         <goals>
@@ -182,7 +182,7 @@ When built, the installed `pom.xml` will be expanded to:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.13</version>
+                <version>0.0.14</version>
                 <executions>
                     <execution>
                         <goals>
@@ -228,7 +228,7 @@ When deployed, the uploaded `pom.xml` will be expanded to:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.13</version>
+                <version>0.0.14</version>
                 <executions>
                     <execution>
                         <goals>
@@ -259,7 +259,7 @@ This project uses the plugin combined with GitHub actions workflows. Here is the
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>...</version>
+                <version>0.0.14</version>
                 <executions>
                     <execution>
                         <goals>
