@@ -34,5 +34,5 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           base: master
-          branch: release/${GITHUB_REF_NAME}
+          branch: release/${{github.ref_name}}
 
