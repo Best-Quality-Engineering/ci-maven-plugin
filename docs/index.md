@@ -265,7 +265,7 @@ This project uses the plugin combined with GitHub actions workflows. Here is the
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>...</version>
+                <version>{{site.version}}</version>
                 <executions>
                     <execution>
                         <goals>
