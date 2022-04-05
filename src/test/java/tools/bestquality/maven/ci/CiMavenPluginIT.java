@@ -12,14 +12,14 @@ import static tools.bestquality.maven.ci.CiMavenAssertions.assertThat;
 
 @MavenRepository
 @MavenJupiterExtension
-public class ExpandPomMojoIT {
+public class CiMavenPluginIT {
 
     @Nested
     @MavenProject
     class single_module_with_all_properties {
 
         @MavenTest
-        void no_system_properties(MavenExecutionResult execution) {
+        void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2")
@@ -30,7 +30,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
-        void revision_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("22.22.22-SNAPSHOT")
                     .revisionIsEqualTo("22.22.22")
@@ -41,7 +41,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
-        void changelist_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-RELEASE")
                     .revisionIsEqualTo("2.22.2")
@@ -52,7 +52,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist=") // This is a workaround for bug in empty content handling
-        void changelist_system_property_empty(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2")
                     .revisionIsEqualTo("2.22.2")
@@ -67,7 +67,7 @@ public class ExpandPomMojoIT {
     class single_module_with_revision_property {
 
         @MavenTest
-        void no_system_properties(MavenExecutionResult execution) {
+        void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
@@ -78,7 +78,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
-        void revision_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("22.22.22")
                     .revisionIsEqualTo("22.22.22")
@@ -89,7 +89,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
-        void changelist_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
@@ -100,7 +100,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist=")
-        void changelist_system_property_empty(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
@@ -115,7 +115,7 @@ public class ExpandPomMojoIT {
     class multi_module_with_all_properties {
 
         @MavenTest
-        void no_system_properties(MavenExecutionResult execution) {
+        void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2")
@@ -130,7 +130,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
-        void revision_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("22.22.22-SNAPSHOT")
                     .revisionIsEqualTo("22.22.22")
@@ -145,7 +145,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
-        void changelist_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-RELEASE")
                     .revisionIsEqualTo("2.22.2")
@@ -160,7 +160,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist=")
-        void changelist_system_property_empty(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2")
                     .revisionIsEqualTo("2.22.2")
@@ -179,7 +179,7 @@ public class ExpandPomMojoIT {
     class multi_module_with_revision_property {
 
         @MavenTest
-        void no_system_properties(MavenExecutionResult execution) {
+        void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
@@ -194,7 +194,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
-        void revision_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("22.22.22")
                     .revisionIsEqualTo("22.22.22")
@@ -209,7 +209,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
-        void changelist_system_property(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
@@ -224,7 +224,7 @@ public class ExpandPomMojoIT {
 
         @MavenTest
         @SystemProperty(value = "changelist=")
-        void changelist_system_property_empty(MavenExecutionResult execution) {
+        void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
