@@ -49,6 +49,17 @@ public class ExpandPomMojoIT {
                     .changelistIsEqualTo("-RELEASE")
                     .artifactIsCorrectlyVersioned();
         }
+
+        @MavenTest
+        @SystemProperty(value = "changelist=") // This is a workaround for bug in empty content handling
+        void changelist_system_property_empty(MavenExecutionResult execution) {
+            assertThat(execution)
+                    .projectWasGenerated("2.22.2")
+                    .revisionIsEqualTo("2.22.2")
+                    .sha1IsEmpty()
+                    .changelistIsEmpty()
+                    .artifactIsCorrectlyVersioned();
+        }
     }
 
     @Nested
@@ -79,6 +90,17 @@ public class ExpandPomMojoIT {
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
         void changelist_system_property(MavenExecutionResult execution) {
+            assertThat(execution)
+                    .projectWasGenerated("2.22.2-SNAPSHOT")
+                    .revisionIsEqualTo("2.22.2-SNAPSHOT")
+                    .sha1IsNotPresent()
+                    .changelistIsNotPresent()
+                    .artifactIsCorrectlyVersioned();
+        }
+
+        @MavenTest
+        @SystemProperty(value = "changelist=")
+        void changelist_system_property_empty(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
@@ -135,6 +157,21 @@ public class ExpandPomMojoIT {
                     .changelistIsNotPresent()
                     .artifactIsCorrectlyVersioned();
         }
+
+        @MavenTest
+        @SystemProperty(value = "changelist=")
+        void changelist_system_property_empty(MavenExecutionResult execution) {
+            assertThat(execution)
+                    .projectWasGenerated("2.22.2")
+                    .revisionIsEqualTo("2.22.2")
+                    .sha1IsEmpty()
+                    .changelistIsEmpty()
+                    .moduleWasGenerated("child", "2.22.2")
+                    .revisionIsNotPresent()
+                    .sha1IsNotPresent()
+                    .changelistIsNotPresent()
+                    .artifactIsCorrectlyVersioned();
+        }
     }
 
     @Nested
@@ -173,6 +210,21 @@ public class ExpandPomMojoIT {
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
         void changelist_system_property(MavenExecutionResult execution) {
+            assertThat(execution)
+                    .projectWasGenerated("2.22.2-SNAPSHOT")
+                    .revisionIsEqualTo("2.22.2-SNAPSHOT")
+                    .sha1IsNotPresent()
+                    .changelistIsNotPresent()
+                    .moduleWasGenerated("child", "2.22.2-SNAPSHOT")
+                    .revisionIsNotPresent()
+                    .sha1IsNotPresent()
+                    .changelistIsNotPresent()
+                    .artifactIsCorrectlyVersioned();
+        }
+
+        @MavenTest
+        @SystemProperty(value = "changelist=")
+        void changelist_system_property_empty(MavenExecutionResult execution) {
             assertThat(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
