@@ -1,19 +1,19 @@
-package tools.bestquality.maven.versioning;
+package tools.bestquality.maven.util;
 
 import org.codehaus.plexus.component.configurator.converters.basic.AbstractBasicConverter;
 
-import static tools.bestquality.maven.versioning.Incrementors.incrementor;
+import java.nio.charset.Charset;
 
-public class IncrementorConverter
+public class CharsetConverter
         extends AbstractBasicConverter {
 
     @Override
     public boolean canConvert(Class<?> type) {
-        return Incrementor.class.equals(type);
+        return Charset.class.equals(type);
     }
 
     @Override
     protected Object fromString(String value) {
-        return incrementor(value);
+        return Charset.forName(value);
     }
 }

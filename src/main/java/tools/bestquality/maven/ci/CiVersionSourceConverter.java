@@ -1,6 +1,5 @@
 package tools.bestquality.maven.ci;
 
-import org.codehaus.plexus.component.configurator.ComponentConfigurationException;
 import org.codehaus.plexus.component.configurator.converters.basic.AbstractBasicConverter;
 
 import static tools.bestquality.maven.ci.CiVersionSources.source;
@@ -14,8 +13,7 @@ public class CiVersionSourceConverter
     }
 
     @Override
-    protected Object fromString(String value)
-            throws ComponentConfigurationException {
+    protected Object fromString(String value) {
         return source(value);
     }
 }

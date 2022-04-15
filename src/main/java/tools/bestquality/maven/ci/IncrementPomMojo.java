@@ -7,6 +7,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import tools.bestquality.io.Content;
 import tools.bestquality.maven.versioning.Incrementor;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.nio.file.Path;
 
@@ -48,13 +49,9 @@ public class IncrementPomMojo
     @Parameter(property = "filename", defaultValue = "next-version.txt")
     private String filename;
 
-
-    IncrementPomMojo(Content content) {
+    @Inject
+    public IncrementPomMojo(Content content) {
         super(content);
-    }
-
-    public IncrementPomMojo() {
-        this(new Content());
     }
 
     public IncrementPomMojo withIncrementor(Incrementor incrementor) {

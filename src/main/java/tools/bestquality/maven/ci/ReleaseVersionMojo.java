@@ -6,6 +6,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import tools.bestquality.io.Content;
 
+import javax.inject.Inject;
+
 import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 
 @Mojo(name = "release-version",
@@ -25,7 +27,8 @@ public class ReleaseVersionMojo
     @Parameter(property = "filename", defaultValue = "release-version.txt")
     private String filename;
 
-    ReleaseVersionMojo(Content content) {
+    @Inject
+    public ReleaseVersionMojo(Content content) {
         super(content);
     }
 
