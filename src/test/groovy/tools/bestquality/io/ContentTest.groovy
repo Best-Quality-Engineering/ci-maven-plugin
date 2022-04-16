@@ -12,12 +12,12 @@ import static java.nio.file.Files.readAllBytes
 
 class ContentTest
         extends Specification {
-    Content helper
     Path file
+    Content content
 
     def setup() {
         file = createTempFile("test", "-file.txt")
-        helper = new Content()
+        content = new Content()
     }
 
     def cleanup() {
@@ -32,7 +32,7 @@ class ContentTest
         }
 
         when:
-        def actual = helper.read(file, UTF_8)
+        def actual = content.read(file, UTF_8)
 
         then:
         actual == expected
@@ -43,7 +43,7 @@ class ContentTest
         def expected = "Hello"
 
         when:
-        helper.write(file, UTF_8, expected)
+        content.write(file, UTF_8, expected)
 
         then:
         new String(readAllBytes(file), UTF_8) == expected

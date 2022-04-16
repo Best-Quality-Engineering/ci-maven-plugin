@@ -8,6 +8,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import tools.bestquality.io.Content;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.nio.file.Path;
 
@@ -51,11 +52,8 @@ public class ExpandPomMojo
     @Parameter(alias = "source", property = "source", defaultValue = "merge-system-first")
     private CiVersionSource source;
 
-    public ExpandPomMojo() {
-        this(new Content());
-    }
-
-    ExpandPomMojo(Content content) {
+    @Inject
+    public ExpandPomMojo(Content content) {
         this.content = content;
     }
 

@@ -102,70 +102,6 @@ mvn ci:release-version -Dscriptable=false
 mvn ci:release-version -Dscriptable=false -Doutput-directory="." -Dfilename="release.txt"
 ```
 
-### `ci:replace-version`
-By default, this goal is bound to the `process-resources` phase and will replace version references in documentation.
-
-This goal can be configured with a list of documents, i.e.:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>bestquality</groupId>
-    <artifactId>ci-pom</artifactId>
-    <version>${revision}</version>
-    <packaging>jar</packaging>
-    <properties>
-        <revision>2.22.2-SNAPSHOT</revision>
-    </properties>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>tools.bestquality</groupId>
-                <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.14</version>
-                <configuration>
-                    <documents>
-                        <document>
-                            <location>${project.basedir}/README.md</location>
-                            <encoding>utf-8</encoding>
-                            <pattern><![CDATA[(?sm)(<artifactId>ci-maven-plugin<\/artifactId>\s+<version>).*?(<\/version>)]]></pattern>
-                            <replacement><![CDATA[$1${version}$2]]></replacement>
-                        </document>
-                        <document>
-                            <location>${project.basedir}/docs/_config.yml</location>
-                            <encoding>utf-8</encoding>
-                            <pattern><![CDATA[^(version:).*$]]></pattern>
-                            <replacement><![CDATA[$1 ${version}]]></replacement>
-                        </document>
-                        <document>
-                            <location>${project.basedir}/pom.xml</location>
-                            <encoding>utf-8</encoding>
-                            <pattern><![CDATA[(<plugin.ci.version>).*(<\/plugin.ci.version>)]]></pattern>
-                            <replacement><![CDATA[$1${version}$2]]></replacement>
-                        </document>
-                    </documents>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>expand-pom</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-</project>
-```
-
-Then, in a release script, the goal can be executed to update version references in the configured documents:
-```shell
-echo "Updating version references in documentation"
-mvn ci:replace-version -Drevision="${GITHUB_REF_NAME}"
-```
-
 ### `ci:clean`
 By default, this goal is bound to the `clean` phase and will remove the expanded `target/generated-poms/pom-ci.xml` file
 
@@ -431,3 +367,6 @@ Updated `pom.xml`:
 Finally, version references to the current release are updated in documentation and the `pom.xml`
 along with the updated docs are pushed to a release branch where they can be reviewed and merged
 back into the default branch.
+
+## Upcoming Features
+* Goal to update any references to the project version in documentation, i.e. `README.md`

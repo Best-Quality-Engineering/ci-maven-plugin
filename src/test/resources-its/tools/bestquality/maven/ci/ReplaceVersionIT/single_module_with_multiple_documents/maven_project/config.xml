@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <properties>
+        <plugin.ci.version>2.2.2</plugin.ci.version>
+    </properties>
+</configuration>

@@ -1,0 +1,18 @@
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>tools.bestquality</groupId>
+            <artifactId>ci-maven-plugin</artifactId>
+            <version>2.2.2</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>expand-pom</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```

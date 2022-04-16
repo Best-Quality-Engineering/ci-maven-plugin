@@ -1,14 +1,15 @@
 package tools.bestquality.io;
 
+import javax.inject.Singleton;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.newBufferedWriter;
 import static java.nio.file.Files.readAllBytes;
 
+@Singleton
 public class Content {
 
     public String read(Path path, Charset charset)
