@@ -1,7 +1,6 @@
-package tools.bestquality.maven.ci
+package tools.bestquality.io
 
 import spock.lang.Specification
-import tools.bestquality.io.Content
 
 import java.nio.charset.Charset
 import java.nio.file.Path
@@ -53,10 +52,10 @@ class DocumentTest
 
         and: "a multiline regular expression"
         document.withPattern(compile("(?sm)(<artifactId>ci-maven-plugin<\\/artifactId>\\s+<version>).*?(<\\/version>)"))
-                .withReplacement("\$1\${ci-version}\$2")
+                .withReplacement("\$12.22.2\$2")
 
         when: "the version is updated"
-        document.updateTo(content, new CiVersion().withRevision("2.22.2"))
+        document.replace(content)
 
         then: "all references in the document are updated to the specified version"
         file.text == getClass().getResourceAsStream("README-expected.md").text
@@ -68,10 +67,10 @@ class DocumentTest
 
         and: "a single line regular expression"
         document.withPattern(compile("^(version:).*\$"))
-                .withReplacement("\$1 \${ci-version}")
+                .withReplacement("\$1 2.22.2")
 
         when: "the version is updated"
-        document.updateTo(content, new CiVersion().withRevision("2.22.2"))
+        document.replace(content)
 
         then: "all references in the document are updated to the specified version"
         file.text == getClass().getResourceAsStream("config-expected.yml").text
@@ -83,10 +82,10 @@ class DocumentTest
 
         and: "a single line regular expression"
         document.withPattern(compile("(<plugin.ci.version>).*(<\\/plugin.ci.version>)"))
-                .withReplacement("\$1\${ci-version}\$2")
+                .withReplacement("\$12.22.2\$2")
 
         when: "the version is updated"
-        document.updateTo(content, new CiVersion().withRevision("2.22.2"))
+        document.replace(content)
 
         then: "all references in the document are updated to the specified version"
         file.text == getClass().getResourceAsStream("pom-expected.xml").text

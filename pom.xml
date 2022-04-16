@@ -21,7 +21,7 @@
         <ossrh.hostname>s01.oss.sonatype.org</ossrh.hostname>
         <ossrh.staging-profile>7e430683fef886</ossrh.staging-profile>
         <repository.slug>ruffkat/ci-maven-plugin</repository.slug>
-        <revision>0.0.16</revision>
+        <revision>0.0.17</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
         <!-- Maven specific properties -->
@@ -36,8 +36,9 @@
         <maven-itf.version>0.11.0</maven-itf.version>
         <objenesis.version>3.2</objenesis.version>
         <spock.version>2.1-groovy-3.0</spock.version>
+        <slf4j.version>1.7.5</slf4j.version>
         <!-- Plugin versions -->
-        <plugin.ci.version>0.0.15</plugin.ci.version>
+        <plugin.ci.version>0.0.16</plugin.ci.version>
         <plugin.gmaven.version>1.13.1</plugin.gmaven.version>
         <nexus.staging.version>1.6.12</nexus.staging.version>
     </properties>
@@ -78,6 +79,12 @@
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>${maven.plugin-annotations.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Test Dependencies -->
@@ -227,19 +234,19 @@
                                     <location>${project.basedir}/README.md</location>
                                     <encoding>utf-8</encoding>
                                     <pattern><![CDATA[(?sm)(<artifactId>ci-maven-plugin<\/artifactId>\s+<version>).*?(<\/version>)]]></pattern>
-                                    <replacement><![CDATA[$1${ci-version}$2]]></replacement>
+                                    <replacement><![CDATA[$1${project.version}$2]]></replacement>
                                 </document>
                                 <document>
                                     <location>${project.basedir}/docs/_config.yml</location>
                                     <encoding>utf-8</encoding>
-                                    <pattern><![CDATA[^(version:).*$]]></pattern>
-                                    <replacement><![CDATA[$1 ${ci-version}]]></replacement>
+                                    <pattern><![CDATA[(version:).*]]></pattern>
+                                    <replacement><![CDATA[$1 ${project.version}]]></replacement>
                                 </document>
                                 <document>
                                     <location>${project.basedir}/pom.xml</location>
                                     <encoding>utf-8</encoding>
                                     <pattern><![CDATA[(<plugin.ci.version>).*(<\/plugin.ci.version>)]]></pattern>
-                                    <replacement><![CDATA[$1${ci-version}$2]]></replacement>
+                                    <replacement><![CDATA[$1${project.version}$2]]></replacement>
                                 </document>
                             </documents>
                         </configuration>

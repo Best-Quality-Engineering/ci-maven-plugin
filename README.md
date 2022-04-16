@@ -14,7 +14,7 @@ A Maven plugin for use in CI pipelines based on the patterns described in the
         <plugin>
             <groupId>tools.bestquality</groupId>
             <artifactId>ci-maven-plugin</artifactId>
-            <version>0.0.15</version>
+            <version>0.0.16</version>
             <executions>
                 <execution>
                     <goals>
@@ -124,26 +124,26 @@ This goal can be configured with a list of documents, i.e.:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.15</version>
+                <version>0.0.16</version>
                 <configuration>
                     <documents>
                         <document>
                             <location>${project.basedir}/README.md</location>
                             <encoding>utf-8</encoding>
                             <pattern><![CDATA[(?sm)(<artifactId>ci-maven-plugin<\/artifactId>\s+<version>).*?(<\/version>)]]></pattern>
-                            <replacement><![CDATA[$1${ci-version}$2]]></replacement>
+                            <replacement><![CDATA[$1${project.version}$2]]></replacement>
                         </document>
                         <document>
                             <location>${project.basedir}/docs/_config.yml</location>
                             <encoding>utf-8</encoding>
-                            <pattern><![CDATA[^(version:).*$]]></pattern>
-                            <replacement><![CDATA[$1 ${ci-version}]]></replacement>
+                            <pattern><![CDATA[(version:).*]]></pattern>
+                            <replacement><![CDATA[$1 ${project.version}]]></replacement>
                         </document>
                         <document>
                             <location>${project.basedir}/pom.xml</location>
                             <encoding>utf-8</encoding>
                             <pattern><![CDATA[(<plugin.ci.version>).*(<\/plugin.ci.version>)]]></pattern>
-                            <replacement><![CDATA[$1${ci-version}$2]]></replacement>
+                            <replacement><![CDATA[$1${project.version}$2]]></replacement>
                         </document>
                     </documents>
                 </configuration>
@@ -198,7 +198,7 @@ This configuration results in consistent developer and pipeline builds:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.15</version>
+                <version>0.0.16</version>
                 <executions>
                     <execution>
                         <goals>
@@ -246,7 +246,7 @@ When built, the installed `pom.xml` will be expanded to:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.15</version>
+                <version>0.0.16</version>
                 <executions>
                     <execution>
                         <goals>
@@ -292,7 +292,7 @@ When deployed, the uploaded `pom.xml` will be expanded to:
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.15</version>
+                <version>0.0.16</version>
                 <executions>
                     <execution>
                         <goals>
@@ -323,7 +323,7 @@ This project uses the plugin combined with GitHub actions workflows. Here is the
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.15</version>
+                <version>0.0.16</version>
                 <executions>
                     <execution>
                         <goals>

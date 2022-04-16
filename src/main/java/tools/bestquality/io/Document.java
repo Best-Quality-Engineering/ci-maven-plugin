@@ -1,6 +1,6 @@
-package tools.bestquality.maven.ci;
+package tools.bestquality.io;
 
-import tools.bestquality.io.Content;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -9,7 +9,11 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class Document {
+    private static final Logger log = getLogger(Document.class);
+
     private Charset encoding;
     private Path location;
     private Pattern pattern;
@@ -67,10 +71,13 @@ public class Document {
         return this;
     }
 
-    public void updateTo(Content content, CiVersion version)
+    public void replace(Content content)
             throws IOException {
+        log.info("Replacing content in {}", location.toAbsolutePath());
+        log.info(" * pattern: {}", pattern.pattern());
+        log.info(" * replacement: {}", replacement);
         Matcher matcher = pattern.matcher(content.read(location, encoding));
-        content.write(location, encoding, matcher.replaceAll(replacement(version)));
+        content.write(location, encoding, matcher.replaceAll(replacement));
     }
 
     @Override
@@ -93,9 +100,5 @@ public class Document {
         return pattern != null
                 ? pattern.pattern()
                 : null;
-    }
-
-    private String replacement(CiVersion version) {
-        return replacement.replace("${ci-version}", version.toExternalForm());
     }
 }
