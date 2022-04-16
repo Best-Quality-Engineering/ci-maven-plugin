@@ -1,6 +1,6 @@
-package tools.bestquality.io;
+package tools.bestquality.maven.ci;
 
-import tools.bestquality.maven.ci.CiVersion;
+import tools.bestquality.io.Content;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

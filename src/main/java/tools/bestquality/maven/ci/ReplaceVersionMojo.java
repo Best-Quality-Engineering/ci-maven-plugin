@@ -7,11 +7,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import tools.bestquality.io.Content;
-import tools.bestquality.io.Document;
 
 import javax.inject.Inject;
-
-import java.io.IOException;
 import java.nio.file.Path;
 
 import static java.lang.String.format;

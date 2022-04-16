@@ -1,7 +1,7 @@
-package tools.bestquality.io
+package tools.bestquality.maven.ci
 
 import spock.lang.Specification
-import tools.bestquality.maven.ci.CiVersion
+import tools.bestquality.io.Content
 
 import java.nio.charset.Charset
 import java.nio.file.Path

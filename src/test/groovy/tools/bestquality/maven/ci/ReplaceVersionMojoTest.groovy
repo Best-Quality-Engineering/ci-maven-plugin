@@ -2,7 +2,6 @@ package tools.bestquality.maven.ci
 
 import org.apache.maven.plugin.MojoExecutionException
 import tools.bestquality.io.Content
-import tools.bestquality.io.Document
 import tools.bestquality.maven.test.MojoSpecification
 
 import java.nio.charset.Charset
