@@ -19,7 +19,7 @@ if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
   mvn -e -B -ntp -P ci ci:increment-pom -Drevision="${GITHUB_REF_NAME}"
 
   echo "Updating version references in project files"
-  mvn -e -B -ntp -P ci ci:replace-version -Drevision="${GITHUB_REF_NAME}" -Dchangelist=""
+  mvn -e -B -ntp -P ci ci:replace-content -Drevision="${GITHUB_REF_NAME}" -Dchangelist=""
 
   echo "Pushing release/${GITHUB_REF_NAME}"
   git add README.md

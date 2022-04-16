@@ -13,14 +13,14 @@ import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 
 @MavenRepository
 @MavenJupiterExtension
-public class ReplaceVersionIT {
+public class ReplaceContentIT {
 
     @Nested
     @MavenProject
     class single_module_with_multiple_documents {
 
         @MavenTest
-        @MavenGoal("ci:replace-version")
+        @MavenGoal("ci:replace-content")
         @SystemProperty(value = "revision", content = "22.22.22")
         void should_replace_all_versions_with_no_system_properties(MavenExecutionResult execution) {
             assertThat(execution)

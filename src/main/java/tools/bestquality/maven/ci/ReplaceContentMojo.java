@@ -13,11 +13,11 @@ import static java.lang.String.format;
 import static java.util.Arrays.copyOf;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
 
-@Mojo(name = "replace-version",
+@Mojo(name = "replace-content",
         configurator = "ci-mojo-configurator",
         threadSafe = true,
         defaultPhase = PROCESS_RESOURCES)
-public class ReplaceVersionMojo
+public class ReplaceContentMojo
         extends CiMojo {
     private final Content content;
 
@@ -40,11 +40,11 @@ public class ReplaceVersionMojo
     private Document[] documents = {};
 
     @Inject
-    public ReplaceVersionMojo(Content content) {
+    public ReplaceContentMojo(Content content) {
         this.content = content;
     }
 
-    public ReplaceVersionMojo withDocument(Document document) {
+    public ReplaceContentMojo withDocument(Document document) {
         int length = documents.length;
         documents = copyOf(documents, length + 1);
         documents[length] = document;

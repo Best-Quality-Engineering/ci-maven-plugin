@@ -13,16 +13,16 @@ import static java.nio.file.Files.createTempFile
 import static java.nio.file.Files.newBufferedWriter
 import static java.util.regex.Pattern.compile
 
-class ReplaceVersionMojoTest
+class ReplaceContentMojoTest
         extends MojoSpecification {
     Path location
     Content contentSpy
-    ReplaceVersionMojo mojo
+    ReplaceContentMojo mojo
 
     def setup() {
         location = createTempFile(outputPath,"config-",".yml")
         contentSpy = Spy(new Content())
-        mojo = new ReplaceVersionMojo(contentSpy)
+        mojo = new ReplaceContentMojo(contentSpy)
                 .withDocument(new Document()
                         .withLocation(location)
                         .withEncoding(US_ASCII)

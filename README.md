@@ -102,8 +102,8 @@ mvn ci:release-version -Dscriptable=false
 mvn ci:release-version -Dscriptable=false -Doutput-directory="." -Dfilename="release.txt"
 ```
 
-### `ci:replace-version`
-By default, this goal is bound to the `process-resources` phase and will replace version references in documentation.
+### `ci:replace-content`
+By default, this goal is bound to the `process-resources` phase and can be used to replace version references in documentation.
 
 This goal can be configured with a list of documents, i.e.:
 
@@ -163,7 +163,7 @@ This goal can be configured with a list of documents, i.e.:
 Then, in a release script, the goal can be executed to update version references in the configured documents:
 ```shell
 echo "Updating version references in documentation"
-mvn ci:replace-version -Drevision="${GITHUB_REF_NAME}" -Dchangelist=
+mvn ci:replace-content -Drevision="${GITHUB_REF_NAME}"
 ```
 
 ### `ci:clean`
