@@ -96,6 +96,6 @@ public class Document {
     }
 
     private String replacement(CiVersion version) {
-        return replacement.replace("${version}", version.toExternalForm());
+        return replacement.replace("${ci-version}", version.toExternalForm());
     }
 }

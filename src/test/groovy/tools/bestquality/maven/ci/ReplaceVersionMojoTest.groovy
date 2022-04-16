@@ -31,7 +31,7 @@ class ReplaceVersionMojoTest
                         .withLocation(location)
                         .withEncoding(US_ASCII)
                         .withPattern(compile("^(version:) .*\$"))
-                        .withReplacement("\$1 \${version}"))
+                        .withReplacement("\$1 \${ci-version}"))
         mojo.setLog(logMock)
     }
 

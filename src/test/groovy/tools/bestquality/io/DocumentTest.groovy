@@ -53,7 +53,7 @@ class DocumentTest
 
         and: "a multiline regular expression"
         document.withPattern(compile("(?sm)(<artifactId>ci-maven-plugin<\\/artifactId>\\s+<version>).*?(<\\/version>)"))
-                .withReplacement("\$1\${version}\$2")
+                .withReplacement("\$1\${ci-version}\$2")
 
         when: "the version is updated"
         document.updateTo(content, new CiVersion().withRevision("2.22.2"))
@@ -68,7 +68,7 @@ class DocumentTest
 
         and: "a single line regular expression"
         document.withPattern(compile("^(version:).*\$"))
-                .withReplacement("\$1 \${version}")
+                .withReplacement("\$1 \${ci-version}")
 
         when: "the version is updated"
         document.updateTo(content, new CiVersion().withRevision("2.22.2"))
@@ -83,7 +83,7 @@ class DocumentTest
 
         and: "a single line regular expression"
         document.withPattern(compile("(<plugin.ci.version>).*(<\\/plugin.ci.version>)"))
-                .withReplacement("\$1\${version}\$2")
+                .withReplacement("\$1\${ci-version}\$2")
 
         when: "the version is updated"
         document.updateTo(content, new CiVersion().withRevision("2.22.2"))

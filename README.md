@@ -131,19 +131,19 @@ This goal can be configured with a list of documents, i.e.:
                             <location>${project.basedir}/README.md</location>
                             <encoding>utf-8</encoding>
                             <pattern><![CDATA[(?sm)(<artifactId>ci-maven-plugin<\/artifactId>\s+<version>).*?(<\/version>)]]></pattern>
-                            <replacement><![CDATA[$1${version}$2]]></replacement>
+                            <replacement><![CDATA[$1${ci-version}$2]]></replacement>
                         </document>
                         <document>
                             <location>${project.basedir}/docs/_config.yml</location>
                             <encoding>utf-8</encoding>
                             <pattern><![CDATA[^(version:).*$]]></pattern>
-                            <replacement><![CDATA[$1 ${version}]]></replacement>
+                            <replacement><![CDATA[$1 ${ci-version}]]></replacement>
                         </document>
                         <document>
                             <location>${project.basedir}/pom.xml</location>
                             <encoding>utf-8</encoding>
                             <pattern><![CDATA[(<plugin.ci.version>).*(<\/plugin.ci.version>)]]></pattern>
-                            <replacement><![CDATA[$1${version}$2]]></replacement>
+                            <replacement><![CDATA[$1${ci-version}$2]]></replacement>
                         </document>
                     </documents>
                 </configuration>

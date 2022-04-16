@@ -65,7 +65,7 @@ public class ReplaceVersionMojo
      *     <li><code>pattern</code>: The regular expression to match; capture groups can
      *          be referenced in the <code>replacement</code></li>
      *     <li><code>replacement</code>: The string used as the replacement for the matched pattern;
-     *         use <code>${version}</code> within the replacement as a placeholder for the version value</li>
+     *         use <code>${ci-version}</code> within the replacement as a placeholder for the version value</li>
      * </ul>
      * <i>Tip: consider using a CDATA section when defining <code>pattern</code> and <code>replacement</code> in XML</i>
      */
