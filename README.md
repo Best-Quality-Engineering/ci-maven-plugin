@@ -103,7 +103,7 @@ mvn ci:release-version -Dscriptable=false -Doutput-directory="." -Dfilename="rel
 ```
 
 ### `ci:replace-content`
-By default, this goal is bound to the `process-resources` phase and can be used to replace version references in documentation.
+By default, this goal is bound to the `verify` phase and can be used to replace version references in documentation.
 
 This goal can be configured with a list of documents, i.e.:
 

@@ -11,12 +11,12 @@ import java.nio.file.Path;
 
 import static java.lang.String.format;
 import static java.util.Arrays.copyOf;
-import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOURCES;
+import static org.apache.maven.plugins.annotations.LifecyclePhase.VERIFY;
 
 @Mojo(name = "replace-content",
         configurator = "ci-mojo-configurator",
         threadSafe = true,
-        defaultPhase = PROCESS_RESOURCES)
+        defaultPhase = VERIFY)
 public class ReplaceContentMojo
         extends CiMojo {
     private final Content content;
