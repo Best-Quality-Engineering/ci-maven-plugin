@@ -13,7 +13,7 @@
     <artifactId>ci-maven-plugin</artifactId>
     <version>${revision}${sha1}${changelist}</version>
     <packaging>maven-plugin</packaging>
-    <name>Maven CI Plugin</name>
+    <name>CI Maven Plugin</name>
     <description>Maven plugin for building and releasing from CI pipelines</description>
 
     <properties>
@@ -39,8 +39,14 @@
         <slf4j.version>1.7.5</slf4j.version>
         <!-- Plugin versions -->
         <plugin.ci.version>0.0.19</plugin.ci.version>
+        <plugin.scm-publish.version>3.1.0</plugin.scm-publish.version>
         <plugin.gmaven.version>1.13.1</plugin.gmaven.version>
         <nexus.staging.version>1.6.12</nexus.staging.version>
+        <!-- Site properties -->
+        <maven.site.version>3.12.0</maven.site.version>
+        <site.fluido-skin.version>1.10.0</site.fluido-skin.version>
+        <site.maven.plugin>0.12</site.maven.plugin>
+        <github.global.server>github</github.global.server>
     </properties>
 
     <prerequisites>
@@ -59,6 +65,14 @@
         <system>github-actions</system>
         <url>https://github.com/${repository.slug}/actions</url>
     </ciManagement>
+
+    <distributionManagement>
+        <site>
+            <id>gh-pages</id>
+            <name>gh-pages</name>
+            <url>scm:git:git@github.com:${repository.slug}.git</url>
+        </site>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -226,6 +240,31 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${site.maven.plugin}</version>
+                <configuration>
+                    <message>Creating site for ${project.version}</message>
+                    <noJekyll>true</noJekyll>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>${plugin.scm-publish.version}</version>
+                <configuration>
+                    <scmBranch>gh-pages</scmBranch>
                 </configuration>
             </plugin>
         </plugins>
