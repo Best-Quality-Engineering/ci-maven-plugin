@@ -46,7 +46,6 @@
         <maven.site.version>3.12.0</maven.site.version>
         <site.fluido-skin.version>1.10.0</site.fluido-skin.version>
         <site.maven.plugin>0.12</site.maven.plugin>
-        <github.global.server>github</github.global.server>
     </properties>
 
     <prerequisites>
@@ -249,6 +248,8 @@
                 <configuration>
                     <message>Creating site for ${project.version}</message>
                     <noJekyll>true</noJekyll>
+                    <!-- scopes: [public_repo, user:email] -->
+                    <oauth2Token>${env.SITE_TOKEN}</oauth2Token>
                 </configuration>
                 <executions>
                     <execution>
