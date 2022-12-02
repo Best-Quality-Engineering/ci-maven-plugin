@@ -23,6 +23,7 @@ if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
 
   echo "Pushing release/${GITHUB_REF_NAME}"
   git add README.md
+  git add CONTRIBUTING.md
   find . -name pom.xml -exec git add {} \;
   git commit -m "Release ${GITHUB_REF_NAME} (build: ${GITHUB_RUN_ID})"
   git push -u origin "release/${GITHUB_REF_NAME}"
