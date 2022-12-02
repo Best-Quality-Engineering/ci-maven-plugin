@@ -20,7 +20,7 @@
         <!-- Project properties -->
         <ossrh.hostname>s01.oss.sonatype.org</ossrh.hostname>
         <ossrh.staging-profile>7e430683fef886</ossrh.staging-profile>
-        <repository.slug>ruffkat/ci-maven-plugin</repository.slug>
+        <repository.slug>Best-Quality-Engineering/ci-maven-plugin</repository.slug>
         <revision>0.0.20</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
@@ -54,7 +54,7 @@
 
     <developers>
         <developer>
-            <id>ruffkat</id>
+            <id>Jeff-Glatz</id>
             <name>Jeff Glatz</name>
             <email>jeff@bestquality.engineering</email>
         </developer>

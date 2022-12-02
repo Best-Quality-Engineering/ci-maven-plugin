@@ -27,7 +27,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 domain: ci.bestquality.tools
 baseurl: ""
 url: https://ci.bestquality.tools
-github_username:  ruffkat
+github_username:  Best-Quality-Engineering
 
 # Released version
 version: 0.0.19
