@@ -8,7 +8,7 @@ import com.soebes.itf.jupiter.extension.SystemProperty;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 import org.junit.jupiter.api.Nested;
 
-import static tools.bestquality.maven.ci.CiMavenAssertions.assertThat;
+import static tools.bestquality.maven.ci.CiMavenAssertions.assertThatExpanded;
 
 @MavenRepository
 @MavenJupiterExtension
@@ -20,7 +20,7 @@ public class CiMavenPluginIT {
 
         @MavenTest
         void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2")
                     .sha1IsEmpty()
@@ -31,7 +31,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
         void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("22.22.22-SNAPSHOT")
                     .revisionIsEqualTo("22.22.22")
                     .sha1IsEmpty()
@@ -42,7 +42,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
         void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-RELEASE")
                     .revisionIsEqualTo("2.22.2")
                     .sha1IsEmpty()
@@ -51,9 +51,10 @@ public class CiMavenPluginIT {
         }
 
         @MavenTest
-        @SystemProperty(value = "changelist=") // This is a workaround for bug in empty content handling
+        @SystemProperty(value = "changelist=")
+            // This is a workaround for bug in empty content handling
         void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2")
                     .revisionIsEqualTo("2.22.2")
                     .sha1IsEmpty()
@@ -68,7 +69,7 @@ public class CiMavenPluginIT {
 
         @MavenTest
         void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
                     .sha1IsNotPresent()
@@ -79,7 +80,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
         void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("22.22.22")
                     .revisionIsEqualTo("22.22.22")
                     .sha1IsNotPresent()
@@ -90,7 +91,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
         void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
                     .sha1IsNotPresent()
@@ -101,7 +102,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist=")
         void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
                     .sha1IsNotPresent()
@@ -116,7 +117,7 @@ public class CiMavenPluginIT {
 
         @MavenTest
         void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2")
                     .sha1IsEmpty()
@@ -131,7 +132,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
         void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("22.22.22-SNAPSHOT")
                     .revisionIsEqualTo("22.22.22")
                     .sha1IsEmpty()
@@ -146,7 +147,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
         void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-RELEASE")
                     .revisionIsEqualTo("2.22.2")
                     .sha1IsEmpty()
@@ -161,7 +162,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist=")
         void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2")
                     .revisionIsEqualTo("2.22.2")
                     .sha1IsEmpty()
@@ -180,7 +181,7 @@ public class CiMavenPluginIT {
 
         @MavenTest
         void should_expand_pom_with_no_system_properties(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
                     .sha1IsNotPresent()
@@ -195,7 +196,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "revision", content = "22.22.22")
         void should_expand_pom_with_revision_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("22.22.22")
                     .revisionIsEqualTo("22.22.22")
                     .sha1IsNotPresent()
@@ -210,7 +211,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist", content = "-RELEASE")
         void should_expand_pom_with_changelist_system_property(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
                     .sha1IsNotPresent()
@@ -225,7 +226,7 @@ public class CiMavenPluginIT {
         @MavenTest
         @SystemProperty(value = "changelist=")
         void should_expand_pom_with_changelist_system_property_empty(MavenExecutionResult execution) {
-            assertThat(execution)
+            assertThatExpanded(execution)
                     .projectWasGenerated("2.22.2-SNAPSHOT")
                     .revisionIsEqualTo("2.22.2-SNAPSHOT")
                     .sha1IsNotPresent()

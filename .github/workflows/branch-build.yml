@@ -10,7 +10,7 @@ on:
       - "feature/**"
       - "fix/**"
 jobs:
-  build:
+  branch-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

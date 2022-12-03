@@ -8,14 +8,14 @@
     <packaging>jar</packaging>
     <properties>
         <revision>2.22.2-SNAPSHOT</revision>
-        <plugin.ci.version>2.22</plugin.ci.version>
+        <plugin.ci.version>22.22.22</plugin.ci.version>
     </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>@project.version@</version>
+                <version>0.0.20-SNAPSHOT</version>
                 <configuration>
                     <documents>
                         <document>

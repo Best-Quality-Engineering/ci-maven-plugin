@@ -5,7 +5,11 @@ import org.assertj.core.api.Assertions;
 
 public class CiMavenAssertions
         extends Assertions {
-    public static ExpandPomAssert assertThat(MavenExecutionResult actual) {
+    public static ExpandPomAssert assertThatExpanded(MavenExecutionResult actual) {
         return new ExpandPomAssert(actual);
+    }
+
+    public static ReplaceContentAssert assertThatReplaced(MavenExecutionResult actual) {
+        return new ReplaceContentAssert(actual);
     }
 }

@@ -1,7 +1,7 @@
 ```xml
 <dependency>
     <groupId>bestquality</groupId>
-    <artifactId>ci-pom</artifactId>
-    <version>2.2.2</version>
+    <artifactId>%s</artifactId>
+    <version>%s</version>
 </dependency>
 ```
