@@ -4,12 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.bestquality</groupId>
+        <groupId>tools.bestquality</groupId>
         <artifactId>ossrh-parent</artifactId>
-        <version>0.0.7</version>
+        <version>0.0.10</version>
     </parent>
 
-    <groupId>tools.bestquality</groupId>
     <artifactId>ci-maven-plugin</artifactId>
     <version>${revision}${sha1}${changelist}</version>
     <packaging>maven-plugin</packaging>
@@ -29,13 +28,13 @@
         <maven.plugin-annotations.version>3.6.4</maven.plugin-annotations.version>
         <maven.plugin-plugin.version>3.6.4</maven.plugin-plugin.version>
         <!-- Dependency versions -->
-        <assertj.version>3.22.0</assertj.version>
-        <byte-buddy.version>1.12.8</byte-buddy.version>
-        <groovy.version>3.0.10</groovy.version>
-        <junit.jupiter.version>5.8.2</junit.jupiter.version>
+        <assertj.version>3.23.1</assertj.version>
+        <byte-buddy.version>1.12.19</byte-buddy.version>
+        <groovy.version>3.0.13</groovy.version>
+        <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <maven-itf.version>0.11.0</maven-itf.version>
         <objenesis.version>3.2</objenesis.version>
-        <spock.version>2.1-groovy-3.0</spock.version>
+        <spock.version>2.3-groovy-3.0</spock.version>
         <slf4j.version>1.7.5</slf4j.version>
         <!-- Plugin versions -->
         <plugin.ci.version>0.0.19</plugin.ci.version>
@@ -51,27 +50,6 @@
     <prerequisites>
         <maven>${maven.version}</maven>
     </prerequisites>
-
-    <developers>
-        <developer>
-            <id>Jeff-Glatz</id>
-            <name>Jeff Glatz</name>
-            <email>jeff@bestquality.engineering</email>
-        </developer>
-    </developers>
-
-    <ciManagement>
-        <system>github-actions</system>
-        <url>https://github.com/${repository.slug}/actions</url>
-    </ciManagement>
-
-    <distributionManagement>
-        <site>
-            <id>gh-pages</id>
-            <name>gh-pages</name>
-            <url>scm:git:git@github.com:${repository.slug}.git</url>
-        </site>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
