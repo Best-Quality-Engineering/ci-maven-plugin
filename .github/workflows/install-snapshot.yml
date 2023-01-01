@@ -1,0 +1,16 @@
+name: Maven Install Snapshot
+on:
+  push:
+    branches:
+      - feature/**
+      - fix/**
+  pull_request:
+    branches:
+      - "master"
+      - feature/**
+      - fix/**
+jobs:
+  install-snapshot:
+    uses: Best-Quality-Engineering/ci-maven-workflows/.github/workflows/install-snapshot.yml@v1
+    with:
+      upload-coverage: true
