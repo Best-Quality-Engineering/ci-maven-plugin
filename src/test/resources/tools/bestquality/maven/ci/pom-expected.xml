@@ -9,13 +9,14 @@
     <properties>
         <revision>2.22.2-SNAPSHOT</revision>
         <plugin.ci.version>22.22.22</plugin.ci.version>
+        <project.plugin.version>%s</project.plugin.version>
     </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>tools.bestquality</groupId>
                 <artifactId>ci-maven-plugin</artifactId>
-                <version>0.0.20-SNAPSHOT</version>
+                <version>%s</version>
                 <configuration>
                     <documents>
                         <document>
