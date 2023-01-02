@@ -9,6 +9,7 @@
     <properties>
         <revision>2.22.2-SNAPSHOT</revision>
         <plugin.ci.version>2.22</plugin.ci.version>
+        <project.plugin.version>@project.version@</project.plugin.version>
     </properties>
     <build>
         <plugins>

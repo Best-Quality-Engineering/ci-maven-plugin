@@ -148,7 +148,7 @@ This goal can be configured with a list of documents, i.e.:
                         <document>
                             <location>${project.basedir}/pom.xml</location>
                             <encoding>utf-8</encoding>
-                            <pattern><![CDATA[(<plugin.ci.version>).*(<\/plugin.ci.version>)]]></pattern>
+                            <pattern><![CDATA[(<maven.ci.version>).*(<\/maven.ci.version>)]]></pattern>
                             <replacement><![CDATA[$1${project.version}$2]]></replacement>
                         </document>
                     </documents>

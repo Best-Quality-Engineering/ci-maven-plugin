@@ -8,6 +8,7 @@ import com.soebes.itf.jupiter.extension.MavenRepository;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.extension.SystemProperty;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
+import org.apache.maven.model.Model;
 import org.junit.jupiter.api.Nested;
 
 import java.io.IOException;
@@ -32,13 +33,16 @@ public class ReplaceContentIT {
         @SystemProperty(value = "revision", content = "22.22.22")
         void should_replace_all_versions_with_no_system_properties(MavenExecutionResult execution)
                 throws IOException {
+            Model model = execution.getMavenProjectResult().getModel();
+            String pluginVersion = model.getProperties().getProperty("project.plugin.version");
             assertThatReplaced(execution)
                     .contentInDocument("README.md", UTF_8)
                     .isEqualToFormattedTestResource("README-expected-simple.md",
                             "ci-pom", "22.22.22")
                     .and()
                     .contentInDocument("pom.xml", UTF_8)
-                    .isEqualToTestResource("pom-expected.xml");
+                    .isEqualToFormattedTestResource("pom-expected.xml",
+                            pluginVersion, pluginVersion);
         }
     }
 
