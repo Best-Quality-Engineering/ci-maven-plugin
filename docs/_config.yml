@@ -30,7 +30,7 @@ url: https://ci.bestquality.tools
 github_username:  Best-Quality-Engineering
 
 # Released version
-version: 0.0.19
+version: 0.0.20
 
 # Build settings
 markdown: kramdown
