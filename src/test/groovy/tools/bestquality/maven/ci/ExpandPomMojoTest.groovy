@@ -1,7 +1,10 @@
 package tools.bestquality.maven.ci
 
+import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.MojoExecutionException
+import org.apache.maven.project.MavenProject
 import tools.bestquality.io.Content
+import tools.bestquality.io.ModelReader
 import tools.bestquality.maven.test.MojoSpecification
 
 import static java.lang.String.format
@@ -12,11 +15,13 @@ import static tools.bestquality.maven.ci.CiVersionSources.MERGE_SYSTEM_FIRST
 class ExpandPomMojoTest
         extends MojoSpecification {
     Content contentSpy
+    ModelReader readerSpy
     ExpandPomMojo mojo
 
     def setup() {
         contentSpy = Spy(new Content())
-        mojo = new ExpandPomMojo(contentSpy)
+        readerSpy = Spy(new ModelReader())
+        mojo = new ExpandPomMojo(contentSpy, readerSpy)
                 .withProject(projectMock)
                 .withSession(sessionMock)
                 .withSource(MERGE_SYSTEM_FIRST)
@@ -81,9 +86,9 @@ class ExpandPomMojoTest
         and: "an error to throw"
         def error = new RuntimeException("nope")
         def versionSpy = Spy(new CiVersion(null, null, null))
-        versionSpy.expand(_) >> { throw error }
+        versionSpy.expand(_ as String) >> { throw error }
         mojo.withSource(Mock(CiVersionSource) {
-            from(_, _) >> {
+            from(_ as MavenProject, _ as MavenSession) >> {
                 return versionSpy;
             }
         })
@@ -117,7 +122,7 @@ class ExpandPomMojoTest
         and: "an error thrown when writing the ci pom file"
         def ciPomPath = mojo.ciPomPath()
         def error = new RuntimeException("nope")
-        contentSpy.write(ciPomPath, UTF_8, _) >> { throw error }
+        contentSpy.write(ciPomPath, UTF_8, _ as String) >> { throw error }
 
         when: "the mojo is executed"
         mojo.execute()
@@ -129,6 +134,36 @@ class ExpandPomMojoTest
         and: "the pom file was not expanded"
         0 * projectMock.setPomFile(_ as File)
         !list(outputPath)
+                .findFirst()
+                .isPresent()
+
+        and: "an exception is thrown"
+        thrown(MojoExecutionException)
+    }
+
+    def "should raise exception on error reading project model"() {
+        given: "a POM file with all ci friendly properties"
+        setupPomFromResource("pom-with-all-ci-properties.xml")
+
+        and: "the ci properties are available as project properties"
+        projectProperties.setProperty("revision", "1.1.1")
+        projectProperties.setProperty("sha1", "11")
+        projectProperties.setProperty("changelist", "-SNAPSHOT")
+
+        and: "an error thrown when reading project model"
+        def error = new RuntimeException("nope")
+        readerSpy.read(_ as String) >> { throw error }
+
+        when: "the mojo is executed"
+        mojo.execute()
+
+        then: "an error message is logged"
+        1 * logMock.error("Failure reading model from expanded POM", error)
+        _ * logMock._
+
+        and: "the pom file was expanded"
+        1 * projectMock.setPomFile(_ as File)
+        list(outputPath)
                 .findFirst()
                 .isPresent()
 
