@@ -1,12 +1,14 @@
 package tools.bestquality.maven.ci;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import tools.bestquality.io.Content;
+import tools.bestquality.io.ModelReader;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -23,6 +25,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.VALIDATE;
 public class ExpandPomMojo
         extends CiPomMojo<ExpandPomMojo> {
     private final Content content;
+    private final ModelReader reader;
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
@@ -53,8 +56,9 @@ public class ExpandPomMojo
     private CiVersionSource source;
 
     @Inject
-    public ExpandPomMojo(Content content) {
+    public ExpandPomMojo(Content content, ModelReader reader) {
         this.content = content;
+        this.reader = reader;
     }
 
     public ExpandPomMojo withProject(MavenProject project) {
@@ -82,6 +86,9 @@ public class ExpandPomMojo
         }
         Path ciPomFile = writeCiPom(expandedPom);
         project.setPomFile(ciPomFile.toFile());
+        // https://github.com/mojohaus/flatten-maven-plugin/issues/100#issuecomment-1088904752
+        // https://github.com/apache/maven-shade-plugin/pull/129
+        project.setOriginalModel(toModel(expandedPom));
         info(format("%s has been configured to use generated POM file at %s",
                 project.getArtifactId(), ciPomFile.toAbsolutePath()));
     }
@@ -127,6 +134,16 @@ public class ExpandPomMojo
             return ciPomPath;
         } catch (Exception e) {
             error(format("Failure writing expanded POM file: %s", ciPomPath.toAbsolutePath()), e);
+            throw new MojoExecutionException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    private Model toModel(String content)
+            throws MojoExecutionException {
+        try {
+            return reader.read(content);
+        } catch (Exception e) {
+            error("Failure reading model from expanded POM", e);
             throw new MojoExecutionException(e.getLocalizedMessage(), e);
         }
     }

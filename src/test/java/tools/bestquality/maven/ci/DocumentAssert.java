@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DocumentAssert
         extends AbstractAssert<DocumentAssert, String> {
@@ -24,9 +25,8 @@ public class DocumentAssert
         return isEqualTo(readTestResource(resource));
     }
 
-    public DocumentAssert isEqualToFormattedTestResource(String resource, String... args)
+    public DocumentAssert isEqualToFormattedTestResource(String resource, Object... args)
             throws IOException {
-        InputStream stream = getClass().getResourceAsStream(resource);
         return isEqualTo(format(readTestResource(resource), args));
     }
 
@@ -36,7 +36,10 @@ public class DocumentAssert
 
     private String readTestResource(String resource)
             throws IOException {
-        InputStream stream = getClass().getResourceAsStream(resource);
-        return new String(stream.readAllBytes(), charset);
+        try (InputStream stream = getClass().getResourceAsStream(resource)) {
+            assertThat(stream)
+                    .isNotNull();
+            return new String(stream.readAllBytes(), charset);
+        }
     }
 }
